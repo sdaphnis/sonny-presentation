@@ -1,0 +1,21 @@
+body{
+	background-color: #FBFDEF ;
+}
+h1{
+	font-size: 30px;
+	color: silver;
+
+}
+h2{
+	color: red;
+}
+.big{
+	font-size: 80px;
+}
+.uppercase{
+text-transform:  uppercase;
+font-family: serif;
+}
+.big.uppercase{
+color:  navy;
+}
