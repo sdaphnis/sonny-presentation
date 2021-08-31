@@ -1,11 +1,125 @@
 <!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<title></title>
-</head>
-<body>
-<p> Entrada 1</p>
-<img src="blog-img/brownianmotion.gif">
-</body>
-</html>
+<!-- saved from url=(0076)https://www.w3schools.com/w3css/tryw3css_templates_gourmet_catering.htm#home -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Excursions</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<link rel="stylesheet" href="./excursion2_files/w3.css">
+
+
+<style>
+body {font-family: "Times New Roman", Georgia, Serif;}
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Playfair Display";
+  letter-spacing: 5px;
+}
+</style>
+</head><body>
+
+<!-- Navbar (sit on top) -->
+<div class="w3-top">
+  <div class="w3-bar w3-white w3-padding w3-card" style="letter-spacing:4px;">
+    <a href="https://www.w3schools.com/w3css/tryw3css_templates_gourmet_catering.htm#home" class="w3-bar-item w3-button">Gourmet au Catering</a>
+    <!-- Right-sided navbar links. Hide them on small screens -->
+    <div class="w3-right w3-hide-small">
+      <a href="https://www.w3schools.com/w3css/tryw3css_templates_gourmet_catering.htm#about" class="w3-bar-item w3-button">About</a>
+      <a href="https://www.w3schools.com/w3css/tryw3css_templates_gourmet_catering.htm#menu" class="w3-bar-item w3-button">Menu</a>
+      <a href="https://www.w3schools.com/w3css/tryw3css_templates_gourmet_catering.htm#contact" class="w3-bar-item w3-button">Contact</a>
+    </div>
+  </div>
+</div>
+
+<!-- Header -->
+
+
+<!-- Page content -->
+<div class="w3-content" style="max-width:1100px">
+
+  <!-- About Section -->
+  <div class="w3-content" id="about">
+      <hr><hr>
+      <h1 class="w3-center">Excursions of Lévy Processes</h1><br>
+      <h5 class="w3-center">Examples</h5>
+      <p>In simple words, excursions can be understood as chunks of stochastic processes that start and finish under certain conditions, for Lévy processes, excursions are independent entre ellas y con la misma distribución, entonces se vuelven una herramienta útil para abordar problemas y de hecho brindan una interpretación a grandes resultados probabilísticos como la descomposición de wiener-hopf. Una forma sencilla de entender cómo están definidas las excursiones es con el ejemplo de  para la caminata aleatoria, que introduzco a continuación.</p>
+      <p> Let <span class="math inline">\(Z_1,Z_2,...,\)</span> be independent identically distributed random variables with common distribution function <span class="math inline">\(F\)</span> such that <span class="math inline">\(0&lt;F(0)&lt;1\)</span> and <span class="math inline">\(P(Z_1=0)=0\)</span>, let us define <span class="math inline">\(Y_0=0\)</span> and <span class="math inline">\(Y_n=\sum_{i=1}^nZ_i\)</span> for <span class="math inline">\(n\geq 1\)</span>. Define the following stopping time <span class="math inline">\(\sigma_x^+=\inf\{n\geq 1:Y_n&gt;x\}\)</span>. With these elements we propose the following path decomposition. Define <span class="math inline">\(T_0=0\)</span> and <span class="math inline">\(H_0=0\)</span>. Let <span class="math inline">\(T_1:=\sigma_0^+\)</span> and <span class="math display">\[H_1\begin{cases}
+Y_{T_1} &amp; \text{ if } T_1&lt;\infty\\
+\infty &amp; \text{ if } T_1=\infty.
+\end{cases}\]</span>Next, we construct iteratively the variables <span class="math inline">\(T_1,T_2,...\)</span> and <span class="math inline">\(H_1,H_2,...\)</span> in such a way that <span class="math display">\[T_n:=\begin{cases}
+\inf\{n&gt;T_{n-1}:Y_t&gt;H_{n-1}\} &amp; \text{ if } T_{n-1}&lt;\infty
+\\
+\infty &amp; \text{ if } T_n=\infty
+\end{cases}
+\]</span> and <span class="math display">\[H_n:=\begin{cases}
+Y_{T_n} &amp; \text{ if } T_{n-1}&lt;\infty
+\\
+\infty &amp; \text{ if } T_n=\infty.
+\end{cases}
+\]</span> Note that for each <span class="math inline">\(n\geq 1\)</span>, <span class="math inline">\(T_{n+1}-T_n\)</span> is equal in distribution to <span class="math inline">\(T_1\)</span>. The strong Markov property aand stationary independent increments imply that, on <span class="math inline">\(\{T_{n-1}&lt;\infty\}\)</span>, the path <span class="math display">\[\begin{equation}
+     \epsilon_{n}=\{Y_n-Y_{T_{n-1}}: T_{n-1} &lt; n \leq T_n\},
+ \end{equation}\]</span> also known as an <span class="math inline">\(Y\)</span>, is independent of <span class="math inline">\(\sigma(Y_{T_{k}}: k\leq n-1)\)</span> and has the same law as <span class="math display">\[\{Y_n:0&lt;n \leq \sigma_0^+\}.\]</span></p>
+
+<img src="blog-img/IMG_3762.GIF">
+
+<p>El elemento crucial en la construcción de las excursiones para la caminata aleatoria es la secuencia de variables <span class="math inline">\(\{T_n:n\geq 1\}\)</span> que juega el rol de indexar el conjunto de los nuevos máximos. Es claro que este conjunto de nuevos máximos forma un conjunto discreto. Para un proceso de Lévy en general, in a finite time interval an infinite number of excursions can occur, luego enumerar excursiones es bastante más complicado. Para tal fin se introduce la herramienta de .</p>
+<p>A continuación hago la construcción formal de excursiones from the maximum para cualquier proceso de Lévy unidimensional. La construcción de un local time apropiado para cada caso particular de procesos de Lévy no es trivial, por lo cual caracterizamos a este proceso con dos propiedades. Antes de mencionar tales propiedades definamos por <span class="math inline">\(X=(X_t:t\geq 0)\)</span> a un proceso de Lévy unidimensional con probabilidades <span class="math inline">\((\mathbb{P}_x,x\in \mathbb{R}).\)</span></p>
+
+<p>A partir de estas dos reglas podemos definir de manera similar el local time at a point <span class="math inline">\(a\)</span>, o el local time at the minimum.</p>
+<p> Si consideramos a <span class="math inline">\(X\)</span> un proceso de Poisson compuesto con drift positivo. Debido a la piecewise linearity of the paths of these processes, over any finite time horizon, the time spend at the maximum has strictly positive Lebesgue measure with probability one. Hence, the quantity <span class="math display">\[L_t:=\int_0^t\mathbf{1}_{\{\sup_{u\leq s}X_u=X_s\}}ds, \quad t \geq 0,\]</span> is almost surely positive and may be taken as a candidate for local time. En general, el que exista un Local time continuo, como el anterior, depende de la regularidad de las trayectorias del proceso.</p>
+<p>Now that we have established the concept of local time at the maximum for any Lévy process, we can give the general decomposition of the path of a Lévy process in termis of its excursions from the maximum.</p>
+
+<p>Ejemplos distintos a las excursiones from the maximum (or from the minimum), son las excursiones desde máximos o mínimos radiales que hace un proceso estable <span class="math inline">\(d\)</span>-dimensional, éstas fueron definidas en  y serán abordadas en el siguiente capítulo. También las excursiones from hyperplanes fueron estudiadas ya en  y los resultados de tal artículo se comentan a continuación.</p>
+
+
+    </div>
+
+  
+  <hr>
+  
+  <!-- Menu Section -->
+  <div class="w3-row w3-padding-64" id="menu">
+    <div class="w3-col l6 w3-padding-large">
+      <h1 class="w3-center">Our Menu</h1><br>
+      <h4>Bread Basket</h4>
+      <p class="w3-text-grey">Assortment of fresh baked fruit breads and muffins 5.50</p><br>
+    
+      <h4>Honey Almond Granola with Fruits</h4>
+      <p class="w3-text-grey">Natural cereal of honey toasted oats, raisins, almonds and dates 7.00</p><br>
+    
+      <h4>Belgian Waffle</h4>
+      <p class="w3-text-grey">Vanilla flavored batter with malted flour 7.50</p><br>
+    
+      <h4>Scrambled eggs</h4>
+      <p class="w3-text-grey">Scrambled eggs, roasted red pepper and garlic, with green onions 7.50</p><br>
+    
+      <h4>Blueberry Pancakes</h4>
+      <p class="w3-text-grey">With syrup, butter and lots of berries 8.50</p>    
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- Contact Section -->
+  <div class="w3-container w3-padding-64" id="contact">
+    <h1>Contact</h1><br>
+    <p>We offer full-service catering for any event, large or small. We understand your needs and we will cater the food to satisfy the biggerst criteria of them all, both look and taste. Do not hesitate to contact us.</p>
+    <p class="w3-text-blue-grey w3-large"><b>Catering Service, 42nd Living St, 43043 New York, NY</b></p>
+    <p>You can also contact us by phone 00553123-2323 or email catering@catering.com, or you can send us a message here:</p>
+    <form action="https://www.w3schools.com/action_page.php" target="_blank">
+      <p><input class="w3-input w3-padding-16" type="text" placeholder="Name" required="" name="Name"></p>
+      <p><input class="w3-input w3-padding-16" type="number" placeholder="How many people" required="" name="People"></p>
+      <p><input class="w3-input w3-padding-16" type="datetime-local" placeholder="Date and time" required="" name="date" value="2020-11-16T20:00"></p>
+      <p><input class="w3-input w3-padding-16" type="text" placeholder="Message \ Special requirements" required="" name="Message"></p>
+      <p><button class="w3-button w3-light-grey w3-section" type="submit">SEND MESSAGE</button></p>
+    </form>
+  </div>
+  
+<!-- End page content -->
+</div>
+
+<!-- Footer -->
+<footer class="w3-center w3-light-grey w3-padding-32">
+  <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" title="W3.CSS" target="_blank" class="w3-hover-text-green">w3.css</a></p>
+</footer>
+
+
+</body></html>
