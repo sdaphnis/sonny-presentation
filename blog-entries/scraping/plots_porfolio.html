@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Embedded Plots</title>
+    <style>
+        body {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #ffffff;
+        }
+        .plot-container {
+            margin: 10px;
+            border: 1px solid #ccc;
+        }
+        .plot-container iframe {
+            display: block;
+            width: 1640px;
+            height: 820px;
+            border: none;
+        }
+        .modern-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 18px;
+            text-align: left;
+        }
+        .modern-table th, .modern-table td {
+            padding: 12px;
+            border: 1px solid #ddd;
+        }
+        .modern-table th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .modern-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .modern-table tr:hover {
+            background-color: #ddd;
+        }
+        
+    </style>
+</head>
+<body>
+    <table border="1" class="dataframe modern-table">
+        <thead>
+          <tr style="text-align: left;">
+            <th>Area</th>
+            <th>Aceptado</th>
+            <th>Porcentaje</th>
+            <th>Exámenes presentados</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Aceptado</td>
+            <td>10.36%</td>
+            <td>3061</td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>Rechazado</td>
+            <td>89.64%</td>
+            <td>26482</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Aceptado</td>
+            <td>5.15%</td>
+            <td>3199</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Rechazado</td>
+            <td>94.85%</td>
+            <td>58938</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>Aceptado</td>
+            <td>16.38%</td>
+            <td>5509</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>Rechazado</td>
+            <td>83.62%</td>
+            <td>28131</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>Aceptado</td>
+            <td>14.82%</td>
+            <td>2007</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>Rechazado</td>
+            <td>85.18%</td>
+            <td>11535</td>
+          </tr>
+        </tbody>
+      </table>
+    <div class="plot-container">
+        <iframe src="violins_by_area.html"></iframe>
+    </div>
+    <div class="plot-container">
+        <iframe src="treemap.html"></iframe>
+    </div>
+    <div class="plot-container">
+        <iframe src="boxplot_area1.html"></iframe>
+    </div>
+    <div class="plot-container">
+        <iframe src="boxplot_area2.html"></iframe>
+    </div>
+    <div class="plot-container">
+        <iframe src="boxplot_area3.html"></iframe>
+    </div>
+    <div class="plot-container">
+        <iframe src="boxplot_area4.html"></iframe>
+    </div>
+</body>
+</html>
