@@ -7522,8 +7522,11 @@ a.anchor-link {
       <h1 class="w3-center">Scrapeamos la página de resultados de la UNAM para visualizar</h1><br>
       <!-- <h5 class="w3-center">Examples</h5>-->
       <p>El concurso de admisión a la UNAM 2024 tuvo, igual que en años pasados, <strong> muchos</strong> aspirantes. Los aspirantes aumentan pero no así los lugares.
-      El aumento de los aspirantes se ve reflejado en que el número de aspirantes con puntajes altos también incrementa, y por tanto el número mínimo de aciertos para
-      ser aceptado. </p>
+      Esto ocasiona que el número de aspirantes con puntajes altos también incrementa, y por tanto el número mínimo de aciertos para
+      ser aceptado. Esta es una de muchas razones para analizar la demanda y los puntajes mínimos de las carreras ofertadas en la UNAM.<br>
+     Para analizar estos datos primero tenemos que obtenerlos, por eso realicé un "web scraping" de las tablas con los aciertos y después hice <a href="#visualisations">unas gráficas </a>  interactivas
+     para explorarlos. Espero les resulte interesante.
+     </p>
       <hr>
     </div>
   </div>
@@ -7813,6 +7816,88 @@ HTTPError 404: https://www.dgae.unam.mx/Licenciatura2024/resultados/4/44006005.h
    </p>
   <hr>
 </div>
+<!-- Inicio de visualizaciones  -->
+  <style>
+    body { font-family: Arial, sans-serif; }
+    .tabs { display: flex; cursor: pointer; }
+    .tab-button { padding: 10px; margin-right: 5px; background-color: #ddd; border: 1px solid #ccc; }
+    .tab-button.active { background-color: #f1f1f1; }
+    .tab-content { display: none; margin-top: 10px; }
+    .tab-content iframe { width: 100%; height: 1000px; border: none; }
+  </style>
+   <div class="tabs">
+    <div class="tab-button" onclick="showTab('file1')">Las carreras más demandadas</div>
+    <div class="tab-button" onclick="showTab('file2')">Diferencias por área </div>
+    <div class="tab-button" onclick="showTab('file3')">Puntajes en área 1</div>
+    <div class="tab-button" onclick="showTab('file4')">Puntajes en área 2</div>
+    <div class="tab-button" onclick="showTab('file5')">Puntajes en área 3</div>
+    <div class="tab-button" onclick="showTab('file6')">Puntajes en área 4</div>
+</div>
+
+<!-- <div id="file1" class="tab-content">
+    <iframe src="treemap.html"></iframe>
+</div>
+<div id="file2" class="tab-content">
+    <iframe src="boxplot_area1.html"></iframe>
+</div>
+<div id="file3" class="tab-content">
+    <iframe src="boxplot_area2.html"></iframe>
+</div> -->
+
+<div id="file1" class="tab-content">
+  <div class="description"> Demanda y dificultad (aciertos mínimos): En esta gráfica (treemap) el tamaño de 
+    los mosaicos representa el número de aspirantes que presentaron examen. Clica en el nombre del área para maximizar las carreras.</div>
+  <iframe src="treemap.html"></iframe>
+</div>
+<div id="file2" class="tab-content">
+  <div class="description"> Distribución del puntaje por área: cada (medio) violín corresponde a la distribución del número
+    de aciertos en cada área.<br> El rectángulo inscrito es un boxplot y la linea que lo parte corresponde a la mediana 
+    de los puntajes obtenidos por los aspirantes <br> (la mitad de ellos tienen puntajes menores, y la otra mitad mayores). Yo no los veo tan distintos. </div>
+  <iframe src="violins_by_area.html"></iframe>
+</div>
+<div id="file3" class="tab-content">
+  <div class="description"> Puntaje por carrera en área 1: cada boxplot corresponde a una carrera, están ordenadas ascendentemente
+     respecto<br> al número de aciertos promedio. Clica en los nombres a la derecha para filtrar y comparar.<br> Los nombres de carrera con asterisco indican
+     que la carrera se imparte en más de un plantel, y la estrella corresponde al puntaje mínimo para ser aceptado. </div>
+  <iframe src="boxplot_area1.html"></iframe>
+</div>
+<div id="file4" class="tab-content">
+  <div class="description">Puntaje por carrera en área 2: cada boxplot corresponde a una carrera, están ordenadas ascendentemente
+    respecto<br> al número de aciertos promedio. Clica en los nombres a la derecha para filtrar y comparar.<br> Los nombres de carrera con asterisco indican
+    que la carrera se imparte en más de un plantel, y la estrella corresponde al puntaje mínimo para ser aceptado. </div>
+  <iframe src="boxplot_area2.html"></iframe>
+</div>
+<div id="file5" class="tab-content">
+  <div class="description">Puntaje por carrera en área 3: cada boxplot corresponde a una carrera, están ordenadas ascendentemente
+    respecto<br> al número de aciertos promedio. Clica en los nombres a la derecha para filtrar y comparar.<br> Los nombres de carrera con asterisco indican
+    que la carrera se imparte en más de un plantel, y la estrella corresponde al puntaje mínimo para ser aceptado. </div>
+  <iframe src="boxplot_area3.html"></iframe>
+</div>
+<div id="file6" class="tab-content">
+  <div class="description">Puntaje por carrera en área 4: cada boxplot corresponde a una carrera, están ordenadas ascendentemente
+    respecto<br> al número de aciertos promedio. Clica en los nombres a la derecha para filtrar y comparar.<br> Los nombres de carrera con asterisco indican
+    que la carrera se imparte en más de un plantel, y la estrella corresponde al puntaje mínimo para ser aceptado. </div>
+  <iframe src="boxplot_area4.html"></iframe>
+</div>
+
+<script>
+    function showTab(tabId) {
+        const tabs = document.querySelectorAll('.tab-content');
+        const buttons = document.querySelectorAll('.tab-button');
+
+        // Hide all tabs and remove 'active' class from buttons
+        tabs.forEach(tab => tab.style.display = 'none');
+        buttons.forEach(button => button.classList.remove('active'));
+
+        // Show the selected tab and add 'active' class to the corresponding button
+        document.getElementById(tabId).style.display = 'block';
+        document.querySelector(`.tab-button[onclick="showTab('${tabId}')"]`).classList.add('active');
+    }
+
+    // Show the first tab by default
+    showTab('file1');
+</script>
+
 
 </main>
 </body>
