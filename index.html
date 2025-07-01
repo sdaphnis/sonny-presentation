@@ -132,6 +132,17 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
   <!-- </header> --> 
   <!-- First Photo Grid-->
   <div class="w3-row-padding">
+    <!-- Strava miniature (left) -->
+    <div class="w3-third w3-container w3-margin-bottom">
+      <div style="width:100%; aspect-ratio: 4/3; overflow:hidden; background:#f5f5f5; display:flex; align-items:center; justify-content:center;">
+        <img src="strava/strava_cdmx_files/miniature.png" alt="StravaStats" style="width:100%; height:100%; object-fit:cover;" class="w3-hover-opacity">
+      </div>
+      <div class="w3-container w3-white">
+        <a href="strava/strava_cdmx.html"> <p><b>Strava Data Analysis</b></p> </a>
+        <p>Exploring and visualising my running and cycling data from Strava using Python and interactive charts.</p>
+      </div>
+    </div>
+    <!-- Scraping miniature (center) -->
     <div class="w3-third w3-container w3-margin-bottom">
       <div style="width:100%; aspect-ratio: 4/3; overflow:hidden; background:#f5f5f5; display:flex; align-items:center; justify-content:center;">
         <img src="blog-entries/scraping/portfolio_mini.png" alt="ScrapingViz" style="width:100%; height:100%; object-fit:cover;" class="w3-hover-opacity">
@@ -141,6 +152,19 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
         <p>I scraped the UNAM exam results and made some visualisations of the exam scores.</p>
       </div>
     </div>
+    <!-- WOHS miniature (right) -->
+    <div class="w3-third w3-container w3-margin-bottom">
+      <div style="width:100%; aspect-ratio: 4/3; overflow:hidden; background:#f5f5f5; display:flex; align-items:center; justify-content:center;">
+        <img src="blog-entries/wohs.png" alt="WOHS" style="width:100%; height:100%; object-fit:cover;" class="w3-hover-opacity">
+      </div>
+      <div class="w3-container w3-white">
+        <a href="blog-entries/wohs.html"><p><b>Walking on Half-spaces</b></p></a>
+        <p>Some notes on the Dirichlet problem and Monte Carlo numeric solutions using Brownian Motion.</p>
+      </div>
+    </div>
+  </div>
+  <!-- Excursions miniature (bottom left, hidden initially) -->
+  <div class="w3-row-padding" id="excursions-row" style="display:none;">
     <div class="w3-third w3-container w3-margin-bottom">
       <div style="width:100%; aspect-ratio: 4/3; overflow:hidden; background:#f5f5f5; display:flex; align-items:center; justify-content:center;">
         <img src="blog-entries/blog-img/IMG_3762.GIF" alt="Excursions" style="width:100%; height:100%; object-fit:cover;" class="w3-hover-opacity">
@@ -150,15 +174,14 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
         <p>Excursions of Lévy processes are useful tools for finding fluctuation identities. Find here an introduction to the topic.</p>
       </div>
     </div>
-    <div class="w3-third w3-container">
-      <div style="width:100%; aspect-ratio: 4/3; overflow:hidden; background:#f5f5f5; display:flex; align-items:center; justify-content:center;">
-        <img src="blog-entries/wohs.png" alt="WOHS" style="width:100%; height:100%; object-fit:cover;" class="w3-hover-opacity">
-      </div>
-      <div class="w3-container w3-white">
-        <a href="blog-entries/wohs.html"><p><b>Walking on Half-spaces</b></p></a>
-        <p>Some notes on the Dirichlet problem and Monte Carlo numeric solutions using Brownian Motion.</p>
-      </div>
-    </div>
+    <div class="w3-third w3-container"></div>
+    <div class="w3-third w3-container"></div>
+  </div>
+  <!-- Show More button -->
+  <div class="w3-center">
+    <button class="w3-button w3-light-grey" onclick="document.getElementById('excursions-row').style.display='flex'; this.style.display='none';">
+      Show more
+    </button>
   </div>
   
   <!-- Second Photo Grid
@@ -188,16 +211,7 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
 -->
 
   <!-- Pagination -->
-  <div class="w3-center w3-padding-32">
-    <div class="w3-bar">
-      <a href="#" class="w3-bar-item w3-button w3-hover-black">«</a>
-      <a href="#" class="w3-bar-item w3-black w3-button">1</a>
-      <!--<a href="#" class="w3-bar-item w3-button w3-hover-black">2</a>-->
-       <!--<a href="#" class="w3-bar-item w3-button w3-hover-black">3</a>-->
-       <!--<a href="#" class="w3-bar-item w3-button w3-hover-black">4</a>-->
-       <!--<a href="#" class="w3-bar-item w3-button w3-hover-black">»</a>-->
-    </div>
-  </div>
+
 
 
   <!-- Contact Section -->
