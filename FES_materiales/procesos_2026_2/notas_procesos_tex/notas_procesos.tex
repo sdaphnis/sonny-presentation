@@ -1,0 +1,239 @@
+\documentclass[12pt]{book}
+\usepackage{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{amsmath} % Para entornos matemáticos avanzados
+\usepackage{amssymb} % Para el uso de \mathbb
+\usepackage{amsthm} % Para entornos como definition, proposition, example, remark
+
+\geometry{margin=1in}
+\pagestyle{fancy}
+
+% Definición de entornos personalizados
+\newtheorem{definition}{Definición}[chapter]
+\newtheorem{proposition}{Proposición}[chapter]
+\newtheorem{example}{Ejemplo}[chapter]
+\newtheorem{remark}{Observación}[chapter]
+
+% Ajuste de \headheight para evitar advertencias de fancyhdr
+\setlength{\headheight}{15.71667pt}
+
+\title{Procesos Estocásticos I}
+\author{Sonny Medina}
+\date{Semestre 2026-2}
+
+\begin{document}
+
+% Portada
+\begin{titlepage}
+    \centering
+    \vspace*{1cm}
+    
+    {\Large \textbf{UNIVERSIDAD NACIONAL AUTÓNOMA DE MÉXICO}}\\
+    \vspace{0.3cm}
+    {\large Facultad de Estudios Superiores Acatlán}\\
+    
+    \vspace{3cm}
+    
+    {\Huge \textbf{Procesos Estocásticos I}}\\
+    
+    \vspace{2cm}
+    
+    {\Large Semestre 2026-2}\\
+    
+    \vspace{3cm}
+    
+%    {\large \textbf{Profesor:}}\\
+    {\large Sonny Medina (Draft)}\\
+    
+    \vfill
+    
+    {\large \today}
+    
+\end{titlepage}
+
+% Tabla de contenidos
+\tableofcontents
+\newpage
+
+% Estructura de capítulos
+\chapter{Modelos Markovianos en Tiempo Discreto}
+
+%\section*{Introducción Histórica}
+La teoría de procesos estocásticos tuvo sus orígenes en los trabajos de Andréi Márkov a principios del siglo XX. Márkov, discípulo de Pafnuty Chebyshev al igual que Andréi Kolmogorov, estudió sucesiones de variables aleatorias que satisfacían una propiedad especial: la dependencia entre observaciones sucesivas. Aunque las contribuciones de Márkov no fueron tan formales como las posteriores de Kolmogorov, quien desarrolló la teoría axiomática de la probabilidad, Márkov es considerado el precursor de la teoría moderna de procesos estocásticos. En sus trabajos iniciales, Márkov se enfocó principalmente en procesos a tiempo discreto con un enfoque probabilístico. Con el desarrollo de la teoría, especialmente tras las contribuciones de Kolmogorov, la disciplina se formalizó considerablemente e incorporó tanto procesos a tiempo discreto como continuo, ampliando su alcance hacia aplicaciones contemporáneas en física estadística, finanzas matemáticas, biología, ingeniería y ciencias de la computación. En la actualidad, los procesos estocásticos constituyen una herramienta fundamental para modelar sistemas dinámicos bajo incertidumbre, con aplicaciones que van desde la modelación de mercados financieros y sistemas de colas, hasta algoritmos de aprendizaje automático, métodos de Monte Carlo vía cadenas de Markov y el análisis de datos temporales en contextos científicos e industriales.
+
+\section{Definición de Proceso Estocástico}
+
+\begin{definition} Un \textbf{proceso estocástico} es una colección de variables aleatorias $\{X_t : t \in T\}$ definidas sobre un espacio de probabilidad $(\Omega, \mathcal{F}, \mathbb{P})$, donde:
+\begin{itemize}
+    \item $T$ es el \textbf{índice temporal}, que puede ser discreto ($T = \mathbb{N}$, ¡asumiremos que contiene al cero!) o continuo ($T = \mathbb{R}^+$).
+    \item $X_t$ representa el estado del sistema en el tiempo $t$.
+\end{itemize}
+
+
+Un proceso estocástico es \textbf{discreto} si $T$ es un conjunto discreto, y \textbf{continuo} si $T$ es un conjunto continuo.
+\end{definition}
+
+\subsection*{Interpretación como función}
+
+Un proceso estocástico puede interpretarse como una función
+\[
+X : T \times \Omega \to S
+\]
+tal que a cada pareja $(t, \omega) \in T \times \Omega$ se le asocia el estado $X(t, \omega) \in S$. Para cada tiempo $t \in T$ fijo, la función $\omega \mapsto X(t, \omega)$ es una variable aleatoria. Por el contrario, para cada resultado $\omega \in \Omega$ fijo, la función $t \mapsto X(t, \omega)$ se llama una \textbf{trayectoria} o \textbf{realización} del proceso, y representa la evolución temporal del sistema bajo el escenario particular $\omega$.
+
+\vspace{10pt}
+\hrule 
+{\center \textit{EJEMPLOS} }
+
+\section{Espacio de Estados}
+
+El \textbf{espacio de estados} de un proceso estocástico es el conjunto $S$ de todos los valores posibles que las variables aleatorias $X_t$ pueden tomar. Se requiere que $S$ sea equipado con una $\sigma$-álgebra apropiada para poder hablar de eventos relacionados con los valores del proceso. Consideraremos principalmente espacios de estados discretos (subconjuntos de $\mathbb{Z}$) o continuos (subconjuntos de $\mathbb{R}$, $\mathbb{R}^d$, etc.). Por ejemplo:
+\begin{itemize}
+    \item Si $S = \{0, 1\}$, el proceso es binario.
+    \item Si $S = \mathbb{R}$, el proceso tiene un espacio de estados continuo.
+    \item Si $S = \mathbb{Z}$, el proceso tiene un espacio de estados discreto infinito.
+    \item Si $S = \mathbb{R}^d$ para $d \geq 2$, el espacio de estados es multidimensional.
+\end{itemize}
+
+\begin{example}[1]
+\textbf{Sucesión de resultados de un dado.} Considere un dado justo. El espacio parametral es $T = \mathbb{N}$, ya que observamos los resultados en pasos discretos (cada lanzamiento). El espacio de estados es $S = \{1, 2, 3, 4, 5, 6\}$ y supondremos que s.p.g. $P(X_0=6)=1$. Ejemplos de probabilidades de interés incluyen:
+\begin{itemize}
+    \item $\mathbb{P}(X_3 = 6)$: Probabilidad de obtener un 6 en el tercer lanzamiento.
+    \item $\mathbb{P}( \text{al menos un 6 en 5 lanzamientos} )$.
+    \item $\mathbb{P}( \text{El primer 6 sale en el lanzamiento } k )$.
+    \item Probabilidades condicionales como $\mathbb{P}(X_4 = 5 \mid X_3 = 2)$.
+\end{itemize}
+\end{example}
+
+Un proceso estocástico se llama cadena cuando es un proceso indexado en tiempo discreto, con espacio de estados numerable. Si dibujamos los posibles estados como nodos en un grafo, y las transiciones entre estados como aristas dirigidas obtenemos una representación visual útil para analizar el comportamiento del proceso.
+
+\section{Caminata Aleatoria}
+
+Un ejemplo fundamental en la teoría de procesos estocásticos es la \textbf{caminata aleatoria}. Sea $\{Y_i : i \in \mathbb{N}\}$ una sucesión de variables aleatorias independientes e idénticamente distribuidas (i.i.d.), todas definidas sobre el mismo espacio de probabilidad $(\Omega, \mathcal{F}, \mathbb{P})$, que toman valores en $S_Y \subseteq \mathbb{R}$. Denotamos por $\mu_Y$ la distribución común de las variables $Y_i$. Consideremos la sucesión de sumas parciales:
+\[
+X_n = \sum_{i=1}^n Y_i, \quad n \in \mathbb{N}, \quad \text{con } X_0 = 0.
+\]
+
+Este proceso se llama \textbf{caminata aleatoria} o \textbf{proceso de suma acumulada}, y es un proceso a tiempo discreto con espacio de estados $S \subseteq \mathbb{R}$ (típicamente $S = \mathbb{Z}$ o $S = \mathbb{R}$ dependiendo de la distribución de $Y_i$).
+
+\begin{proposition}
+Para una caminata aleatoria $X_n = \sum_{i=1}^n Y_i$ donde los $Y_i$ son i.i.d.:
+\begin{itemize}
+%    \item La distribución inicial es $\mathbb{P}(X_0 = 0) = 1$.
+    \item La distribución de $X_n$ es la convolución de $n$ copias de $\mu_Y$.
+    \item Para $n \geq 1$, se tiene $X_n = X_{n-1} + Y_n$, por lo que la probabilidad de transición depende únicamente de la distribución de $Y_i$.
+\end{itemize}
+\end{proposition}
+
+\begin{example}[2]
+\textbf{Caminata aleatoria simétrica en $\mathbb{Z}$.} Sea $Y_i$ con distribución $\mathbb{P}(Y_i = 1) = \mathbb{P}(Y_i = -1) = \frac{1}{2}$. El proceso $X_n = \sum_{i=1}^n Y_i$ es una caminata aleatoria simétrica donde en cada paso el proceso se mueve una unidad hacia la derecha o hacia la izquierda con igual probabilidad. Algunas probabilidades de interés:
+\begin{itemize}
+    \item $\mathbb{P}(X_1 = 1) = \frac{1}{2}$ y $\mathbb{P}(X_1 = -1) = \frac{1}{2}$.
+    \item $\mathbb{P}(X_2 = 0) = \mathbb{P}(Y_1 = 1, Y_2 = -1) + \mathbb{P}(Y_1 = -1, Y_2 = 1) = \frac{1}{4} + \frac{1}{4} = \frac{1}{2}$.
+    \item $\mathbb{P}(X_2 = 2) = \mathbb{P}(Y_1 = 1, Y_2 = 1) = \frac{1}{4}$.
+    \item $\mathbb{P}(X_3 = 0)$: Es necesario un número par de pasos $+1$ y un número par de pasos $-1$. Esto es imposible en 3 pasos, por lo que esta probabilidad es 0.
+\end{itemize}
+\end{example}
+
+\begin{example}[3]
+\textbf{Caminata aleatoria de Pólya.} Consideremos $Y_i$ con distribución $\mathbb{P}(Y_i = k) = p^k(1-p)^{1-k}$ para $k \in \{0, 1\}$, donde $0 < p < 1$. El proceso $X_n = \sum_{i=1}^n Y_i$ cuenta el número de ``éxitos'' hasta el tiempo $n$, y representa el número de caras en $n$ lanzamientos de una moneda sesgada. Este tipo de caminata aleatoria tiene aplicaciones en economía, biología y otras áreas.
+\end{example}
+
+\section{Distribución Inicial y Matriz de Transición}
+
+\textbf{Distribución inicial.} La \textbf{distribución inicial} (o \textbf{distribución de probabilidad inicial}) de un proceso estocástico describe la ley de probabilidad del estado del sistema en el tiempo inicial. Para un proceso con espacio de estados $S$, se define como:
+\[
+\pi = (\pi_i)_{i \in S}, \quad \text{donde} \quad \pi_i = \mathbb{P}(X_0 = i) \geq 0, \quad \sum_{i \in S} \pi_i = 1.
+\]
+
+En el caso de espacios de estados infinitos, la distribución inicial es una medida de probabilidad sobre $S$.
+
+\textbf{Probabilidades de transición.} Para procesos a tiempo discreto, la \textbf{probabilidad de transición} de un paso describe la probabilidad de pasar de un estado $i$ al estado $j$ entre tiempo $n$ y $n+1$:
+\[
+p_{ij} = \mathbb{P}(X_{n+1} = j \mid X_n = i), \quad \forall i, j \in S.
+\]
+
+Cuando el espacio de estados es finito, estas probabilidades pueden organizarse en una \textbf{matriz de transición}:
+\[
+P = (p_{ij})_{i,j \in S},
+\]
+que es una matriz cuadrada cuyas entradas satisfacen propiedades específicas.
+
+\begin{proposition}
+Sea $P = (p_{ij})$ la matriz de probabilidades de transición de un paso para un proceso estocástico con espacio de estados finito $S = \{1, 2, \ldots, m\}$. Entonces:
+\begin{enumerate}
+    \item $p_{ij} \geq 0$ para todos $i, j \in S$.
+    \item $\sum_{j=1}^m p_{ij} = 1$ para todo $i \in S$ (cada fila suma 1).
+    \item $P$ es una \textbf{matriz estocástica}.
+\end{enumerate}
+\end{proposition}
+
+\begin{example}[4]
+\textbf{Movilidad social y clases socioeconómicas.} Considere una población clasificada en tres clases: baja (B), media (M) y alta (A). Sea $X_n$ la clase socioeconómica del primogénito de una familia en la generación $n$. El espacio de estados es $S = \{B, M, A\}$ y el espacio parametral es $T = \mathbb{N}$. 
+
+Suponga que en el momento actual ($n = 0$), la distribución inicial es:
+\[
+\pi_B = 0.5, \quad \pi_M = 0.3, \quad \pi_A = 0.2.
+\]
+
+Esto significa que el 50\% de la población pertenece a la clase baja, el 30\% a la clase media y el 20\% a la clase alta. Una pregunta natural es: \textit{¿Cuál es la probabilidad de que el nieto de una persona de clase baja pertenezca a la clase alta?} Para responder esto necesitamos conocer las probabilidades de transición $p_{ij} = \mathbb{P}(X_{n+1} = j \mid X_n = i)$ para cada par de clases $(i,j)$.
+\end{example}
+
+\begin{example}[5]
+\textbf{Dinero en la cartera.} Sea $X_n$ la cantidad de dinero (en pesos) en nuestra cartera al final del día $n$. El espacio de estados es $S = \mathbb{R}^+_0$ (números reales no negativos). El espacio parametral es $T = \mathbb{N}$ (días). La distribución inicial $X_0$ depende de cuánto dinero teníamos al inicio, y las probabilidades de transición modelan cómo cambia nuestro saldo diariamente en función de nuestros gastos e ingresos, que pueden ser aleatorios.
+\end{example}
+
+\begin{example}[6]
+\textbf{Precio de una acción en la bolsa.} Sea $X_n$ el precio de una acción particular al cierre del día $n$. El espacio parametral es $T = \mathbb{N}$ (días de operación bursátil) y el espacio de estados es $S = \mathbb{R}^+$ (precios positivos). La distribución inicial depende del precio de cierre inicial de la acción. Las probabilidades de transición $\mathbb{P}(X_{n+1} \in [a, b] \mid X_n = x)$ modelan cómo evoluciona el precio día a día en respuesta a condiciones de mercado, y son un objeto central de estudio en matemática financiera.
+\end{example}
+
+\begin{example}[7]
+\textbf{Temperatura ambiente cada hora.} Sea $X_t$ la temperatura ambiente (en grados Celsius) registrada cada hora $t$ durante un periodo de tiempo. Aquí, $T = \mathbb{N}$ (horas) y $S = \mathbb{R}$ (cualquier temperatura es posible en principio). La distribución inicial $X_0$ depende de la temperatura al momento inicial, y las probabilidades de transición reflejan patrones de cambio de temperatura entre horas consecutivas, que dependen de factores como la hora del día, la estación del año, y otras condiciones meteorológicas.
+\end{example}
+
+\begin{example}[8]
+\textbf{Deciles de ingresos.} Sea $X_n$ el decil de ingresos al que pertenece el primogénito de una familia en la generación $n$, donde los deciles son $S = \{D_1, D_2, \ldots, D_{10}\}$ con $D_1$ siendo el 10\% más pobre y $D_{10}$ el 10\% más rico. El espacio parametral es $T = \mathbb{N}$ (generaciones). La distribución inicial $(\pi_{D_1}, \ldots, \pi_{D_{10}})$ representa la proporción de la población en cada decil. Las probabilidades de transición $p_{ij} = \mathbb{P}(X_{n+1} = D_j \mid X_n = D_i)$ describen la movilidad socioeconómica entre generaciones.
+\end{example}
+
+\begin{example}[9]
+\textbf{Estatura de una persona en el tiempo.} Sea $X_n$ la estatura de una persona (en centímetros) medida al final del año $n$. Aquí, $T = \mathbb{N}$ (años de vida) y $S = \mathbb{R}^+$ (estaturas positivas). La distribución inicial depende de la estatura al nacimiento. Las probabilidades de transición son determinísticas en el caso del crecimiento infantil (la estatura tiende a aumentar de manera predecible años a años durante la infancia), pero pueden incluir variabilidad en períodos posteriores.
+\end{example}
+
+\begin{example}[10]
+\textbf{Población de una especie.} Sea $X_n$ la cantidad total de individuos de una especie particular en una región al tiempo $n$. El espacio de estados es $S = \mathbb{Z}_{\geq 0}$ (números enteros no negativos), el espacio parametral es $T = \mathbb{N}$ (periodos de tiempo, p. ej., años), y la distribución inicial es el tamaño de la población inicial. Las probabilidades de transición dependen de tasas de natalidad, mortalidad, inmigración y emigración, que pueden ser determinísticas o estocásticas.
+\end{example}
+
+\begin{example}[11]
+\textbf{Movimiento de una partícula en un fluido.} Sea $\mathbf{X}_t = (X_t, Y_t, Z_t) \in \mathbb{R}^3$ la posición de una partícula suspendida en un fluido al tiempo $t$ (movimiento browniano). El espacio de estados es $S = \mathbb{R}^3$. Esta es una descripción clásica del movimiento aleatorio de partículas coloidales, estudiado por primera vez por Robert Brown. El espacio parametral puede ser discreto (si observamos la posición en intervalos regulares) o continuo (si consideramos la trayectoria continua de la partícula).
+\end{example}
+
+\begin{remark}
+La distribución inicial y las probabilidades de transición determinan completamente la evolución probabilística de un proceso estocástico a tiempo discreto. Para un proceso con espacio de estados finito, la matriz de transición es una herramienta algebraica fundamental para estudiar el comportamiento a largo plazo del proceso.
+\end{remark}
+
+\section{Cadenas de Markov}
+
+Un \textbf{proceso de Markov} es un proceso estocástico que satisface una propiedad especial de ``falta de memoria'': el futuro del proceso, dado el estado presente, es independiente del pasado. Más formalmente:
+
+\begin{definition}
+Decimos que un proceso estocástico $\{X_n : n \in \mathbb{N}\}$ es un \textbf{proceso de Markov} si para todos $n \in \mathbb{N}$ y todos los estados $i_0, i_1, \ldots, i_n, j \in S$:
+\[
+\mathbb{P}(X_{n+1} = j \mid X_n = i_n, X_{n-1} = i_{n-1}, \ldots, X_0 = i_0) = \mathbb{P}(X_{n+1} = j \mid X_n = i_n),
+\]
+siempre que las probabilidades condicionales estén bien definidas.
+\end{definition}
+
+Una \textbf{cadena de Markov} es un proceso de Markov a tiempo discreto con espacio de estados discreto. En esta sesión, nuestro estudio se centrará principalmente en cadenas de Markov a tiempo discreto con espacio de estados finito.
+
+\begin{definition}
+Una \textbf{cadena de Markov homogénea} es una cadena de Markov donde las probabilidades de transición no dependen del tiempo $n$, es decir, $\mathbb{P}(X_{n+1} = j \mid X_n = i)$ es la misma para todo $n \geq 0$.
+\end{definition}
+
+\begin{remark}
+A menos que se indique lo contrario, en este curso supondremos que todas nuestras cadenas de Markov son homogéneas. Esta hipótesis simplifica significativamente el análisis matemático y es apropiada para muchas aplicaciones prácticas.
+\end{remark}
+
+\end{document}
