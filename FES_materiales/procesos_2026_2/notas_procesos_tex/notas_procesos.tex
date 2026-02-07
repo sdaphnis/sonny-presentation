@@ -11,6 +11,9 @@
 \geometry{margin=1in}
 \pagestyle{fancy}
 
+% Ocultar el texto de las secciones en los encabezados
+\renewcommand{\sectionmark}[1]{}
+
 % Definición de entornos personalizados
 \newtheorem{definition}{Definición}[chapter]
 \newtheorem{proposition}{Proposición}[chapter]
@@ -68,7 +71,7 @@ La teoría de procesos estocásticos tuvo sus orígenes en los trabajos de Andr�
 
 \begin{definition} Un \textbf{proceso estocástico} es una colección de variables aleatorias $\{X_t : t \in T\}$ definidas sobre un espacio de probabilidad $(\Omega, \mathcal{F}, \mathbb{P})$, donde:
 \begin{itemize}
-    \item $T$ es el \textbf{índice temporal}, que puede ser discreto ($T = \mathbb{N}$, ¡asumiremos que contiene al cero!) o continuo ($T = \mathbb{R}^+$).
+    \item $T$ es el \textbf{índice temporal}, que puede ser discreto ($T = \mathbb{N}$) o continuo ($T = \mathbb{R}^+$). Asumiremos que ambos conjuntos contienen al cero.
     \item $X_t$ representa el estado del sistema en el tiempo $t$.
 \end{itemize}
 
@@ -214,6 +217,141 @@ Esto significa que el 50\% de la población pertenece a la clase baja, el 30\% a
 La distribución inicial y las probabilidades de transición determinan completamente la evolución probabilística de un proceso estocástico a tiempo discreto. Para un proceso con espacio de estados finito, la matriz de transición es una herramienta algebraica fundamental para estudiar el comportamiento a largo plazo del proceso.
 \end{remark}
 
+\subsection*{La ruina del jugador}
+
+Consideremos uno de los problemas más antiguos e importantes de la teoría de procesos estocásticos: \textit{el problema de la ruina del jugador}. Este problema ilustra cómo las probabilidades de transición pueden usarse para resolver preguntas fundamentales sobre la evolución de un proceso.
+
+\textbf{Planteamiento del problema.} Un jugador inicia con una fortuna de $k$ dólares. En cada ronda de juego:
+\begin{itemize}
+    \item Con probabilidad $p$, el jugador gana \$1 (su fortuna aumenta a $k+1$).
+    \item Con probabilidad $q = 1 - p$, el jugador pierde \$1 (su fortuna disminuye a $k-1$).
+\end{itemize}
+
+El juego continúa hasta que el jugador se arruina (fortuna = \$0) o alcanza una fortuna objetivo de \$N. Sea $X_n$ la fortuna del jugador después de $n$ rondas, donde $X_0 = k$. El espacio de estados es $S = \{0, 1, 2, \ldots, N\}$, siendo 0 y $N$ \textit{estados absorbentes} (el juego termina cuando se alcanzan).
+
+Las probabilidades de transición de un paso son:
+\[
+p_{i,i+1} = p, \quad p_{i,i-1} = q, \quad \text{para } i \in \{1, 2, \ldots, N-1\},
+\]
+y $p_{0,0} = 1$, $p_{N,N} = 1$ (los estados absorbentes permanecen absorbentes).
+
+\textbf{Objetivo.} Calcular $P_k := \mathbb{P}(\text{el jugador alcanza } \$N \mid X_0 = k)$, es decir, la probabilidad de que el jugador gane alcanzando la fortuna objetivo antes de arruinarse.
+
+\textbf{Solución mediante ecuaciones de recurrencia.} 
+
+Razonemos de manera intuitiva. Si el jugador se encuentra en la fortuna $k$ (con $0 < k < N$), en la siguiente ronda ocurre uno de dos eventos:
+\begin{enumerate}
+    \item Con probabilidad $p$, el jugador gana \$1 y su fortuna pasa a $k+1$.
+    \item Con probabilidad $q$, el jugador pierde \$1 y su fortuna pasa a $k-1$.
+\end{enumerate}
+
+Por lo tanto, la probabilidad de que el jugador eventualmente alcance \$N partiendo de $k$ depende de lo que suceda en la próxima ronda. Podemos escribir:
+\[
+P_k = p \cdot P_{k+1} + q \cdot P_{k-1}, \quad \text{para } 0 < k < N.
+\]
+
+Con condiciones de frontera:
+\[
+P_0 = 0 \quad (\text{si el jugador está arruinado, no puede ganar}),
+\]
+\[
+P_N = 1 \quad (\text{si el jugador alcanza la fortuna objetivo, ha ganado}).
+\]
+
+Esta es una ecuación de recurrencia lineal homogénea de segundo orden. Su solución depende del valor de $p$.
+
+\textbf{Caso 1: Juego justo} ($p = q = \frac{1}{2}$).
+
+Si $p = \frac{1}{2}$, la ecuación se convierte en:
+\[
+P_k = \frac{1}{2} P_{k+1} + \frac{1}{2} P_{k-1},
+\]
+que puede reescribirse como:
+\[
+P_{k+1} - P_k = P_k - P_{k-1}.
+\]
+
+Esto significa que las diferencias consecutivas son constantes. Por lo tanto, $P_k$ es una función lineal de $k$:
+\[
+P_k = a + bk
+\]
+para algunas constantes $a$ y $b$. Aplicando las condiciones de frontera:
+\[
+P_0 = a = 0 \implies a = 0,
+\]
+\[
+P_N = b \cdot N = 1 \implies b = \frac{1}{N}.
+\]
+
+Por lo tanto:
+\[
+\boxed{P_k = \frac{k}{N} \quad \text{(para } p = \tfrac{1}{2}\text{)}.}
+\]
+
+Esta es una conclusión importante: \textit{en un juego justo, la probabilidad de ganar es proporcional a la fortuna inicial}.
+
+\textbf{Caso 2: Juego sesgado} ($p \neq \frac{1}{2}$).
+
+Cuando $p \neq q$, buscamos soluciones de la forma $P_k = r^k$. Sustituyendo en la ecuación de recurrencia:
+\[
+r^k = p \cdot r^{k+1} + q \cdot r^{k-1}.
+\]
+
+Dividiendo por $r^{k-1}$:
+\[
+r = p \cdot r^2 + q,
+\]
+o equivalentemente:
+\[
+p r^2 - r + q = 0.
+\]
+
+Las soluciones son:
+\[
+r = \frac{1 \pm \sqrt{1 - 4pq}}{2p} = \frac{1 \pm \sqrt{(1 - 2p)^2}}{2p} = \frac{1 \pm |1 - 2p|}{2p}.
+\]
+
+Como $p + q = 1$, tenemos $1 - 4pq = (p - q)^2 = (1 - 2p)^2$, por lo que:
+\[
+r_1 = 1 \quad \text{y} \quad r_2 = \frac{q}{p}.
+\]
+
+La solución general es:
+\[
+P_k = A + B \left(\frac{q}{p}\right)^k
+\]
+para constantes $A$ y $B$. Aplicando las condiciones de frontera:
+\[
+P_0 = A + B = 0 \implies B = -A,
+\]
+\[
+P_N = A + B \left(\frac{q}{p}\right)^N = A \left(1 - \left(\frac{q}{p}\right)^N\right) = 1.
+\]
+
+Despejando $A$:
+\[
+A = \frac{1}{1 - (q/p)^N}.
+\]
+
+Por lo tanto:
+\[
+\boxed{P_k = \frac{1 - (q/p)^k}{1 - (q/p)^N} \quad \text{(para } p \neq \tfrac{1}{2}\text{)}.}
+\]
+
+Nótese que esta fórmula recupera el resultado del caso justo cuando $p = \frac{1}{2}$ (tomando el límite adecuado).
+
+\textbf{Interpretación de los resultados.}
+
+\begin{enumerate}
+    \item \textbf{Cuando $p > \frac{1}{2}$ (juego favorable).} Tenemos $q/p < 1$, por lo que $(q/p)^k \to 0$ cuando $k \to \infty$. Para un jugador con fortuna inicial $k$ pequeña comparada con $N$, la probabilidad $P_k \approx 1 - (q/p)^k$ es cercana a 1. Esto indica que un jugador con ventaja tiene una alta probabilidad de ganar, especialmente si su objetivo es modesto.
+    
+    \item \textbf{Cuando $p < \frac{1}{2}$ (juego desfavorable).} Tenemos $q/p > 1$, por lo que $(q/p)^k$ crece exponencialmente con $k$. Incluso si el jugador comienza con una buena fortuna inicial, la probabilidad de ganar disminuye exponencialmente. Para un jugador con $p < \frac{1}{2}$ y en contra de un oponente con una fortuna mucho mayor ($N$ muy grande), la ruina es prácticamente segura.
+    
+    \item \textbf{El caso justo.} Cuando $p = \frac{1}{2}$, la probabilidad de ganar es simplemente $k/N$, una relación lineal. Un jugador con fortuna $k$ y objetivo $N$ tiene una probabilidad de éxito igual a la proporción de su fortuna inicial respecto al capital total en juego.
+\end{enumerate}
+
+\textbf{Observación fundamental.} Este problema demuestra la potencia de analizar procesos estocásticos a través de sus probabilidades de transición. Sin invocar teorías sofisticadas, simplemente planteando ecuaciones de recurrencia basadas en cómo el proceso evoluciona en un paso, hemos obtenido resultados exactos y muy interpretables. Esta es la esencia del enfoque mediante cadenas de Markov: comprender el comportamiento global del sistema a partir del conocimiento local de cómo transiciona entre estados adyacentes.
+
 \section{Cadenas de Markov}
 
 Un \textbf{proceso de Markov} es un proceso estocástico que satisface una propiedad especial de ``falta de memoria'': el futuro del proceso, dado el estado presente, es independiente del pasado. Más formalmente:
@@ -226,7 +364,7 @@ Decimos que un proceso estocástico $\{X_n : n \in \mathbb{N}\}$ es un \textbf{p
 siempre que las probabilidades condicionales estén bien definidas.
 \end{definition}
 
-Una \textbf{cadena de Markov} es un proceso de Markov a tiempo discreto con espacio de estados discreto. En esta sesión, nuestro estudio se centrará principalmente en cadenas de Markov a tiempo discreto con espacio de estados finito.
+Una \textbf{cadena de Markov} es un proceso de Markov a tiempo discreto con espacio de estados discreto.
 
 \begin{definition}
 Una \textbf{cadena de Markov homogénea} es una cadena de Markov donde las probabilidades de transición no dependen del tiempo $n$, es decir, $\mathbb{P}(X_{n+1} = j \mid X_n = i)$ es la misma para todo $n \geq 0$.
@@ -235,5 +373,147 @@ Una \textbf{cadena de Markov homogénea} es una cadena de Markov donde las proba
 \begin{remark}
 A menos que se indique lo contrario, en este curso supondremos que todas nuestras cadenas de Markov son homogéneas. Esta hipótesis simplifica significativamente el análisis matemático y es apropiada para muchas aplicaciones prácticas.
 \end{remark}
+
+\subsection*{La caminata aleatoria como cadena de Markov homogénea}
+
+Demostremos que la caminata aleatoria $\{X_n : n \in \mathbb{N}\}$ definida por $X_n = \sum_{i=1}^n Y_i$ (donde los $Y_i$ son i.i.d. con distribución en $S_Y \subseteq \mathbb{R}$) es una cadena de Markov homogénea.
+
+\begin{proposition}
+La caminata aleatoria $X_n = \sum_{i=1}^n Y_i$ con $X_0 = 0$ es una cadena de Markov homogénea cuando los $Y_i$ son independientes e idénticamente distribuidas.
+\end{proposition}
+
+\begin{proof}
+Demostramos dos cosas: primero que es una cadena de Markov, y luego que es homogénea.
+
+\textit{Parte 1: Propiedad de Markov.} 
+
+Sea $n \in \mathbb{N}$ y sean $i_0, i_1, \ldots, i_n, j$ valores específicos en el espacio de estados. Queremos mostrar que:
+\[
+\mathbb{P}(X_{n+1} = j \mid X_n = i_n, X_{n-1} = i_{n-1}, \ldots, X_0 = i_0) = \mathbb{P}(X_{n+1} = j \mid X_n = i_n).
+\]
+
+Por definición, $X_{n+1} = X_n + Y_{n+1}$. Dado que $X_n = i_n$, tenemos:
+\[
+X_{n+1} = j \iff Y_{n+1} = j - i_n.
+\]
+
+Por lo tanto:
+\[
+\mathbb{P}(X_{n+1} = j \mid X_n = i_n, X_{n-1} = i_{n-1}, \ldots, X_0 = i_0) = \mathbb{P}(Y_{n+1} = j - i_n \mid X_n = i_n, X_{n-1} = i_{n-1}, \ldots, X_0 = i_0).
+\]
+
+Ahora bien, la variable aleatoria $Y_{n+1}$ es independiente de todas las variables $Y_1, Y_2, \ldots, Y_n$ por la hipótesis de independencia. Puesto que $X_0, X_1, \ldots, X_n$ son funciones únicamente de $Y_1, Y_2, \ldots, Y_n$, podemos concluir que $Y_{n+1}$ es independiente de $(X_0, X_1, \ldots, X_n)$. En particular:
+\[
+\mathbb{P}(Y_{n+1} = j - i_n \mid X_n = i_n, X_{n-1} = i_{n-1}, \ldots, X_0 = i_0) = \mathbb{P}(Y_{n+1} = j - i_n).
+\]
+
+Asimismo:
+\[
+\mathbb{P}(X_{n+1} = j \mid X_n = i_n) = \mathbb{P}(Y_{n+1} = j - i_n \mid X_n = i_n) = \mathbb{P}(Y_{n+1} = j - i_n).
+\]
+
+Por lo tanto, se cumple la igualdad requerida, y $\{X_n\}$ es una cadena de Markov.
+
+\textit{Parte 2: Homogeneidad.}
+
+Para demostrar que la cadena es homogénea, debemos verificar que la probabilidad de transición $p_{ij}^{(n)} := \mathbb{P}(X_{n+1} = j \mid X_n = i)$ no depende de $n$.
+
+Para cualquier $n$, condicionando en $X_n = i$:
+\[
+\mathbb{P}(X_{n+1} = j \mid X_n = i) = \mathbb{P}(X_n + Y_{n+1} = j \mid X_n = i) = \mathbb{P}(Y_{n+1} = j - i \mid X_n = i).
+\]
+
+Como $Y_{n+1}$ es independiente de $X_n$:
+\[
+\mathbb{P}(Y_{n+1} = j - i \mid X_n = i) = \mathbb{P}(Y_{n+1} = j - i).
+\]
+
+Dado que todos los $Y_i$ tienen la misma distribución, la probabilidad $\mathbb{P}(Y_{n+1} = j - i)$ es idéntica para cualquier $n$. Por lo tanto:
+\[
+p_{ij} := \mathbb{P}(X_{n+1} = j \mid X_n = i) = \mathbb{P}(Y_1 = j - i)
+\]
+no depende de $n$, lo que demuestra que la cadena es homogénea. 
+\end{proof}
+
+\begin{remark}
+Si considerásemos un proceso estocástico $\{Z_n : n \in \mathbb{N}\}$ donde cada $Z_n$ es una variable aleatoria independiente (no solo débilmente dependiente como en la caminata aleatoria, sino completamente independiente de las demás), entonces el proceso sería trivialmente una cadena de Markov homogénea: la probabilidad de transición sería:
+\[
+\mathbb{P}(Z_{n+1} = j \mid Z_n = i) = \mathbb{P}(Z_{n+1} = j),
+\]
+que no depende del estado actual $i$. De hecho, para procesos con variables completamente independientes, la propiedad de Markov es automática porque el futuro es independiente de todo el pasado, incluyendo el presente. La especificidad de las cadenas de Markov reside en permitir dependencia entre variables aleatorias sucesivas (a través de las probabilidades de transición) mientras se mantiene la ausencia de memoria más allá del estado presente.
+\end{remark}
+
+\subsection*{Ejemplos de cadenas de Markov con matriz de transición explícita}
+
+\begin{example}[12]
+\textbf{Cadena de Markov con matriz de transición finita.} Consideremos una cadena de Markov con espacio de estados $S = \{1, 2, 3\}$ y matriz de transición:
+\[
+P = \begin{pmatrix}
+0.5 & 0.3 & 0.2 \\
+0.1 & 0.6 & 0.3 \\
+0.2 & 0.2 & 0.6
+\end{pmatrix},
+\]
+donde $P_{ij}$ representa la probabilidad $p_{ij} = \mathbb{P}(X_{n+1} = j \mid X_n = i)$. Por ejemplo:
+\begin{itemize}
+    \item $p_{1,1} = 0.5$: Si el proceso está en estado 1, permanece en estado 1 con probabilidad 0.5.
+    \item $p_{1,2} = 0.3$: Si el proceso está en estado 1, transiciona a estado 2 con probabilidad 0.3.
+    \item $p_{2,3} = 0.3$: Si el proceso está en estado 2, transiciona a estado 3 con probabilidad 0.3.
+\end{itemize}
+
+Cada fila de la matriz suma 1, como corresponde a una matriz estocástica.
+
+Supongamos una distribución inicial $\pi = (0.4, 0.3, 0.3)$, lo que significa:
+\[
+\mathbb{P}(X_0 = 1) = 0.4, \quad \mathbb{P}(X_0 = 2) = 0.3, \quad \mathbb{P}(X_0 = 3) = 0.3.
+\]
+
+A partir de esta distribución inicial y la matriz de transición, podemos calcular la distribución de probabilidades en tiempos posteriores. Por ejemplo, la distribución en tiempo 1 es:
+\[
+\pi^{(1)} = \pi \cdot P = (0.4, 0.3, 0.3) \cdot P.
+\]
+
+Calculando:
+\[
+\pi_1^{(1)} = 0.4 \cdot 0.5 + 0.3 \cdot 0.1 + 0.3 \cdot 0.2 = 0.2 + 0.03 + 0.06 = 0.29,
+\]
+\[
+\pi_2^{(1)} = 0.4 \cdot 0.3 + 0.3 \cdot 0.6 + 0.3 \cdot 0.2 = 0.12 + 0.18 + 0.06 = 0.36,
+\]
+\[
+\pi_3^{(1)} = 0.4 \cdot 0.2 + 0.3 \cdot 0.3 + 0.3 \cdot 0.6 = 0.08 + 0.09 + 0.18 = 0.35.
+\]
+
+Por lo tanto, $\pi^{(1)} = (0.29, 0.36, 0.35)$.
+\end{example}
+
+\begin{example}[13]
+\textbf{La cadena de las horas del reloj.} Sea $X_n$ la hora que marca un reloj después de $n$ horas, donde las horas se representan como $S = \{0, 1, 2, \ldots, 11\}$ (con 0 representando las 12 en punto). El proceso transiciona según la regla determinística:
+\[
+X_{n+1} = (X_n + 1) \bmod 12.
+\]
+
+Esto significa que de cualquier hora $i$, el reloj avanza a la hora $i+1$ (módulo 12) con probabilidad 1. Formalmente, las probabilidades de transición son:
+\[
+p_{i, (i+1) \bmod 12} = 1 \quad \text{para todo } i \in S,
+\]
+y $p_{ij} = 0$ para cualquier otro par $(i, j)$.
+
+La matriz de transición es:
+\[
+P = \begin{pmatrix}
+0 & 1 & 0 & 0 & \cdots & 0 \\
+0 & 0 & 1 & 0 & \cdots & 0 \\
+0 & 0 & 0 & 1 & \cdots & 0 \\
+\vdots & \vdots & \vdots & \vdots & \ddots & \vdots \\
+1 & 0 & 0 & 0 & \cdots & 0
+\end{pmatrix},
+\]
+donde cada fila contiene exactamente un 1 (en la posición correspondiente a la siguiente hora) y ceros en todas partes.
+
+Este es un ejemplo de cadena de Markov con estructura \textit{cíclica}. Si el reloj comienza en las 3 en punto ($X_0 = 3$), después de 1 hora marca las 4 ($X_1 = 4$), después de 2 horas marca las 5 ($X_2 = 5$), y después de 12 horas regresa a las 3 ($X_{12} = 3$). De manera general, $X_n = (X_0 + n) \bmod 12$.
+
+Aunque el proceso es determinístico (no hay aleatoriedad en las transiciones), sigue siendo una cadena de Markov válida: el futuro depende únicamente del estado presente, no del pasado.
+\end{example}
 
 \end{document}
