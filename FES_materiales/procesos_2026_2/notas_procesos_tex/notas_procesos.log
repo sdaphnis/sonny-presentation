@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.3.8)  16 FEB 2026 19:13
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.3.8)  16 FEB 2026 19:22
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -194,10 +194,8 @@ Package: amsthm 2020/05/29 v2.20.6
 File: l3backend-pdftex.def 2024-05-08 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count293
 \l__pdf_internal_box=\box54
-) (./notas_procesos.aux
-LaTeX Info: Redefining \. on input line 8.
-LaTeX Info: Redefining \% on input line 8.
 )
+No file notas_procesos.aux.
 \openout1 = `notas_procesos.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 30.
@@ -216,7 +214,6 @@ LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 30.
 LaTeX Font Info:    ... okay on input line 30.
 LaTeX Info: Redefining \. on input line 30.
 LaTeX Info: Redefining \% on input line 30.
-
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
 *geometry* verbose mode - [ preamble ] result:
@@ -278,17 +275,8 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 
 [2
 
-] (./notas_procesos.toc
-LaTeX Info: Redefining \. on input line 1.
-LaTeX Info: Redefining \% on input line 1.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 3.
- (/usr/local/texlive/2025/texmf-dist/tex/latex/amsfonts/umsa.fd
-File: umsa.fd 2013/01/14 v3.01 AMS symbols A
-)
-LaTeX Font Info:    Trying to load font information for U+msb on input line 3.
- (/usr/local/texlive/2025/texmf-dist/tex/latex/amsfonts/umsb.fd
-File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-))
+]
+No file notas_procesos.toc.
 \tf@toc=\write3
 \openout3 = `notas_procesos.toc'.
 
@@ -304,7 +292,14 @@ LaTeX Info: Redefining \% on input line 65.
 
 ]
 Cap\'{\i }tulo 1.
-
+LaTeX Font Info:    Trying to load font information for U+msa on input line 72.
+(/usr/local/texlive/2025/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Trying to load font information for U+msb on input line 72.
+ (/usr/local/texlive/2025/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+)
 
 [5]
 
@@ -354,9 +349,57 @@ LaTeX Info: Redefining \. on input line 496.
 LaTeX Info: Redefining \% on input line 496.
 [14]
 
-LaTeX Info: Redefining \. on input line 539.
-LaTeX Info: Redefining \% on input line 539.
-[15] (./notas_procesos.aux
+LaTeX Info: Redefining \. on input line 542.
+LaTeX Info: Redefining \% on input line 542.
+[15]
+
+LaTeX Info: Redefining \. on input line 602.
+LaTeX Info: Redefining \% on input line 602.
+[16]
+
+/Users/sonnymedina/Desktop/Personal webpage/sonny-presentation/FES_materiales/procesos_2026_2/notas_procesos_tex/notas_procesos.tex:615: LaTeX Error: Environment theorem undefined.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.615 \begin{theorem}
+                     [Ecuación de Chapman-Kolmogorov]
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+/Users/sonnymedina/Desktop/Personal webpage/sonny-presentation/FES_materiales/procesos_2026_2/notas_procesos_tex/notas_procesos.tex:626: LaTeX Error: \begin{document} ended by \end{theorem}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.626 \end{theorem}
+                   
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+
+LaTeX Info: Redefining \. on input line 654.
+LaTeX Info: Redefining \% on input line 654.
+[17]
+Overfull \hbox (36.08478pt too wide) detected at line 716
+[]
+ []
+
+
+
+LaTeX Info: Redefining \. on input line 716.
+LaTeX Info: Redefining \% on input line 716.
+[18]
+
+LaTeX Info: Redefining \. on input line 734.
+LaTeX Info: Redefining \% on input line 734.
+[19] (./notas_procesos.aux
 LaTeX Info: Redefining \. on input line 8.
 LaTeX Info: Redefining \% on input line 8.
 )
@@ -366,18 +409,18 @@ L3 programming layer <2025-01-18>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 5108 strings out of 473190
- 79701 string characters out of 5715801
- 497481 words of memory out of 5000000
- 28313 multiletter control sequences out of 15000+600000
- 568323 words of font info for 69 fonts, out of 8000000 for 9000
+ 5120 strings out of 473190
+ 79913 string characters out of 5715801
+ 498488 words of memory out of 5000000
+ 28328 multiletter control sequences out of 15000+600000
+ 570286 words of font info for 77 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 57i,13n,82p,1591b,600s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbxti10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsl12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb>
-Output written on notas_procesos.pdf (15 pages, 215347 bytes).
+ 57i,14n,82p,1591b,603s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbxti10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsl12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmti8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb>
+Output written on notas_procesos.pdf (19 pages, 236217 bytes).
 PDF statistics:
- 129 PDF objects out of 1000 (max. 8388607)
- 81 compressed objects within 1 object stream
+ 147 PDF objects out of 1000 (max. 8388607)
+ 93 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

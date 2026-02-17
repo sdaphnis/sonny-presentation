@@ -536,4 +536,199 @@ Para aumentar nuestro entendimiento de la propiedad de Markov, probaremos la sig
 
 \end{proposition}
 
+\section{Probabilidades de Transición en $n$ Pasos}
+
+Hasta ahora hemos estudiado las probabilidades de transición de un paso, definidas como $p_{ij} = \mathbb{P}(X_{n+1} = j \mid X_n = i)$. Sin embargo, en muchas aplicaciones es fundamental conocer la probabilidad de que la cadena pase del estado $i$ al estado $j$ transcurridos exactamente $n$ pasos, independientemente del instante inicial.
+
+\begin{definition}
+Sea $\{X_n : n \in \mathbb{N}\}$ una cadena de Markov homogénea con espacio de estados $S$. Definimos la \textbf{probabilidad de transición en $n$ pasos} como:
+\[
+p_{ij}^{(n)} = \mathbb{P}(X_{m+n} = j \mid X_m = i),
+\]
+para cualesquiera $i, j \in S$ y $m, n \in \mathbb{N}$. La homogeneidad de la cadena garantiza que esta probabilidad es independiente del instante inicial $m$.
+\end{definition}
+
+\begin{remark}
+Por supuesto, para $n = 1$, recuperamos las probabilidades de transición de un paso:
+\[
+p_{ij}^{(1)} = p_{ij}.
+\]
+Asimismo, para $n = 0$, se define:
+\[
+p_{ij}^{(0)} = \begin{cases} 1 & \text{si } i = j, \\ 0 & \text{si } i \neq j. \end{cases}
+\]
+Esta es la matriz identidad, lo que tiene sentido: sin dar ningún paso, la cadena permanece en su estado actual con certeza.
+\end{remark}
+
+Cuando el espacio de estados es finito, estas probabilidades pueden organizarse en una \textbf{matriz de transición en $n$ pasos}:
+\[
+P^{(n)} = (p_{ij}^{(n)})_{i,j \in S},
+\]
+donde $P^{(1)} = P$ es la matriz de transición estándar y $P^{(0)} = I$ es la matriz identidad.
+
+\begin{example}[15]
+Consideremos la cadena de Markov del Ejemplo 12 con matriz de transición:
+\[
+P = \begin{pmatrix}
+0.5 & 0.3 & 0.2 \\
+0.1 & 0.6 & 0.3 \\
+0.2 & 0.2 & 0.6
+\end{pmatrix}.
+\]
+
+¿Cuál es la probabilidad de que la cadena transite del estado 1 al estado 2 en exactamente 2 pasos? Esta es la cantidad $p_{1,2}^{(2)}$. Para calcularla, podemos identificar todos los caminos de longitud 2 que comienzan en el estado 1 y terminan en el estado 2:
+\begin{itemize}
+    \item Camino $1 \to 1 \to 2$: Probabilidad $p_{1,1} \cdot p_{1,2} = 0.5 \times 0.3 = 0.15$.
+    \item Camino $1 \to 2 \to 2$: Probabilidad $p_{1,2} \cdot p_{2,2} = 0.3 \times 0.6 = 0.18$.
+    \item Camino $1 \to 3 \to 2$: Probabilidad $p_{1,3} \cdot p_{3,2} = 0.2 \times 0.2 = 0.04$.
+\end{itemize}
+
+Por lo tanto:
+\[
+p_{1,2}^{(2)} = 0.15 + 0.18 + 0.04 = 0.37.
+\]
+
+Alternativamente, podemos calcular $P^{(2)} = P \cdot P = P^2$:
+\[
+P^2 = \begin{pmatrix}
+0.5 & 0.3 & 0.2 \\
+0.1 & 0.6 & 0.3 \\
+0.2 & 0.2 & 0.6
+\end{pmatrix} \begin{pmatrix}
+0.5 & 0.3 & 0.2 \\
+0.1 & 0.6 & 0.3 \\
+0.2 & 0.2 & 0.6
+\end{pmatrix}.
+\]
+
+El elemento $(1,2)$ de $P^2$ es:
+\[
+(P^2)_{1,2} = 0.5 \times 0.3 + 0.3 \times 0.6 + 0.2 \times 0.2 = 0.15 + 0.18 + 0.04 = 0.37,
+\]
+que coincide con nuestro cálculo anterior.
+\end{example}
+
+\subsection*{La Ecuación de Chapman-Kolmogorov}
+
+La ecuación de Chapman-Kolmogorov es una relación fundamental que conecta probabilidades de transición en diferentes números de pasos. Esta ecuación expresa una intuición natural: para ir del estado $i$ al estado $j$ en $n + m$ pasos, necesariamente pasamos por algún estado intermedio $k$ después de los primeros $n$ pasos.
+
+\begin{theorem}[Ecuación de Chapman-Kolmogorov]
+Sea $\{X_n : n \in \mathbb{N}\}$ una cadena de Markov homogénea con espacio de estados $S$. Entonces, para cualesquiera enteros $n, m \geq 0$ y estados $i, j \in S$:
+\[
+p_{ij}^{(n+m)} = \sum_{k \in S} p_{ik}^{(n)} \cdot p_{kj}^{(m)}.
+\]
+
+En notación matricial:
+\[
+P^{(n+m)} = P^{(n)} \cdot P^{(m)},
+\]
+donde el producto es el producto usual de matrices.
+\end{theorem}
+
+\begin{proof}
+Demostraremos la ecuación utilizando la ley de probabilidad total y la propiedad de Markov.
+
+Sean $n, m \geq 0$ y consideremos los estados $i, j \in S$. Por definición:
+\[
+p_{ij}^{(n+m)} = \mathbb{P}(X_{n+m} = j \mid X_0 = i).
+\]
+
+Condicionamos sobre el estado de la cadena después de $n$ pasos, $X_n$. Por la ley de probabilidad total:
+\[
+\mathbb{P}(X_{n+m} = j \mid X_0 = i) = \sum_{k \in S} \mathbb{P}(X_{n+m} = j \mid X_n = k, X_0 = i) \cdot \mathbb{P}(X_n = k \mid X_0 = i).
+\]
+
+Ahora aplicamos la propiedad de Markov (Definición de cadena de Markov). Dado que la cadena es Markoviana y el estamos en el estado $X_n = k$, el futuro (desde el tiempo $n$ en adelante) es independiente del pasado (antes del tiempo $n$). Específicamente:
+\[
+\mathbb{P}(X_{n+m} = j \mid X_n = k, X_0 = i) = \mathbb{P}(X_{n+m} = j \mid X_n = k).
+\]
+
+Por lo tanto:
+\[
+p_{ij}^{(n+m)} = \sum_{k \in S} \mathbb{P}(X_{n+m} = j \mid X_n = k) \cdot \mathbb{P}(X_n = k \mid X_0 = i).
+\]
+
+Reconocemos en esta expresión:
+\[
+\mathbb{P}(X_{n+m} = j \mid X_n = k) = \mathbb{P}(X_{m} = j \mid X_0 = k) = p_{kj}^{(m)},
+\]
+y
+\[
+\mathbb{P}(X_n = k \mid X_0 = i) = p_{ik}^{(n)},
+\]
+por la homogeneidad de la cadena. Por lo tanto:
+\[
+p_{ij}^{(n+m)} = \sum_{k \in S} p_{ik}^{(n)} \cdot p_{kj}^{(m)},
+\]
+que es exactamente la ecuación de Chapman-Kolmogorov.
+
+En forma matricial, esta ecuación correspond a la multiplicación de matrices, es decir, $P^{(n+m)} = P^{(n)} \cdot P^{(m)}$.
+\end{proof}
+
+\begin{remark}
+La ecuación de Chapman-Kolmogorov es fundamental porque implica que:
+\[
+P^{(n)} = \underbrace{P \times P \times \cdots \times P}_{n \text{ veces}} = P^n,
+\]
+es decir, la matriz de transición en $n$ pasos es simplemente la $n$-ésima potencia de la matriz de transición de un paso $P$. Esta es una consecuencia inmediata de la ecuación de Chapman-Kolmogorov aplicada recursivamente:
+\[
+P^{(n)} = P^{(n-1+1)} = P^{(n-1)} \cdot P^{(1)} = P^{(n-1)} \cdot P.
+\]
+
+Por inducción, obtenemos $P^{(n)} = P^n$.
+\end{remark}
+
+\begin{example}[16]
+Retomemos la cadena de Markov del Ejemplo 12. Queremos calcular $p_{1,2}^{(3)}$, la probabilidad de ir del estado 1 al estado 2 en exactamente 3 pasos.
+
+Por la ecuación de Chapman-Kolmogorov con $n = 2$ y $m = 1$:
+\[
+p_{1,2}^{(3)} = \sum_{k=1}^{3} p_{1,k}^{(2)} \cdot p_{k,2}^{(1)}.
+\]
+
+Primero necesitamos $P^{(2)} = P^2$. Ya calculamos este en el Ejemplo 15:
+\[
+P^2 = \begin{pmatrix}
+0.29 + 0.11 & 0.36 & 0.35 \\
+\cdot & \cdot & \cdot \\
+\cdot & \cdot & \cdot
+\end{pmatrix}
+\quad \text{(mostramos solo la fila relevante con detalle)}.
+\]
+
+Calculemos $P^2$ completamente. El elemento $(i,j)$ de $P^2$ es $\sum_k p_{ik} p_{kj}$. Después del cálculo:
+\begin{align*}
+P^2 &= \begin{pmatrix}
+0.5 \cdot 0.5 + 0.3 \cdot 0.1 + 0.2 \cdot 0.2 & 0.5 \cdot 0.3 + 0.3 \cdot 0.6 + 0.2 \cdot 0.2 & 0.5 \cdot 0.2 + 0.3 \cdot 0.3 + 0.2 \cdot 0.6 \\
+0.1 \cdot 0.5 + 0.6 \cdot 0.1 + 0.3 \cdot 0.2 & 0.1 \cdot 0.3 + 0.6 \cdot 0.6 + 0.3 \cdot 0.2 & 0.1 \cdot 0.2 + 0.6 \cdot 0.3 + 0.3 \cdot 0.6 \\
+0.2 \cdot 0.5 + 0.2 \cdot 0.1 + 0.6 \cdot 0.2 & 0.2 \cdot 0.3 + 0.2 \cdot 0.6 + 0.6 \cdot 0.2 & 0.2 \cdot 0.2 + 0.2 \cdot 0.3 + 0.6 \cdot 0.6
+\end{pmatrix}\\
+&= \begin{pmatrix}
+0.25 + 0.03 + 0.04 & 0.15 + 0.18 + 0.04 & 0.10 + 0.09 + 0.12 \\
+0.05 + 0.06 + 0.06 & 0.03 + 0.36 + 0.06 & 0.02 + 0.18 + 0.18 \\
+0.10 + 0.02 + 0.12 & 0.06 + 0.12 + 0.12 & 0.04 + 0.06 + 0.36
+\end{pmatrix}\\
+&= \begin{pmatrix}
+0.32 & 0.37 & 0.31 \\
+0.17 & 0.45 & 0.38 \\
+0.24 & 0.30 & 0.46
+\end{pmatrix}.
+\end{align*}
+
+Ahora aplicamos Chapman-Kolmogorov:
+\[
+p_{1,2}^{(3)} = p_{1,1}^{(2)} \cdot p_{1,2} + p_{1,2}^{(2)} \cdot p_{2,2} + p_{1,3}^{(2)} \cdot p_{3,2}
+\]
+\[
+= 0.32 \times 0.3 + 0.37 \times 0.6 + 0.31 \times 0.2 = 0.096 + 0.222 + 0.062 = 0.380.
+\]
+
+Alternativamente, podemos calcular $P^3 = P^2 \times P$ y leer el elemento $(1,2)$.
+\end{example}
+
+\begin{remark}
+La ecuación de Chapman-Kolmogorov no es únicamente un resultado teórico interesante; tiene profundas implicaciones prácticas. Al expresar $P^{(n)} = P^n$, nos proporciona un algoritmo eficiente (usando exponenciación rápida de matrices) para calcular probabilidades de transición en un gran número de pasos sin necesidad de enumerar todos los caminos posibles. Esto es especialmente relevante en aplicaciones computacionales donde frecuentemente nos interesa el comportamiento a largo plazo de cadenas de Markov.
+\end{remark}
+
+
 \end{document}
