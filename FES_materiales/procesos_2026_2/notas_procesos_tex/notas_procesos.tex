@@ -374,7 +374,9 @@ Una \textbf{cadena de Markov homogénea} es una cadena de Markov donde las proba
 A menos que se indique lo contrario, en este curso supondremos que todas nuestras cadenas de Markov son homogéneas. Esta hipótesis simplifica significativamente el análisis matemático y es apropiada para muchas aplicaciones prácticas.
 \end{remark}
 
-\subsection*{La caminata aleatoria como cadena de Markov homogénea}
+\begin{remark}
+    La distribución de una cadena de Markov homogénea depende únicamente de la distribución inicial y de las probabilidades de transición, es decir, de la pareja $(\pi,P)$.
+\end{remark}
 
 Demostremos que la caminata aleatoria $\{X_n : n \in \mathbb{N}\}$ definida por $X_n = \sum_{i=1}^n Y_i$ (donde los $Y_i$ son i.i.d. con distribución en $S_Y \subseteq \mathbb{R}$) es una cadena de Markov homogénea.
 
@@ -416,7 +418,7 @@ Por lo tanto, se cumple la igualdad requerida, y $\{X_n\}$ es una cadena de Mark
 
 \textit{Parte 2: Homogeneidad.}
 
-Para demostrar que la cadena es homogénea, debemos verificar que la probabilidad de transición $p_{ij}^{(n)} := \mathbb{P}(X_{n+1} = j \mid X_n = i)$ no depende de $n$.
+Para demostrar que la cadena es homogénea, debemos verificar que la probabilidad de transición $p_{ij}^{[n]} := \mathbb{P}(X_{n+1} = j \mid X_n = i)$ no depende de $n$.
 
 Para cualquier $n$, condicionando en $X_n = i$:
 \[
@@ -436,7 +438,7 @@ no depende de $n$, lo que demuestra que la cadena es homogénea.
 \end{proof}
 
 \begin{remark}
-Si considerásemos un proceso estocástico $\{Z_n : n \in \mathbb{N}\}$ donde cada $Z_n$ es una variable aleatoria independiente (no solo débilmente dependiente como en la caminata aleatoria, sino completamente independiente de las demás), entonces el proceso sería trivialmente una cadena de Markov homogénea: la probabilidad de transición sería:
+Si considerásemos un proceso estocástico $\{Z_n : n \in \mathbb{N}\}$ donde cada $Z_n$ es una variable aleatoria independiente, entonces el proceso sería trivialmente una cadena de Markov homogénea: la probabilidad de transición sería:
 \[
 \mathbb{P}(Z_{n+1} = j \mid Z_n = i) = \mathbb{P}(Z_{n+1} = j),
 \]
@@ -488,6 +490,16 @@ Por lo tanto, $\pi^{(1)} = (0.29, 0.36, 0.35)$.
 \end{example}
 
 \begin{example}[13]
+La \textit{Urna de Ehrenfest} es una cadena de Markov homogénea que representa una descripción matemática simplificada del proceso de difusion de gases o líquidos a través de una membrana. El modelo consiste de dos cajas A y B que contienen un total de $N$ bolas. Seleccionamos al azar una de las $N$ bolas y la colocamos en la otra caja. Sea $X_n$ el número de bolas en la caja $A$ después de $n$ pasos. El espacio de estados es $S = \{0, 1, 2, \ldots, N\}$, y las probabilidades de transición son:
+\[
+p_{i, i+1} = \frac{N - i}{N} \quad \text{(si seleccionamos una bola de la caja B)},
+\]
+\[p_{i, i-1} = \frac{i}{N} \quad \text{(si seleccionamos una bola de la caja A)},
+\]
+y $p_{ij} = 0$ para cualquier otro par $(i, j)$.
+\end{example}
+
+\begin{example}[14]
 \textbf{La cadena de las horas del reloj.} Sea $X_n$ la hora que marca un reloj después de $n$ horas, donde las horas se representan como $S = \{0, 1, 2, \ldots, 11\}$ (con 0 representando las 12 en punto). El proceso transiciona según la regla determinística:
 \[
 X_{n+1} = (X_n + 1) \bmod 12.
@@ -515,5 +527,13 @@ Este es un ejemplo de cadena de Markov con estructura \textit{cíclica}. Si el r
 
 Aunque el proceso es determinístico (no hay aleatoriedad en las transiciones), sigue siendo una cadena de Markov válida: el futuro depende únicamente del estado presente, no del pasado.
 \end{example}
+
+Para aumentar nuestro entendimiento de la propiedad de Markov, probaremos la siguiente proposición, que auda en la interpretación del futuro independiente del pasado dado el presente.
+
+\begin{proposition}
+    Sea $X$ una cadena de Markov homogénea $(\pi,P)$, con espacio de estados $S$, $i,j,k\in S$  y $0\leq m \leq n-1$. Se tiene que 
+    $$\mathbb{P}(X_{n+1}=j | X_n = i, X_{m} = k) = \mathbb{P}(X_{n+1}=j | X_n = i).$$ 
+
+\end{proposition}
 
 \end{document}
