@@ -1,0 +1,168 @@
+\documentclass[12pt]{article}
+\usepackage{inputenc}
+\usepackage[spanish]{babel}
+\decimalpoint % Usar puntos (.) en lugar de comas (,) como separadores decimales
+\usepackage{geometry}
+\usepackage{amsmath} % Para entornos matemáticos avanzados
+\usepackage{amssymb} % Para el uso de \mathbb
+\usepackage{amsthm} % Para entornos de teoremas
+\usepackage{hyperref} % Para hipervínculos
+
+\geometry{margin=1in}
+
+% Definición de entornos personalizados
+\newtheorem{problem}{Problema}
+
+\title{Procesos Estocásticos I \\ Tarea 1}
+\author{Semestre 2026-2}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\textbf{Instrucciones:} Resuelva los siguientes problemas. Justifique sus respuestas claramente y muestre todos los pasos. Puede utilizar los conceptos y resultados presentados en las notas de clase.
+
+\begin{problem}
+\textbf{Definición y propiedades de cadenas de Markov.}
+
+Considere una cadena de Markov homogénea $\{X_n : n \in \mathbb{N}\}$ con espacio de estados $S = \{1, 2, 3\}$ y matriz de transición:
+\[
+P = \begin{pmatrix}
+0.4 & 0.3 & 0.3 \\
+0.2 & 0.5 & 0.3 \\
+0.1 & 0.4 & 0.5
+\end{pmatrix}.
+\]
+
+\begin{enumerate}
+    \item[(a)] Verifique que $P$ es una matriz estocástica. ¿Cuáles son las condiciones que debe satisfacer?
+    
+    \item[(b)] Si la distribución inicial es $\pi = (0.3, 0.4, 0.3)$, calcule la distribución de probabilidades en el tiempo $n=1$.
+    
+    \item[(c)] Interprete el valor $\pi_1^{(1)}$ en términos de probabilidades en la cadena.
+\end{enumerate}
+\end{problem}
+
+\begin{problem}
+\textbf{Ecuación de Chapman-Kolmogorov y probabilidades en $n$ pasos.}
+
+Nuevamente considere la cadena de Markov del Problema 1 con matriz de transición:
+\[
+P = \begin{pmatrix}
+0.4 & 0.3 & 0.3 \\
+0.2 & 0.5 & 0.3 \\
+0.1 & 0.4 & 0.5
+\end{pmatrix}.
+\]
+
+\begin{enumerate}
+    \item[(a)] Calcule $P^2 = P \times P$ y encuentre el elemento $(P^2)_{2,1}$. ¿Qué representa este valor?
+    
+    \item[(b)] Utilice la ecuación de Chapman-Kolmogorov para calcular $p_{1,3}^{(2)}$ (la probabilidad de ir del estado 1 al estado 3 en exactamente 2 pasos). Verifique su resultado con el elemento $(P^2)_{1,3}$.
+    
+    \item[(c)] Enuncie formalmente la ecuación de Chapman-Kolmogorov y explique su interpretación intuitiva.
+\end{enumerate}
+\end{problem}
+
+\begin{problem}
+\textbf{Caminata aleatoria y su propiedad de Markov.}
+
+Sea $\{Y_i : i \in \mathbb{N}\}$ una sucesión de variables aleatorias independientes e idénticamente distribuidas con distribución $\mathbb{P}(Y_i = 1) = p$ y $\mathbb{P}(Y_i = -1) = 1-p$, donde $0 < p < 1$.
+
+Defina la caminata aleatoria como:
+\[
+X_n = \sum_{i=1}^n Y_i, \quad \text{con } X_0 = 0.
+\]
+
+\begin{enumerate}
+    \item[(a)] Demuestre que $\{X_n\}$ satisface la propiedad de Markov, es decir, que es una cadena de Markov homogénea.
+    
+    \item[(b)] Calcule las probabilidades de transición $p_{i,i+1}$ y $p_{i,i-1}$ para cualquier estado $i$.
+    
+    \item[(c)] Suponga que $p = 0.6$. Calcule $\mathbb{P}(X_2 = 0)$ y $\mathbb{P}(X_2 = 2)$ partiendo de $X_0 = 0$.
+    
+    \item[(d)] ¿Por qué es importante que los incrementos $Y_i$ sean independientes para que $\{X_n\}$ sea una cadena de Markov?
+\end{enumerate}
+\end{problem}
+
+\begin{problem}
+\textbf{Diagonalización de la matriz de transición y comportamiento asintótico.}
+
+Considere una cadena de Markov de dos estados con matriz de transición:
+\[
+P = \begin{pmatrix}
+1 - \alpha & \alpha \\
+\beta & 1 - \beta
+\end{pmatrix},
+\]
+donde $\alpha = 0.2$ y $\beta = 0.3$.
+
+\begin{enumerate}
+    \item[(a)] Calcule los valores propios de $P$. (Sugerencia: Uno de ellos es $\lambda_1 = 1$.)
+    
+    \item[(b)] Encuentre los vectores propios asociados a cada valor propio.
+    
+    \item[(c)] Escriba la factorización $P = VDV^{-1}$ donde $V$ es la matriz de vectores propios y $D$ es la matriz diagonal de valores propios.
+    
+    \item[(d)] Utilizando la factorización anterior, calcule $P^n$ de forma explícita y determine $\lim_{n \to \infty} P^n$.
+    
+    \item[(e)] Interprete el significado de $\lim_{n \to \infty} P^n$. ¿Qué nos dice sobre el comportamiento a largo plazo de la cadena?
+    
+    \item[(f)] Identifique la distribución estacionaria $\pi^*$ de la cadena (es decir, la distribución tal que $\pi^* P = \pi^*$).
+\end{enumerate}
+\end{problem}
+
+\begin{problem}
+\textbf{Propiedad de Markov: independencia del futuro del pasado.}
+
+Sea $\{X_n : n \in \mathbb{N}\}$ una cadena de Markov homogénea con espacio de estados $S$. Sea $i, j, k \in S$ estados arbitrarios y sean $m, n \in \mathbb{N}$ con $m < n$.
+
+\begin{enumerate}
+    \item[(a)] Demuestre que:
+    \[
+    \mathbb{P}(X_{n} = j \mid X_{n-1} = i, X_{m} = k) = \mathbb{P}(X_{n} = j \mid X_{n-1} = i).
+    \]
+    
+    Interprete este resultado: ¿qué significa que el lado izquierdo sea igual al lado derecho?
+    
+    \item[(b)] Generalice el resultado anterior y demuestre que para cualquier $n > m$:
+    \[
+    \mathbb{P}(X_{n} = j \mid X_{n-1} = i, X_{m} = k) = \mathbb{P}(X_{n} = j \mid X_{n-1} = i).
+    \]
+    
+    \item[(c)] Explique cómo este resultado refleja la ``propiedad de falta de memoria'' (``memoryless property'') de las cadenas de Markov.
+    
+    \item[(d)] ¿Por qué esta propiedad es fundamental para el análisis de cadenas de Markov? Dé un ejemplo de un proceso estocástico que NO satisfaga esta propiedad.
+\end{enumerate}
+\end{problem}
+
+\begin{problem}
+\textbf{Factorización de probabilidades conjuntas en cadenas de Markov.}
+
+Sea $\{X_n : n \in \mathbb{N}\}$ una cadena de Markov homogénea con espacio de estados $S$, distribución inicial $\pi = (\pi_i)_{i \in S}$ y matriz de transición $P = (p_{ij})$.
+
+Considere una secuencia de estados $i_0, i_1, i_2, \ldots, i_n \in S$.
+
+\begin{enumerate}
+    \item[(a)] Demuestre que la probabilidad conjunta de observar la secuencia de estados se puede factorizar como:
+    \[
+    \mathbb{P}(X_n = i_n, X_{n-1} = i_{n-1}, \ldots, X_1 = i_1, X_0 = i_0) = \pi_{i_0} \cdot p_{i_0, i_1} \cdot p_{i_1, i_2} \cdot \ldots \cdot p_{i_{n-1}, i_n}.
+    \]
+    
+    O de forma compacta:
+    \[
+    \mathbb{P}(X_0 = i_0, X_1 = i_1, \ldots, X_n = i_n) = \pi_{i_0} \prod_{j=0}^{n-1} p_{i_j, i_{j+1}}.
+    \]
+    
+    Proporcione dos demostraciones: una usando la definición de probabilidad condicional, y otra usando inducción matemática.
+    
+    \item[(b)] Interprete esta factorización: ¿qué significa en términos de cómo se genera una trayectoria de la cadena?
+    
+    \item[(c)] Considere la cadena de Markov del Problema 1 (con matriz de transición $P$ y distribución inicial $\pi = (0.3, 0.4, 0.3)$). Calcule la probabilidad de la secuencia específica de estados: $X_0 = 1, X_1 = 2, X_2 = 3$ utilizando la factorización anterior.
+    
+    \item[(d)] Explique por qué el hecho de que la probabilidad conjunta se factorice de esta manera es una consecuencia directa de la propiedad de Markov.
+\end{enumerate}
+\end{problem}
+
+\end{document}

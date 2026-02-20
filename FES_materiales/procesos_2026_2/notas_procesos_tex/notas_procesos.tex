@@ -1,20 +1,33 @@
 \documentclass[12pt]{book}
 \usepackage{inputenc}
 \usepackage[spanish]{babel}
+\decimalpoint % Usar puntos (.) en lugar de comas (,) como separadores decimales
 \usepackage{geometry}
 \usepackage{fancyhdr}
 \usepackage{graphicx}
 \usepackage{amsmath} % Para entornos matemáticos avanzados
 \usepackage{amssymb} % Para el uso de \mathbb
 \usepackage{amsthm} % Para entornos como definition, proposition, example, remark
+\usepackage{hyperref} % Para hipervínculos interactivos en el PDF
 
 \geometry{margin=1in}
 \pagestyle{fancy}
+
+% Configuración de hyperref para mejor apariencia
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue,
+    bookmarksnumbered=true,
+    pdfstartview=FitH
+}
 
 % Ocultar el texto de las secciones en los encabezados
 \renewcommand{\sectionmark}[1]{}
 
 % Definición de entornos personalizados
+\newtheorem{theorem}{Teorema}[chapter]
 \newtheorem{definition}{Definición}[chapter]
 \newtheorem{proposition}{Proposición}[chapter]
 \newtheorem{example}{Ejemplo}[chapter]
@@ -729,6 +742,206 @@ Alternativamente, podemos calcular $P^3 = P^2 \times P$ y leer el elemento $(1,2
 \begin{remark}
 La ecuación de Chapman-Kolmogorov no es únicamente un resultado teórico interesante; tiene profundas implicaciones prácticas. Al expresar $P^{(n)} = P^n$, nos proporciona un algoritmo eficiente (usando exponenciación rápida de matrices) para calcular probabilidades de transición en un gran número de pasos sin necesidad de enumerar todos los caminos posibles. Esto es especialmente relevante en aplicaciones computacionales donde frecuentemente nos interesa el comportamiento a largo plazo de cadenas de Markov.
 \end{remark}
+
+\subsection*{Diagonalización de la Matriz de Transición}
+
+Para calcular $P^n$ de manera eficiente, especialmente cuando $n$ es grande, podemos utilizar la diagonalización de la matriz $P$. El siguiente teorema es fundamental en el álgebra lineal y tiene aplicaciones directas al estudio de cadenas de Markov.
+
+\begin{theorem}
+Sea $P$ una matriz cuadrada $m \times m$ con espectro (conjunto de valores propios) $\Lambda = \{\lambda_1, \lambda_2, \ldots, \lambda_m\}$, donde $\lambda_i$ son valores propios (no necesariamente distintos) y sean $\mathbf{v}_1, \mathbf{v}_2, \ldots, \mathbf{v}_m$ los correspondientes vectores propios por la derecha.\footnote{Un vector propio derecho satisface $P \mathbf{v}_i = \lambda_i \mathbf{v}_i$.}
+
+Si $P$ es diagonalizable\footnote{Una condición suficiente para que una matriz sea diagonalizable es que todos sus valores propios sean distintos.}, entonces existe una matriz $V$ cuyas columnas son los vectores propios $\mathbf{v}_1, \mathbf{v}_2, \ldots, \mathbf{v}_m$, y una matriz $D = \text{diag}(\lambda_1, \lambda_2, \ldots, \lambda_m)$ diagonal de valores propios, tales que:
+\[
+P = V D V^{-1}.
+\]
+
+En consecuencia, para el cálculo de potencias:
+\[
+P^n = V D^n V^{-1},
+\]
+donde $D^n = \text{diag}(\lambda_1^n, \lambda_2^n, \ldots, \lambda_m^n)$ es trivial de calcular.
+\end{theorem}
+
+\begin{remark}
+Para una matriz cuadrada $P$ (en particular, una matriz de transición), existen tres propiedades fundamentales relacionadas con los valores propios:
+
+\begin{enumerate}
+    \item Si la matriz es estocástica, tiene al menos un valor propio igual a 1, lo cual está relacionado con la existencia de distribuciones estacionaria (por verse en las secciones siguientes). 
+
+    \item La \textbf{traza} de $P$ (suma de los elementos diagonales) es igual a la suma de los valores propios:
+    \[
+    \text{tr}(P) = \sum_{i=1}^m p_{ii} = \sum_{i=1}^m \lambda_i.
+    \]
+    
+    \item El \textbf{determinante} de $P$ es el producto de los valores propios:
+    \[
+    \det(P) = \prod_{i=1}^m \lambda_i.
+    \]
+\end{enumerate}
+En los casos $2 \times 2$ o $3 \times 3$, es posible obtener los valores propios resolviendo el sistema de ecuaciones que resulta de estas tres propiedades, sin necesidad de calcular explícitamente el polinomio característico.
+\end{remark}
+
+\begin{example}[17]
+\textbf{Cadena de Markov con dos estados: caso general.} Consideremos una cadena de Markov con espacio de estados $S = \{1, 2\}$ y matriz de transición:
+\[
+P = \begin{pmatrix}
+1 - \alpha & \alpha \\
+\beta & 1 - \beta
+\end{pmatrix},
+\]
+donde $0 < \alpha, \beta < 1$. Esta es una cadena arbitraria simétrica o asimétrica, dependiendo de los valores de $\alpha$ y $\beta$.
+
+\textbf{Paso 1: Calcular los valores propios.}
+
+Para esto podemos encontrar las raíces del polinomio característico $\det(P - \lambda I) = 0$ o hacer caso a las observaciones anteriores. Al ser el determinante es $\det(P) = (1 - \alpha)(1 - \beta) - \alpha \beta = 1 - \alpha - \beta$ y 1 un valor propio, el otro tiene que necesariamente ser $1 - \alpha - \beta$.
+
+\textbf{Paso 2: Calcular los vectores propios.}
+
+Para $\lambda_1 = 1$:
+\[
+\begin{pmatrix}
+1 - \alpha - 1 & \alpha \\
+\beta & 1 - \beta - 1
+\end{pmatrix} \begin{pmatrix} v_1 \\ v_2 \end{pmatrix} = \begin{pmatrix} 0 \\ 0 \end{pmatrix}
+\]
+\[
+\begin{pmatrix}
+-\alpha & \alpha \\
+\beta & -\beta
+\end{pmatrix} \begin{pmatrix} v_1 \\ v_2 \end{pmatrix} = \begin{pmatrix} 0 \\ 0 \end{pmatrix}.
+\]
+
+De la primera ecuación: $-\alpha v_1 + \alpha v_2 = 0 \implies v_1 = v_2$. Un vector propio es $\mathbf{v}_1 = \begin{pmatrix} 1 \\ 1 \end{pmatrix}$.
+
+Para $\lambda_2 = 1 - \alpha - \beta$:
+\[
+\begin{pmatrix}
+1 - \alpha - (1 - \alpha - \beta) & \alpha \\
+\beta & 1 - \beta - (1 - \alpha - \beta)
+\end{pmatrix} \begin{pmatrix} v_1 \\ v_2 \end{pmatrix} = \begin{pmatrix} 0 \\ 0 \end{pmatrix}
+\]
+\[
+\begin{pmatrix}
+\beta & \alpha \\
+\beta & \alpha
+\end{pmatrix} \begin{pmatrix} v_1 \\ v_2 \end{pmatrix} = \begin{pmatrix} 0 \\ 0 \end{pmatrix}.
+\]
+
+De la primera ecuación: $\beta v_1 + \alpha v_2 = 0 \implies v_2 = -\frac{\beta}{\alpha} v_1$. Un vector propio es $\mathbf{v}_2 = \begin{pmatrix} 1 \\ -\beta/\alpha \end{pmatrix}$ o, reescalando, $\mathbf{v}_2 = \begin{pmatrix} \alpha \\ -\beta \end{pmatrix}$.
+
+\textbf{Paso 3: Formar la matriz $V$ y su inversa.}
+
+\[
+V = \begin{pmatrix} 1 & \alpha \\ 1 & -\beta \end{pmatrix}.
+\]
+
+El determinante es $\det(V) = 1 \cdot (-\beta) - \alpha \cdot 1 = -\beta - \alpha = -(\alpha + \beta)$.
+
+\[
+V^{-1} = \frac{1}{-(\alpha + \beta)} \begin{pmatrix} -\beta & -\alpha \\ -1 & 1 \end{pmatrix} = \frac{1}{\alpha + \beta} \begin{pmatrix} \beta & \alpha \\ 1 & -1 \end{pmatrix}.
+\]
+
+\textbf{Paso 4: Expresión para $P^n$.}
+
+\[
+P^n = V D^n V^{-1} = \begin{pmatrix} 1 & \alpha \\ 1 & -\beta \end{pmatrix} \begin{pmatrix} 1 & 0 \\ 0 & (1-\alpha-\beta)^n \end{pmatrix} \frac{1}{\alpha + \beta} \begin{pmatrix} \beta & \alpha \\ 1 & -1 \end{pmatrix}.
+\]
+
+Calculando:
+\[
+V D^n = \begin{pmatrix} 1 & \alpha(1-\alpha-\beta)^n \\ 1 & -\beta(1-\alpha-\beta)^n \end{pmatrix}.
+\]
+
+Multiplicando por $V^{-1}$:
+\[
+P^n = \frac{1}{\alpha + \beta} \begin{pmatrix} 1 & \alpha(1-\alpha-\beta)^n \\ 1 & -\beta(1-\alpha-\beta)^n \end{pmatrix} \begin{pmatrix} \beta & \alpha \\ 1 & -1 \end{pmatrix}.
+\]
+
+El elemento $(1,1)$ de $P^n$ es:
+\[
+(P^n)_{1,1} = \frac{1}{\alpha + \beta} \left[ \beta + \alpha(1-\alpha-\beta)^n \right].
+\]
+
+De manera similar, podemos calcular los demás elementos:
+\[
+\boxed{P^n = \frac{1}{\alpha + \beta} \begin{pmatrix} 
+\beta + \alpha(1-\alpha-\beta)^n & \alpha - \alpha(1-\alpha-\beta)^n \\
+\beta - \beta(1-\alpha-\beta)^n & \alpha + \beta(1-\alpha-\beta)^n
+\end{pmatrix}.}
+\]
+
+\textbf{Comportamiento asintótico cuando $n \to \infty$:}
+
+Dado que $0 < \alpha, \beta < 1$, tenemos $0 < \alpha + \beta < 2$, y por lo tanto $1 - \alpha - \beta \in (-1, 1)$. Esto implica que $(1 - \alpha - \beta)^n \to 0$ cuando $n \to \infty$.
+
+Por consiguiente:
+\[
+\lim_{n \to \infty} P^n = \frac{1}{\alpha + \beta} \begin{pmatrix} 
+\beta & \alpha \\
+\beta & \alpha
+\end{pmatrix}.
+\]
+
+\end{example}
+
+
+\subsection*{Cálculo de la inversa de una matriz}
+
+Para completar el cálculo de $P^n$ mediante diagonalización, frecuentemente necesitamos calcular la inversa de la matriz $V$ de vectores propios. A continuación recordamos el método general usando cofactores y determinantes.
+
+\begin{definition}
+Sea $A$ una matriz cuadrada $m \times m$. La \textbf{matriz de cofactores} $C$ se define como:
+\[
+C_{ij} = (-1)^{i+j} M_{ij},
+\]
+donde $M_{ij}$ es el determinante del menor obtenido al eliminar la fila $i$ y la columna $j$ de $A$. La \textbf{matriz adjunta} (o \textbf{matriz de adjuntos}) es la transpuesta de la matriz de cofactores:
+\[
+\text{adj}(A) = C^T.
+\]
+\end{definition}
+
+\begin{theorem}
+Sea $A$ una matriz cuadrada con $\det(A) \neq 0$. Entonces:
+\[
+A^{-1} = \frac{1}{\det(A)} \text{adj}(A).
+\]
+\end{theorem}
+
+\begin{remark}
+Este método es especialmente útil para matrices pequeñas (por ejemplo $3 \times 3$). Para matrices grandes, métodos computacionales como eliminación gaussiana o descomposición LU suelen ser más eficientes.
+\end{remark}
+
+\textbf{Caso particular: Matriz $3 \times 3$.}
+
+Para una matriz $A = \begin{pmatrix} a_{11} & a_{12} & a_{13} \\ a_{21} & a_{22} & a_{23} \\ a_{31} & a_{32} & a_{33} \end{pmatrix}$, primero calculamos:
+\[
+\det(A) = a_{11}(a_{22}a_{33} - a_{23}a_{32}) - a_{12}(a_{21}a_{33} - a_{23}a_{31}) + a_{13}(a_{21}a_{32} - a_{22}a_{31}).
+\]
+
+Luego, la matriz de cofactores es:
+\[
+C = \begin{pmatrix}
++(a_{22}a_{33} - a_{23}a_{32}) & -(a_{21}a_{33} - a_{23}a_{31}) & +(a_{21}a_{32} - a_{22}a_{31}) \\
+-(a_{12}a_{33} - a_{13}a_{32}) & +(a_{11}a_{33} - a_{13}a_{31}) & -(a_{11}a_{32} - a_{12}a_{31}) \\
++(a_{12}a_{23} - a_{13}a_{22}) & -(a_{11}a_{23} - a_{13}a_{21}) & +(a_{11}a_{22} - a_{12}a_{21})
+\end{pmatrix}.
+\]
+
+La matriz adjunta es $\text{adj}(A) = C^T$, y finalmente:
+\[
+A^{-1} = \frac{1}{\det(A)} \text{adj}(A).
+\]
+
+\begin{example}[18]
+\textbf{Cadena de Markov con tres estados.} Consideremos una cadena de Markov con espacio de estados $S = \{1, 2, 3\}$ y matriz de transición:
+\[
+P = \begin{pmatrix}
+0 & \tfrac{1}{2} & \tfrac{1}{2} \\
+\tfrac{1}{4} & \tfrac{1}{2} & \tfrac{1}{4} \\
+\tfrac{1}{4} & \tfrac{1}{4} & \tfrac{1}{2}
+\end{pmatrix}.
+\]
+\end{example}
 
 
 \end{document}

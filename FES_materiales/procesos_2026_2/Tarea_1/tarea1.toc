@@ -1,0 +1,7 @@
+\babel@toc {spanish}{}\relax 
+\contentsline {section}{\numberline {1}Definición de Proceso Estocástico}{2}{section.1}%
+\contentsline {section}{\numberline {2}Espacio de Estados}{3}{section.2}%
+\contentsline {section}{\numberline {3}Caminata Aleatoria}{3}{section.3}%
+\contentsline {section}{\numberline {4}Distribución Inicial y Matriz de Transición}{4}{section.4}%
+\contentsline {section}{\numberline {5}Cadenas de Markov}{9}{section.5}%
+\contentsline {section}{\numberline {6}Probabilidades de Transición en $n$ Pasos}{12}{section.6}%
