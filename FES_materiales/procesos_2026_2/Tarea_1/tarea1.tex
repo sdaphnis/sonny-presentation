@@ -70,6 +70,37 @@ Considere una secuencia de estados $i_0, i_1, i_2, \ldots, i_n \in S$.
 \end{problem}
 
 \begin{problem}
+\textbf{Cálculo de probabilidades en una cadena de dos estados.}
+
+Considere una cadena de Markov de dos estados 0 y 1, con distribución inicial $\pi = \left(\frac{1}{2}, \frac{1}{2}\right)$ y matriz de probabilidades de transición:
+\[
+P = \begin{pmatrix}
+\frac{1}{3} & \frac{2}{3} \\
+\frac{3}{4} & \frac{1}{4}
+\end{pmatrix}.
+\]
+
+Encuentre:
+
+\begin{enumerate}
+    \item[(a)] La distribución de $X_1$ (la distribución después de 1 paso).
+    
+    \item[(b)] $\mathbb{P}(X_5 = 1 \mid X_4 = 0)$.
+    
+    \item[(c)] $\mathbb{P}(X_3 = 0 \mid X_1 = 0)$ (probabilidad de que en el paso 3 la cadena esté en estado 0, dado que en el paso 1 estaba en estado 0).
+    
+    \item[(d)] $\mathbb{P}(X_{100} = 0 \mid X_{98} = 0)$. Compare con el inciso anterior.
+    
+    \item[(e)] $\mathbb{P}(X_1 = 0 \mid X_2 = 0)$.
+    
+    \item[(f)] $\mathbb{P}(X_1 = 1 \mid X_2 = 1, X_3 = 1)$.
+    
+    \item[(g)] $\mathbb{P}(X_3 = 0, X_2 = 0 \mid X_1 = 0)$.
+\end{enumerate}
+\end{problem}
+
+
+\begin{problem}
 \textbf{Distribución de probabilidades de una caminata aleatoria.}
 
 Sea $\{X_n : n \in \mathbb{N}\}$ una caminata aleatoria como se define en los apuntes, es decir:
@@ -114,6 +145,19 @@ P = \begin{pmatrix}
     \item[(c)] Enuncie formalmente la ecuación de Chapman-Kolmogorov y explique su interpretación intuitiva.
 \end{enumerate}
 \end{problem}
+
+\begin{problem}
+\textbf{Propiedades algebraicas de matrices estocásticas.}
+
+Una matriz $P$ de tamaño $m \times m$ es \textbf{estocástica} si sus entradas son no negativas y cada fila suma 1. Una matriz $P$ es \textbf{simétrica} si $P = P^T$, es decir, $p_{ij} = p_{ji}$ para todos $i, j$.
+
+\begin{enumerate}
+    \item[(a)] Demuestre que si $P$ y $Q$ son matrices estocásticas de tamaño $m \times m$, entonces el producto $PQ$ también es una matriz estocástica. Luego demuestre que si $P$ es una matriz estocástica, entonces $P^n$ es estocástica para todo entero $n \geq 1$.
+    
+    \item[(b)] Demuestre que si $P$ es una matriz estocástica \textbf{simétrica}, entonces $P^n$ también es simétrica para todo entero $n \geq 1$.
+\end{enumerate}
+\end{problem}
+
 
 \begin{problem}
 \textbf{Proceso de rachas.}
@@ -267,6 +311,26 @@ Sea $f_{0,0}^{(n)}$ la probabilidad de que la cadena regrese al estado 0 por pri
 \end{enumerate}
 \end{problem}
 
-\end{document}
+\begin{problem}
+\textbf{Proposiciones sobre probabilidades de transición y primeras visitas.}
+
+Sea $\{X_n : n \in \mathbb{N}\}$ una cadena de Markov homogénea con espacio de estados $S$. Demuestre las siguientes proposiciones usando definiciones y propiedades de primeras visitas.
+
+\begin{enumerate}
+    \item[(a)] Para cualesquiera estados $i \in S$ y enteros $m, n \geq 1$, demuestre la siguiente desigualdad:
+    \[
+    p_{ii}^{(n)} \cdot p_{ii}^{(m)} \leq p_{ii}^{(n+m)} \leq p_{ii}^{(n)} \cdot p_{ii}^{(m)} + \left(1 - p_{ii}^{(n)}\right).
+    \]
+    Interprete estas cotas en términos de la probabilidad de regresar a un estado.
+    
+    \item[(b)] Para cualesquiera estados $i, j \in S$, demuestre que:
+    \[
+    \sup_{n \geq 1} p_{ij}^{(n)} \leq f_{ij} \leq \sum_{n=1}^{\infty} p_{ij}^{(n)}.
+    \]
+    \item[(c)] Demuestre que $i \to j$ (es decir, $j$ es accesible desde $i$) si y sólo si $f_{ij} > 0$.
+    
+    \item[(d)] Demuestre que $i \leftrightarrow j$ (es decir, $i$ y $j$ se comunican) si y sólo si $f_{ij} \cdot f_{ji} > 0$. (En otras palabras, ambas direcciones de accesibilidad deben cumplirse.)
+    \end{enumerate}
+\end{problem}
 
 \end{document}

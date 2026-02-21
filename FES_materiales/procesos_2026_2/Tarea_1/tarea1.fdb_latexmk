@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1771647030.11447 "/Users/sonnymedina/Desktop/Personal webpage/sonny-presentation/FES_materiales/procesos_2026_2/Tarea_1/tarea1.tex" "tarea1.pdf" "tarea1" 1771647030.5553 0
-  "/Users/sonnymedina/Desktop/Personal webpage/sonny-presentation/FES_materiales/procesos_2026_2/Tarea_1/tarea1.tex" 1771647030.01388 11567 7c5603787b62c590afd7edf29a52eb63 ""
+["pdflatex"] 1771648161.63388 "/Users/sonnymedina/Desktop/Personal webpage/sonny-presentation/FES_materiales/procesos_2026_2/Tarea_1/tarea1.tex" "tarea1.pdf" "tarea1" 1771648162.08401 0
+  "/Users/sonnymedina/Desktop/Personal webpage/sonny-presentation/FES_materiales/procesos_2026_2/Tarea_1/tarea1.tex" 1771648161.53919 14468 1173c18edfe7e38bd08fa392de5fdd47 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm" 1246382020 988 bdf658c3bfc2d96d3c8b02cfc1c94c20 ""
@@ -91,9 +91,9 @@
   "/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1770311260 5467155 19efa205003f9ecad95fbbaa6ff24da1 ""
   "/usr/local/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt" 1741450574 3345740 46b66fdb0378f7bf5921b5eabf1762b8 ""
   "/usr/local/texlive/2025/texmf.cnf" 1741450484 577 418a7058ec8e006d8704f60ecd22c938 ""
-  "tarea1.aux" 1771647030.51383 362 a60e22da3321aa78ccb72232e186c2b6 "pdflatex"
-  "tarea1.out" 1771647030.39628 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
-  "tarea1.tex" 1771647030.01388 11567 7c5603787b62c590afd7edf29a52eb63 ""
+  "tarea1.aux" 1771648162.01957 362 117562da6a1e80eb6fb5d27362787089 "pdflatex"
+  "tarea1.out" 1771648161.89204 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
+  "tarea1.tex" 1771648161.53919 14468 1173c18edfe7e38bd08fa392de5fdd47 ""
   (generated)
   "tarea1.aux"
   "tarea1.log"
