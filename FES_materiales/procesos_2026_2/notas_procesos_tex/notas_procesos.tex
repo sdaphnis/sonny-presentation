@@ -982,7 +982,7 @@ Por lo tanto, la relación de comunicación particiona el espacio de estados $S$
 P = \begin{pmatrix}
 0.6 & 0.3 & 0.1 \\
 0.2 & 0.5 & 0.3 \\
-0 & 0.1 & 0.9
+0 & 0 & 1
 \end{pmatrix},
 \]
 donde las filas y columnas corresponden a los estados $B$, $M$ y $A$, respectivamente.
@@ -991,8 +991,7 @@ Analicemos la accesibilidad:
 \begin{itemize}
     \item Desde $B$ podemos alcanzar $M$ con probabilidad $p_{BM} = 0.3 > 0$, de modo que $B \to M$.
     \item Desde $M$ podemos alcanzar $A$ con probabilidad $p_{MA} = 0.3 > 0$, de modo que $M \to A$.
-    \item Desde $A$ no podemos alcanzar $B$ o $M$ directamente, pues $p_{AB} = p_{AM} = 0$. Sin embargo, desde $A$ podemos llegar a $M$ en dos pasos si se ocupa el camino $A \to M$ con probabilidad $p_{AM}^{(2)}$: observamos que $p_{AA} p_{AM} = 0.9 \times 0 = 0$, pero $A \to A \to M$ requiere pasar por $M$ en el primer paso, lo cual no ocurre. De hecho, estudiando más cuidadosamente, desde $A$ con probabilidad 1 permanecemos en $A$, por lo que jamás alcanzamos $B$ o $M$.
-    \item Desde $B$ o $M$ podemos alcanzar $A$: $B \to M \to A$ o directamente $B \to A$.
+    \item Desde $A$ no podemos alcanzar $B$ o $M$ 
 \end{itemize}
 
 En consecuencia, tenemos dos clases de comunicación:
@@ -1009,7 +1008,7 @@ Una cadena de Markov se llama \textbf{irreducible} si todos sus estados pertenec
 \end{definition}
 
 \begin{example}[20]
-\textbf{Cadena con tres clases de comunicación.} Consideremos una cadena de Markov con espacio de estados $S = \{1, 2, 3, 4, 5, 6\}$ y matriz de transición:
+\textbf{Cadena con varias clases de comunicación.} Consideremos una cadena de Markov con espacio de estados $S = \{1, 2, 3, 4, 5, 6\}$ y matriz de transición:
 \[
 P = \begin{pmatrix}
 0.5 & 0.5 & 0 & 0 & 0 & 0 \\
@@ -1025,41 +1024,15 @@ Analicemos la estructura de comunicación:
 \begin{itemize}
     \item \textbf{Clase 1}: Estados $\{1, 2\}$. Desde el estado 1 podemos alcanzar el estado 2 con $p_{1,2} = 0.5 > 0$, y desde el estado 2 podemos alcanzar el estado 1 con $p_{2,1} = 0.3 > 0$. Por lo tanto, $1 \leftrightarrow 2$. Observe que desde estos estados no podemos escapar: $p_{1,3} = p_{1,4} = p_{1,5} = p_{1,6} = 0$ y $p_{2,3} = p_{2,4} = \cdots = p_{2,6} = 0$.
     
-    \item \textbf{Clase 2}: Estado $\{3\}$. Este es un estado absorbente: $p_{3,3} = 1$ y $p_{3,j} = 0$ para $j \neq 3$. Una vez que la cadena entra en este estado, permanece indefinidamente. Observe que desde la clase 1 podemos alcanzar el estado 3: existe una probabilidad positiva $p_{2,3} = 0$ pero... de hecho no! El estado 3 es una clase por sí sola que no es accesible desde los estados 1 y 2. Corramos la matriz: desde 1 y 2, las únicas transiciones son hacia 1 y 2. Así pues, el estado 3 nunca es alcanzado desde 1 o 2. Sin embargo, desde 3 no podemos regresar a 1 o 2.
+    \item \textbf{Clase 2}: Estado $\{3\}$. Este es un estado absorbente: $p_{3,3} = 1$ y $p_{3,j} = 0$ para $j \neq 3$. Una vez que la cadena entra en este estado, permanece ahí para siempre. 
     
-    \item \textbf{Clase 3}: Estados $\{4, 5\}$. Desde el estado 4 podemos alcanzar el estado 5 con probabilidad $p_{4,5} = 0.6 > 0$, pero desde el estado 5 tenemos $p_{5,5} = 1$ y $p_{5,4} = 0$, lo que significa que una vez en el estado 5, la cadena permanece allí. Así pues, $4 \to 5$ pero NO $5 \to 4$, de modo que 4 y 5 NO se comunican. El estado 5 es absorbente dentro de esta región, y el estado 4 es un transitor que eventualmente es absorbido por 5.
-    
-    \item \textbf{Clase 4}: Estado $\{6\}$. Este es un estado absorbente aislado: $p_{6,6} = 1$.
+    \item \textbf{Clase 3}: Estado $\{4\}$. Desde el estado 4 podemos alcanzar el estado 5 con probabilidad $p_{4,5} = 0.6 > 0$, pero desde el estado 5 tenemos $p_{5,5} = 1$ y $p_{5,4} = 0$, lo que significa que una vez en el estado 5, la cadena permanece allí. Así pues, $4 \to 5$ pero NO $5 \to 4$, de modo que 4 y 5 NO se comunican. Como $\{4\}$ no se comunica con otros estados, forma entonces su propia clase de comunicación.
+    \item \textbf{Clase 4}: Estado $\{5\}$. Este es un estado absorbente: $p_{5,5} = 1$ y $p_{5,j} = 0$ para $j \neq 5$. 
+    \item \textbf{Clase 5}: Estado $\{6\}$. Este es un estado absorbente: $p_{6,6} = 1$.
 \end{itemize}
 
-En realidad, reexaminemos esta matriz más cuidadosamente. Según la definición:
-\begin{itemize}
-    \item Clase de comunicación 1: $\{1, 2\}$ (se comunican mutuamente).
-    \item Clase de comunicación 2: $\{3\}$ (aislado, accesible desde... veamos: desde 1 y 2 no hay transiciones a 3. Desde 3 no hay transiciones a otros. Pero desde dónde se puede llegar a 3? Mirando la matriz, el estado 3 solo es accesible si comenzamos en el estado 3, o... en realidad, analizando fila por fila: $p_{1,3} = 0$, $p_{2,3} = 0$, $p_{3,3} = 1$ (absorbente).
-    \item Clase de comunicación 3: $\{4, 5\}$. Tenemos $p_{4,4} = 0$, $p_{4,5} = 0.6$, de modo que desde 4 podemos llegar a 5. Y $p_{5,5} = 1$, $p_{5,4} = 0$, de modo que desde 5 no podemos llegar a 4. Por lo tanto NO se comunican.
-    \item Clase de comunicación 4: $\{6\}$ (aislado).
-\end{itemize}
 
-Mejor redefinamos el ejemplo para que sea más claro. Consideremos:
-\[
-P = \begin{pmatrix}
-0.5 & 0.5 & 0 & 0 & 0 & 0 \\
-0.3 & 0.7 & 0 & 0 & 0 & 0 \\
-0 & 0 & 0.4 & 0.6 & 0 & 0 \\
-0 & 0 & 0.5 & 0.5 & 0 & 0 \\
-0 & 0 & 0 & 0 & 0 & 1 \\
-0 & 0 & 0 & 0 & 1 & 0
-\end{pmatrix}.
-\]
-
-Ahora:
-\begin{itemize}
-    \item \textbf{Clase 1}: $\{1, 2\}$. Tenemos $p_{1,2} = 0.5 > 0$ y $p_{2,1} = 0.3 > 0$, así que $1 \leftrightarrow 2$.
-    \item \textbf{Clase 2}: $\{3, 4\}$. Tenemos $p_{3,4} = 0.6 > 0$ y $p_{4,3} = 0.5 > 0$, así que $3 \leftrightarrow 4$.
-    \item \textbf{Clase 3}: $\{5, 6\}$. Tenemos $p_{5,6} = 1 > 0$ y $p_{6,5} = 1 > 0$, así que $5 \leftrightarrow 6$. De hecho, desde 5 y 6 la cadena cicla: $5 \to 6 \to 5 \to 6 \to \cdots$.
-\end{itemize}
-
-Esta cadena es \textbf{reducible} porque posee tres clases de comunicación disjuntas. Desde la Clase 1 no podemos alcanzar las Clases 2 o 3. De manera similar, los estados en las otras clases no pueden comunicarse con los estados fuera de su clase.
+Esta cadena es \textbf{reducible} porque posee cinco clases de comunicación.
 \end{example}
 
 \begin{example}[21]
@@ -1077,16 +1050,16 @@ Esta irreducibilidad es una propiedad estructural fundamental de la caminata ale
 Hemos visto que ciertos estados pueden ser accesibles desde otros, pero existe una propiedad adicional que afecta la estructura de la cadena: el \textbf{período} de un estado. El período mide la periodicidad con la cual la cadena puede regresar a un estado dado.
 
 \begin{definition}
-Sea $\{X_n : n \in \mathbb{N}\}$ una cadena de Markov homogénea con espacio de estados $S$. Para un estado $i \in S$, definimos el \textbf{período del estado} $i$ como:
+El \emph{periodo} de un estado $i$ es un número entero no negativo,
+denotado por $d_i$, y definido como
 \[
-d_i = \gcd\{n \geq 1 : p_{ii}^{(n)} > 0\},
+d_i = \gcd \{\, n \ge 1 : p_{ii}^{(n)} > 0 \,\},
 \]
-donde $\gcd$ denota el máximo común divisor. Es decir, el período es el máximo común divisor de los tiempos en los cuales la cadena puede regresar al estado $i$ (partiendo de $i$) con probabilidad positiva. Un estado $i$ se llama \textbf{aperiódico} si $d_i = 1$.
+donde $\gcd$ denota el máximo común divisor. Si $p_{ii}^{(n)} = 0$ para toda $n \ge 1$, se define $d_i = 0$. En particular, se dice que un estado $i$ es \emph{aperiódico} si $d_i = 1$.
+Cuando $d_i = k \ge 2$, se dice que $i$ es \emph{periódico de periodo $k$}.
 \end{definition}
 
-\begin{remark}
-El conjunto $\{n \geq 1 : p_{ii}^{(n)} > 0\}$ puede ser vacío (si el estado $i$ nunca regresa a sí mismo), en cuyo caso $d_i$ no está bien definido. Para evitar ambigüedad, se suele asumir que consideramos estados $i$ tales que existe al menos uno $n \geq 1$ con $p_{ii}^{(n)} > 0$. Además, si un estado nunca retorna a sí mismo, decimos que es \textbf{transitorio}.
-\end{remark}
+
 
 \begin{example}[22]
 \textbf{Cadena de las horas cíclica.} Recordemos la cadena del Ejemplo 14, donde $X_{n+1} = (X_n + 1) \bmod 12$. Debido a que cada estado se alcanza incrementando el reloj en 1 unidad, tenemos:
@@ -1101,7 +1074,7 @@ De forma similar, para cualquier hora $i$, el período es $d_i = 12$. La cadena 
 \end{example}
 
 \begin{example}[23]
-\textbf{Caminata aleatoria simétrica (Aperiódica).} Para la caminata aleatoria simétrica del Ejemplo 2, considere un estado particular, digamos el 0. Tenemos:
+\textbf{Caminata aleatoria simétrica.} Para la caminata aleatoria simétrica del Ejemplo 2, considere un estado particular, digamos el 0. Tenemos:
 \begin{itemize}
     \item En 1 paso: $p_{0,0}^{(1)} = 0$ (no podemos regresar en 1 paso puesto que cada paso es $\pm 1$).
     \item En 2 pasos: $p_{0,0}^{(2)} = \mathbb{P}(Y_1 = 1, Y_2 = -1) + \mathbb{P}(Y_1 = -1, Y_2 = 1) = \frac{1}{4} + \frac{1}{4} = \frac{1}{2} > 0$.
@@ -1113,8 +1086,6 @@ El conjunto de retorno es $\{2, 4, 6, 8, \ldots\}$ (todos los números pares), y
 \[
 d_0 = \gcd(2, 4, 6, 8, \ldots) = 2.
 \]
-
-Este resultado sorprende a primera vista: la caminata aleatoria simétrica tiene período 2, no 1. Sin embargo, esto tiene sentido intuitivo: la cadena no puede regresar al estado 0 en un número impar de pasos porque cada paso cambia la paridad del estado (un paso $\pm 1$ cambia la paridad de la posición).
 \end{example}
 
 \begin{proposition}
@@ -1122,53 +1093,77 @@ El período es una \textbf{propiedad de clase}: si dos estados $i$ y $j$ se comu
 \end{proposition}
 
 \begin{proof}
-Supongamos que $i \leftrightarrow j$. Entonces existen enteros $m, n \geq 1$ tales que $p_{ij}^{(m)} > 0$ y $p_{ji}^{(n)} > 0$. 
-
-Queremos demostrar que $d_i = d_j$. Observemos que si $p_{j j}^{(k)} > 0$, entonces:
+Supongamos que $i \leftrightarrow j$. Entonces existen $m,n \ge 1$ tales que
 \[
-p_{ii}^{(m + k + n)} \geq p_{ij}^{(m)} \cdot p_{jj}^{(k)} \cdot p_{ji}^{(n)} > 0.
+p_{ij}^{(m)} > 0,
+\qquad
+p_{ji}^{(n)} > 0.
 \]
 
-Esto significa que $(m + k + n)$ pertenece al conjunto $\{n \geq 1 : p_{ii}^{(n)} > 0\}$.
-
-De manera similar, si $p_{ii}^{(k)} > 0$, entonces:
+Definimos
 \[
-p_{jj}^{(m + k + n)} \geq p_{ji}^{(n)} \cdot p_{ii}^{(k)} \cdot p_{ij}^{(m)} > 0.
+A_i=\{r\ge1:\; p_{ii}^{(r)}>0\},
+\qquad
+A_j=\{r\ge1:\; p_{jj}^{(r)}>0\},
+\]
+y $d_i=\gcd(A_i)$, $d_j=\gcd(A_j)$.
+
+\medskip
+
+\textbf{Paso 1: $d_j \mid d_i$.}
+
+Sea $r\in A_i$. Entonces $p_{ii}^{(r)}>0$. Por Chapman--Kolmogorov,
+\[
+p_{jj}^{(m+r+n)}
+\ge
+p_{ji}^{(n)}\,p_{ii}^{(r)}\,p_{ij}^{(m)}
+>0,
+\]
+luego $m+n+r\in A_j$.
+
+Como también $p_{ii}^{(2r)}>0$, se obtiene igualmente
+\[
+m+n+2r\in A_j.
 \]
 
-Sea $A = \{k \geq 1 : p_{ii}^{(k)} > 0\}$ y $B = \{k \geq 1 : p_{jj}^{(k)} > 0\}$. Hemos demostrado que:
-\begin{itemize}
-    \item Si $k \in B$, entonces $m + n + k \in A$.
-    \item Si $k \in A$, entonces $m + n + k \in B$.
-\end{itemize}
+Como $d_j$ divide todos los elementos de $A_j$, divide
+$m+n+r$ y $m+n+2r$, y por tanto su diferencia:
+\[
+(m+n+2r)-(m+n+r)=r.
+\]
 
-Por una propiedad estándar del máximo común divisor, esto implica que $\gcd(A) = \gcd(B)$, es decir, $d_i = d_j$.
+Así, todo $r\in A_i$ es divisible por $d_j$, y por lo tanto
+\[
+d_j \mid d_i.
+\]
+
+\medskip
+
+\textbf{Paso 2: $d_i \mid d_j$.}
+
+Intercambiando los papeles de $i$ y $j$ y repitiendo el argumento,
+se obtiene
+\[
+d_i \mid d_j.
+\]
+
+\medskip
+
+Concluimos que $d_i=d_j$.
 \end{proof}
 
 \begin{proposition}
 Si un estado $i$ en una cadena de Markov tiene período $d_i$, entonces existe un entero $N$ (que depende de $i$) tal que para todo $n \geq N$:
 \[
-p_{ii}^{(m + n \cdot d_i)} > 0.
+p_{ii}^{( n \cdot d_i)} > 0.
 \]
 
-Más generalmente, para estados $i$ y $j$ que se comunican, si sabemos que $p_{ij}^{(m)} > 0$ para algún entero $m$, entonces existe $N$ tal que para todo $n \geq N$:
-\[
-p_{ij}^{(m + n \cdot d_j)} > 0.
-\]
 \end{proposition}
 
-\begin{remark}
-Esta proposición establece una estructura regular en las transiciones de una cadena periódica. Si el período es $d$, entonces después de un ``tiempo de calentamiento'' (transient), la cadena puede regresar a un estado particular únicamente en tiempos que sean múltiplos de $d$ (más un desfase constante). Esta estructura es fundamental para estudiar el comportamiento asintótico de cadenas de Markov periódicas, incluida la convergencia de distribuciones de probabilidad y la existencia de distribuciones estacionarias. En particular, las cadenas aperiódicas (con $d = 1$) tienen mejor comportamiento asintótico que las cadenas periódicas.
-\end{remark}
+Como corolario de la proposición anterior se tiene que si acaso es posible
+pasar de $i$ a $j$ en $m$ pasos, entonces también es posible tal transición en
+$m + n \cdot d_j$ pasos con $n$ suficientemente grande, suponiendo $d_j \geq 1$.
 
-\begin{example}[24]
-\textbf{Aplicación a la caminata aleatoria.} Para la caminata aleatoria simétrica con período $d_0 = 2$, la Proposición anterior garantiza que existe un entero $N$ tal que para todos $n \geq N$, tenemos:
-\[
-p_{0,0}^{(2 + 2n)} = p_{0,0}^{(2(n+1))} > 0.
-\]
-
-Esto confirma que después de un cierto tiempo, es posible regresar al estado 0 en cualquier número par de pasos (suficientemente grande).
-\end{example}
 
 \section{Primeras Visitas}
 
@@ -1177,7 +1172,7 @@ Una pregunta fundamental en la teoría de cadenas de Markov es: ¿cuál es la pr
 \begin{definition}
 Sea $\{X_n : n \in \mathbb{N}\}$ una cadena de Markov con espacio de estados $S$, y sea $B \subseteq S$ un conjunto no vacío de estados. El \textbf{tiempo de primera visita} a $B$ partiendo del estado $i$ se define como:
 \[
-\tau_B^{(i)} = \inf\{n \geq 1 : X_n \in B \mid X_0 = i\},
+\tau_B^{(i)} = \min\{n \geq 1 : X_n \in B \mid X_0 = i\},
 \]
 donde convenimos que $\tau_B^{(i)} = \infty$ si la cadena nunca alcanza $B$ partiendo de $i$.
 \end{definition}
@@ -1276,7 +1271,7 @@ Recordemos que el período es $d_0 = 2$, así que la cadena solo puede retornar 
 f_{0,0}^{(2)} = \mathbb{P}(X_2 = 0, X_1 \neq 0 \mid X_0 = 0) = \mathbb{P}(Y_1 = 1, Y_2 = -1) + \mathbb{P}(Y_1 = -1, Y_2 = 1) = \frac{1}{4} + \frac{1}{4} = \frac{1}{2}.
 \]
 
-Para el retorno en 4 pasos, debemos evitar retornar en los primeros 2 pasos. Los caminos de retorno en 4 pasos sin tocar 0 intermediamente incluyen secuencias como $(+1, +1, -1, -1)$, $(+1, -1, +1, -1)$, etc. El cálculo directo es más complejo, pero mediante técnicas analíticas (funciones generatrices), puede demostrarse que:
+Para el retorno en 4 pasos, debemos evitar retornar en los primeros 2 pasos. Los caminos de retorno en 4 pasos sin tocar 0 intermediamente incluyen secuencias como $(+1, +1, -1, -1)$, $(+1, -1, +1, -1)$, etc. El cálculo directo es más complejo, pero mediante técnicas analíticas (funciones generadoras), puede demostrarse que:
 \[
 f_{0,0} = \sum_{n=1}^{\infty} f_{0,0}^{(2n)} = 1.
 \]
@@ -1287,7 +1282,7 @@ Este es un resultado célebre: la caminata aleatoria simétrica en $\mathbb{Z}$ 
 \begin{example}[27]
 \textbf{Caminata aleatoria sesgada: Transitoriedad.} Consideremos una caminata aleatoria en $\mathbb{Z}$ con $\mathbb{P}(Y_i = 1) = p$ y $\mathbb{P}(Y_i = -1) = q = 1 - p$, donde $p \neq \frac{1}{2}$.
 
-Supongamos $p = 0.6$ (sesgada hacia la derecha). Intuitivamente, si comenzamos en el estado 0, con probabilidad 1 la cadena ``fluye'' hacia $+\infty$, por lo que la probabilidad de retornar al 0 debe ser menor que 1. De hecho, mediante análisis de funciones generatrices, puede demostrarse que:
+Supongamos $p = 0.6$ (sesgada hacia la derecha). Intuitivamente, si comenzamos en el estado 0, con probabilidad 1 la cadena ``fluye'' hacia $+\infty$, por lo que la probabilidad de retornar al 0 debe ser menor que 1. De hecho, mediante análisis de funciones generadoras, puede demostrarse que:
 \[
 f_{0,0} = \left(\frac{q}{p}\right) = \frac{0.4}{0.6} = \frac{2}{3} < 1.
 \]

@@ -7,5 +7,5 @@
 \contentsline {section}{\numberline {1.5}Cadenas de Markov}{12}{section.1.5}%
 \contentsline {section}{\numberline {1.6}Probabilidades de Transición en $n$ Pasos}{16}{section.1.6}%
 \contentsline {section}{\numberline {1.7}Comunicación entre Estados}{23}{section.1.7}%
-\contentsline {section}{\numberline {1.8}Distribuciones Periódicas: Período de un Estado}{26}{section.1.8}%
-\contentsline {section}{\numberline {1.9}Primeras Visitas}{28}{section.1.9}%
+\contentsline {section}{\numberline {1.8}Distribuciones Periódicas: Período de un Estado}{25}{section.1.8}%
+\contentsline {section}{\numberline {1.9}Primeras Visitas}{27}{section.1.9}%
