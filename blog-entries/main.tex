@@ -1,0 +1,117 @@
+\documentclass[11pt, twoside]{report}
+\input{settings and packages}
+\usepackage{baththesis, amssymb, graphicx, parskip}
+\usepackage{ragged2e}
+% remove the twoside option for single sided printing
+
+
+%\documentclass{book}
+
+% All the crap with packages and convenient commands
+
+
+
+\title{Excursions from Hyperplanes for the $\alpha$-stable Lévy Process}
+\author{Sonny Alberto Medina Jiménez}
+\degree{Doctor of Philosophy}
+\department{Department of Mathematical Sciences}
+\degreemonthyear{16 January 2023}
+\faculty{Faculty of Science}
+
+%%uncomment for sans-serif font
+%\renewcommand\familydefault{\sfdefault}
+
+\begin{document}
+
+\maketitle
+
+\pagenumbering{gobble}
+
+%************* summary ****************************
+\begin{abstract}
+This thesis focuses on advancing the theoretical understanding of isotropic $\alpha$-stable Lévy processes, Brownian motion, and self-similar Markov processes (ssMps) through an excursion theory framework and skew-product representation. Each chapter addresses a specific set of problems, culminating in a collection of results with theoretical and practical significance.
+
+In Chapter 1, we extend results on radial excursions of isotropic $\alpha$-stable Lévy processes to Brownian motion ($\alpha = 2$), deriving a Deep Wiener-Hopf factorisation and explicit expressions for ladder potential measures. Additionally, we establish the Hunt-Nagasawa duality for isotropic $\alpha$-stable processes and transient Brownian motion ($d \geq 3$), using it to time-reverse laws at first entry and last exit of a ball.
+
+Chapter 2 develops an excursion theory for isotropic $\alpha$-stable Lévy processes ($d \geq 2$, $\alpha \in (0,2)$) relative to hyperplanes, characterising key distributions such as an $n$-tuple law at the moment of crossing a hyperplane. These results are extended to Brownian motion in $d \geq 2$. Additionally, conditional laws of processes attracted, repelled, or constrained by hyperplanes are explored.
+
+In Chapter 3, we introduce the cylindrical Lamperti-Kiu transform to represent ssMps in $\mathbb{R}^d \setminus \mathbb{H}_0$ as Markov Additive Processes (MAPs). This transform enables the study of fluctuations and excursions relative to hyperplanes and slabs. The framework is applied to isotropic $\alpha$-stable processes and extends to cylindrically positive self-similar Markov processes (cpssMps), generalising positive ssMp theory to higher dimensions.
+
+Chapter 4 investigates first-entry and first-exit problems for isotropic $\alpha$-stable processes in higher dimensions, specifically within infinite strips. A probabilistic approach is used to characterise the distribution of first hit or first exit to a slab. Numerical methods, including Monte Carlo sampling algorithms, are developed to overcome the challenges of solving integral equations in high dimensions.
+\end{abstract}
+
+\begin{acknowledgements}
+I would like to express my deepest gratitude to everyone who made completing this PhD possible.  
+
+First and foremost, I want to thank my supervisors, Andreas and Juan Carlos. Andreas, your ideas and the elegance with which you approach proofs have been a constant source of inspiration. Juan Carlos, our discussions were invaluable in helping me grasp the nuances of complex topics, and for that, I am immensely grateful.  
+
+To my friends in Bath, thank you for all the conversations and for making this experience both intellectually stimulating and enjoyable. A special shoutout to the latino gang who made me feel at home.  
+
+Melina, gracias por tu comprensión e infinita empatía a lo largo de este proceso. Tu apoyo me mantuvo a flote en los momentos más difíciles. 
+
+A mis papás y hermanos, gracias por su cariño, consejos y apoyo incondicional.  
+
+I am also deeply grateful to SAMBa and the incredible team behind it for giving me the opportunity to collaborate with such talented individuals. Their support, along with partial funding from CONAHCyT, has been essential to materialise this work.  
+
+Finally, I want to express my heartfelt appreciation to the beautiful city of Bath.  
+
+Thank you all for being part of this remarkable chapter of my life.
+\end{acknowledgements}
+
+
+%************** aknowledgements ********************
+
+
+\pagenumbering{roman}
+\tableofcontents
+\newpage
+% *************** Chapter 0 ************************
+\chapter*{Preliminaries}
+\addcontentsline{toc}{chapter}{Preliminaries}
+\markboth{PRELIMINARIES}{Preliminaries}
+\input{chapter 0}
+
+%**************** Chapter 1 *************************
+\chapter{Contributions to the radial analysis of Isotropic stable Lévy processes} 
+\label{chapter:deep3brownian}
+\input{chapter 1}
+
+%**************** Chapter 2 *************************
+\chapter{Directional excursions of stable processes}
+\label{chapter:excursions}
+\input{chapter 2}
+
+%**************** Chapter 3 *************************
+\chapter{Self-similar Markov processes and Cylindrical MAPs}
+\label{chapter:cylindricalMAP}
+\input{chapter 3}
+
+%************** Chapter 4 ****************************
+%\chapter{Hyperplanes and Brownian motion} 
+%\label{chapter:brownian}
+%\input{chapter 4}
+
+%************** Chapter 5 ****************************
+\chapter{Numerics of the first entry/exit of an infinite strip} 
+\label{chapter:numerics}
+\input{chapter 5 v2}
+
+%************** Appendix ****************************
+%\addcontentsline{toc}{chapter}{Appendix}
+%\chapter*{Appendix} 
+%\markboth{APPENDIX}{Appendix}
+%\input{appendix}
+%************** Attempts ***************************
+%\chapter*{Attempts}
+%\input{attempts}
+
+%**************** Global references ******************
+\newpage
+\chapter*{References}
+\addcontentsline{toc}{chapter}{References}
+ %*********
+\markboth{REFERENCES}{References}
+
+\printbibliography[heading=none]
+
+\end{document}

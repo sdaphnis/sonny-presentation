@@ -1,697 +1,1409 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Walking on half-spaces </title><style>
-/* cspell:disable-file */
-/* webkit printing magic: print all background colors */
-html {
-	-webkit-print-color-adjust: exact;
-}
-* {
-	box-sizing: border-box;
-	-webkit-print-color-adjust: exact;
-}
-
-html,
-body {
-	margin: 0;
-	padding: 0;
-}
-@media only screen {
-	body {
-		margin: 2em auto;
-		max-width: 900px;
-		color: rgb(55, 53, 47);
-	}
-}
-
-body {
-	line-height: 1.5;
-	white-space: pre-wrap;
-}
-
-a,
-a.visited {
-	color: inherit;
-	text-decoration: underline;
-}
-
-.pdf-relative-link-path {
-	font-size: 80%;
-	color: #444;
-}
-
-h1,
-h2,
-h3 {
-	letter-spacing: -0.01em;
-	line-height: 1.2;
-	font-weight: 600;
-	margin-bottom: 0;
-}
-
-.page-title {
-	font-size: 2.5rem;
-	font-weight: 700;
-	margin-top: 0;
-	margin-bottom: 0.75em;
-}
-
-h1 {
-	font-size: 1.875rem;
-	margin-top: 1.875rem;
-}
-
-h2 {
-	font-size: 1.5rem;
-	margin-top: 1.5rem;
-}
-
-h3 {
-	font-size: 1.25rem;
-	margin-top: 1.25rem;
-}
-
-.source {
-	border: 1px solid #ddd;
-	border-radius: 3px;
-	padding: 1.5em;
-	word-break: break-all;
-}
-
-.callout {
-	border-radius: 3px;
-	padding: 1rem;
-}
-
-figure {
-	margin: 1.25em 0;
-	page-break-inside: avoid;
-}
-
-figcaption {
-	opacity: 0.5;
-	font-size: 85%;
-	margin-top: 0.5em;
-}
-
-mark {
-	background-color: transparent;
-}
-
-.indented {
-	padding-left: 1.5em;
-}
-
-hr {
-	background: transparent;
-	display: block;
-	width: 100%;
-	height: 1px;
-	visibility: visible;
-	border: none;
-	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
-}
-
-img {
-	max-width: 100%;
-}
-
-@media only print {
-	img {
-		max-height: 100vh;
-		object-fit: contain;
-	}
-}
-
-@page {
-	margin: 1in;
-}
-
-.collection-content {
-	font-size: 0.875rem;
-}
-
-.column-list {
-	display: flex;
-	justify-content: space-between;
-}
-
-.column {
-	padding: 0 1em;
-}
-
-.column:first-child {
-	padding-left: 0;
-}
-
-.column:last-child {
-	padding-right: 0;
-}
-
-.table_of_contents-item {
-	display: block;
-	font-size: 0.875rem;
-	line-height: 1.3;
-	padding: 0.125rem;
-}
-
-.table_of_contents-indent-1 {
-	margin-left: 1.5rem;
-}
-
-.table_of_contents-indent-2 {
-	margin-left: 3rem;
-}
-
-.table_of_contents-indent-3 {
-	margin-left: 4.5rem;
-}
-
-.table_of_contents-link {
-	text-decoration: none;
-	opacity: 0.7;
-	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
-}
-
-table,
-th,
-td {
-	border: 1px solid rgba(55, 53, 47, 0.09);
-	border-collapse: collapse;
-}
-
-table {
-	border-left: none;
-	border-right: none;
-}
-
-th,
-td {
-	font-weight: normal;
-	padding: 0.25em 0.5em;
-	line-height: 1.5;
-	min-height: 1.5em;
-	text-align: left;
-}
-
-th {
-	color: rgba(55, 53, 47, 0.6);
-}
-
-ol,
-ul {
-	margin: 0;
-	margin-block-start: 0.6em;
-	margin-block-end: 0.6em;
-}
-
-li > ol:first-child,
-li > ul:first-child {
-	margin-block-start: 0.6em;
-}
-
-ul > li {
-	list-style: disc;
-}
-
-ul.to-do-list {
-	padding-inline-start: 0;
-}
-
-ul.to-do-list > li {
-	list-style: none;
-}
-
-.to-do-children-checked {
-	text-decoration: line-through;
-	opacity: 0.375;
-}
-
-ul.toggle > li {
-	list-style: none;
-}
-
-ul {
-	padding-inline-start: 1.7em;
-}
-
-ul > li {
-	padding-left: 0.1em;
-}
-
-ol {
-	padding-inline-start: 1.6em;
-}
-
-ol > li {
-	padding-left: 0.2em;
-}
-
-.mono ol {
-	padding-inline-start: 2em;
-}
-
-.mono ol > li {
-	text-indent: -0.4em;
-}
-
-.toggle {
-	padding-inline-start: 0em;
-	list-style-type: none;
-}
-
-/* Indent toggle children */
-.toggle > li > details {
-	padding-left: 1.7em;
-}
-
-.toggle > li > details > summary {
-	margin-left: -1.1em;
-}
-
-.selected-value {
-	display: inline-block;
-	padding: 0 0.5em;
-	background: rgba(206, 205, 202, 0.5);
-	border-radius: 3px;
-	margin-right: 0.5em;
-	margin-top: 0.3em;
-	margin-bottom: 0.3em;
-	white-space: nowrap;
-}
-
-.collection-title {
-	display: inline-block;
-	margin-right: 1em;
-}
-
-.page-description {
-	margin-bottom: 2em;
-}
-
-.simple-table {
-	margin-top: 1em;
-	font-size: 0.875rem;
-	empty-cells: show;
-}
-.simple-table td {
-	height: 29px;
-	min-width: 120px;
-}
-
-.simple-table th {
-	height: 29px;
-	min-width: 120px;
-}
-
-.simple-table-header-color {
-	background: rgb(247, 246, 243);
-	color: black;
-}
-.simple-table-header {
-	font-weight: 500;
-}
-
-time {
-	opacity: 0.5;
-}
-
-.icon {
-	display: inline-block;
-	max-width: 1.2em;
-	max-height: 1.2em;
-	text-decoration: none;
-	vertical-align: text-bottom;
-	margin-right: 0.5em;
-}
-
-img.icon {
-	border-radius: 3px;
-}
-
-.user-icon {
-	width: 1.5em;
-	height: 1.5em;
-	border-radius: 100%;
-	margin-right: 0.5rem;
-}
-
-.user-icon-inner {
-	font-size: 0.8em;
-}
-
-.text-icon {
-	border: 1px solid #000;
-	text-align: center;
-}
-
-.page-cover-image {
-	display: block;
-	object-fit: cover;
-	width: 100%;
-	max-height: 30vh;
-}
-
-.page-header-icon {
-	font-size: 3rem;
-	margin-bottom: 1rem;
-}
-
-.page-header-icon-with-cover {
-	margin-top: -0.72em;
-	margin-left: 0.07em;
-}
-
-.page-header-icon img {
-	border-radius: 3px;
-}
-
-.link-to-page {
-	margin: 1em 0;
-	padding: 0;
-	border: none;
-	font-weight: 500;
-}
-
-p > .user {
-	opacity: 0.5;
-}
-
-td > .user,
-td > time {
-	white-space: nowrap;
-}
-
-input[type="checkbox"] {
-	transform: scale(1.5);
-	margin-right: 0.6em;
-	vertical-align: middle;
-}
-
-p {
-	margin-top: 0.5em;
-	margin-bottom: 0.5em;
-}
-
-.image {
-	border: none;
-	margin: 1.5em 0;
-	padding: 0;
-	border-radius: 0;
-	text-align: center;
-}
-
-.code,
-code {
-	background: rgba(135, 131, 120, 0.15);
-	border-radius: 3px;
-	padding: 0.2em 0.4em;
-	border-radius: 3px;
-	font-size: 85%;
-	tab-size: 2;
-}
-
-code {
-	color: #eb5757;
-}
-
-.code {
-	padding: 1.5em 1em;
-}
-
-.code-wrap {
-	white-space: pre-wrap;
-	word-break: break-all;
-}
-
-.code > code {
-	background: none;
-	padding: 0;
-	font-size: 100%;
-	color: inherit;
-}
-
-blockquote {
-	font-size: 1.25em;
-	margin: 1em 0;
-	padding-left: 1em;
-	border-left: 3px solid rgb(55, 53, 47);
-}
-
-.bookmark {
-	text-decoration: none;
-	max-height: 8em;
-	padding: 0;
-	display: flex;
-	width: 100%;
-	align-items: stretch;
-}
-
-.bookmark-title {
-	font-size: 0.85em;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	height: 1.75em;
-	white-space: nowrap;
-}
-
-.bookmark-text {
-	display: flex;
-	flex-direction: column;
-}
-
-.bookmark-info {
-	flex: 4 1 180px;
-	padding: 12px 14px 14px;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-}
-
-.bookmark-image {
-	width: 33%;
-	flex: 1 1 180px;
-	display: block;
-	position: relative;
-	object-fit: cover;
-	border-radius: 1px;
-}
-
-.bookmark-description {
-	color: rgba(55, 53, 47, 0.6);
-	font-size: 0.75em;
-	overflow: hidden;
-	max-height: 4.5em;
-	word-break: break-word;
-}
-
-.bookmark-href {
-	font-size: 0.75em;
-	margin-top: 0.25em;
-}
-
-.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
-.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
-.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
-.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
-.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
-.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
-.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
-.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
-.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
-.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
-.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
-.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
-.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
-.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
-.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
-.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
-.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
-.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
-.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
-.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
-.highlight-default {
-	color: rgba(50, 48, 44, 1);
-}
-.highlight-gray {
-	color: rgba(115, 114, 110, 1);
-	fill: rgba(115, 114, 110, 1);
-}
-.highlight-brown {
-	color: rgba(159, 107, 83, 1);
-	fill: rgba(159, 107, 83, 1);
-}
-.highlight-orange {
-	color: rgba(217, 115, 13, 1);
-	fill: rgba(217, 115, 13, 1);
-}
-.highlight-yellow {
-	color: rgba(203, 145, 47, 1);
-	fill: rgba(203, 145, 47, 1);
-}
-.highlight-teal {
-	color: rgba(68, 131, 97, 1);
-	fill: rgba(68, 131, 97, 1);
-}
-.highlight-blue {
-	color: rgba(51, 126, 169, 1);
-	fill: rgba(51, 126, 169, 1);
-}
-.highlight-purple {
-	color: rgba(144, 101, 176, 1);
-	fill: rgba(144, 101, 176, 1);
-}
-.highlight-pink {
-	color: rgba(193, 76, 138, 1);
-	fill: rgba(193, 76, 138, 1);
-}
-.highlight-red {
-	color: rgba(205, 60, 58, 1);
-	fill: rgba(205, 60, 58, 1);
-}
-.highlight-default_background {
-	color: rgba(50, 48, 44, 1);
-}
-.highlight-gray_background {
-	background: rgba(248, 248, 247, 1);
-}
-.highlight-brown_background {
-	background: rgba(244, 238, 238, 1);
-}
-.highlight-orange_background {
-	background: rgba(251, 236, 221, 1);
-}
-.highlight-yellow_background {
-	background: rgba(251, 243, 219, 1);
-}
-.highlight-teal_background {
-	background: rgba(237, 243, 236, 1);
-}
-.highlight-blue_background {
-	background: rgba(231, 243, 248, 1);
-}
-.highlight-purple_background {
-	background: rgba(248, 243, 252, 1);
-}
-.highlight-pink_background {
-	background: rgba(252, 241, 246, 1);
-}
-.highlight-red_background {
-	background: rgba(253, 235, 236, 1);
-}
-.block-color-default {
-	color: inherit;
-	fill: inherit;
-}
-.block-color-gray {
-	color: rgba(115, 114, 110, 1);
-	fill: rgba(115, 114, 110, 1);
-}
-.block-color-brown {
-	color: rgba(159, 107, 83, 1);
-	fill: rgba(159, 107, 83, 1);
-}
-.block-color-orange {
-	color: rgba(217, 115, 13, 1);
-	fill: rgba(217, 115, 13, 1);
-}
-.block-color-yellow {
-	color: rgba(203, 145, 47, 1);
-	fill: rgba(203, 145, 47, 1);
-}
-.block-color-teal {
-	color: rgba(68, 131, 97, 1);
-	fill: rgba(68, 131, 97, 1);
-}
-.block-color-blue {
-	color: rgba(51, 126, 169, 1);
-	fill: rgba(51, 126, 169, 1);
-}
-.block-color-purple {
-	color: rgba(144, 101, 176, 1);
-	fill: rgba(144, 101, 176, 1);
-}
-.block-color-pink {
-	color: rgba(193, 76, 138, 1);
-	fill: rgba(193, 76, 138, 1);
-}
-.block-color-red {
-	color: rgba(205, 60, 58, 1);
-	fill: rgba(205, 60, 58, 1);
-}
-.block-color-default_background {
-	color: inherit;
-	fill: inherit;
-}
-.block-color-gray_background {
-	background: rgba(248, 248, 247, 1);
-}
-.block-color-brown_background {
-	background: rgba(244, 238, 238, 1);
-}
-.block-color-orange_background {
-	background: rgba(251, 236, 221, 1);
-}
-.block-color-yellow_background {
-	background: rgba(251, 243, 219, 1);
-}
-.block-color-teal_background {
-	background: rgba(237, 243, 236, 1);
-}
-.block-color-blue_background {
-	background: rgba(231, 243, 248, 1);
-}
-.block-color-purple_background {
-	background: rgba(248, 243, 252, 1);
-}
-.block-color-pink_background {
-	background: rgba(252, 241, 246, 1);
-}
-.block-color-red_background {
-	background: rgba(253, 235, 236, 1);
-}
-.select-value-color-uiBlue { background-color: undefined; }
-.select-value-color-pink { background-color: rgba(225, 136, 179, 0.27); }
-.select-value-color-purple { background-color: rgba(168, 129, 197, 0.27); }
-.select-value-color-green { background-color: rgba(123, 183, 129, 0.27); }
-.select-value-color-gray { background-color: rgba(84, 72, 49, 0.15); }
-.select-value-color-translucentGray { background-color: undefined; }
-.select-value-color-orange { background-color: rgba(224, 124, 57, 0.27); }
-.select-value-color-brown { background-color: rgba(210, 162, 141, 0.35); }
-.select-value-color-red { background-color: rgba(244, 171, 159, 0.4); }
-.select-value-color-yellow { background-color: rgba(236, 191, 66, 0.39); }
-.select-value-color-blue { background-color: rgba(93, 165, 206, 0.27); }
-.select-value-color-pageGlass { background-color: undefined; }
-.select-value-color-washGlass { background-color: undefined; }
-
-.checkbox {
-	display: inline-flex;
-	vertical-align: text-bottom;
-	width: 16;
-	height: 16;
-	background-size: 16px;
-	margin-left: 2px;
-	margin-right: 5px;
-}
-
-.checkbox-on {
-	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
-}
-
-.checkbox-off {
-	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
-}
-	
-</style></head><body><article id="3c8db4bd-2dbb-44c8-a687-decbb7608ac0" class="page sans"><header><h1 class="page-title">Walking on half-spaces </h1><p class="page-description"></p></header><div class="page-body"><p id="90e2e1b4-3855-44ea-95ab-1072af4a0be1" class="">A Monte Carlo approach to solve fractional PDEs</p><p id="64096d0a-86d9-46e7-9343-27b7925c9981" class="">
-</p><p id="6280a8df-a70a-4e01-ae99-53c57c31f9d8" class="">Tags: Fractional analysis, Dirichlet problem, Feynman-Kac, Martingales, \alpha-stable-process, Laplace equation, fractional Laplacian.</p><p id="b8d3929c-64bc-4fe0-a917-855f051989cc" class="">
-</p><h3 id="5cdabbea-74bf-486b-b48c-56f9f399d4c5" class="">Vanilla Laplacian and Brownian motion</h3><p id="762f0b5f-f3c7-4316-99d5-25db3d62dffc" class="">Every mathematician is familiar with the Laplace equation. </p><figure id="5017557c-d5a9-418c-8e0a-3ae3471a0a59" class="equation"><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')</style><div class="equation-container"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>f</mi><mo>=</mo><mn>0.</mn></mrow><annotation encoding="application/x-tex">\Delta f=0.</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord">Δ</span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0.</span></span></span></span></span></div></figure><p id="b8664e23-d2ae-41f6-8f09-86f21ce0106a" class="">where <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>f</mi><mo>=</mo><mi mathvariant="normal">∇</mi><mo>⋅</mo><mi mathvariant="normal">∇</mi><mi>f</mi></mrow><annotation encoding="application/x-tex">\Delta f = \nabla \cdot \nabla f</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord">Δ</span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">∇</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord">∇</span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span></span></span></span></span><span>﻿</span></span>  is called the Laplacian operator and <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">∇</mi><mi>f</mi><mo>=</mo><mrow><mo fence="true">(</mo><mfrac><mrow><mi mathvariant="normal">∂</mi><mi>f</mi></mrow><mrow><mi mathvariant="normal">∂</mi><msub><mi>x</mi><mn>1</mn></msub></mrow></mfrac><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><mfrac><mi mathvariant="normal">∂</mi><mrow><mi mathvariant="normal">∂</mi><mi>f</mi><msub><mi>x</mi><mi>d</mi></msub></mrow></mfrac><mo fence="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\nabla f = \left ( \frac{\partial f }{\partial x_1} , \ldots , \frac{\partial }{\partial f x_d} \right )</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord">∇</span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.8em;vertical-align:-0.65em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size2">(</span></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9322em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight" style="margin-right:0.05556em;">∂</span><span class="mord mtight"><span class="mord mathnormal mtight">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3173em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.4461em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight" style="margin-right:0.05556em;">∂</span><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.4451em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8801em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight" style="margin-right:0.05556em;">∂</span><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span><span class="mord mtight"><span class="mord mathnormal mtight">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3488em;margin-left:0em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight">d</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1512em;"><span></span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight" style="margin-right:0.05556em;">∂</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.4811em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size2">)</span></span></span></span></span></span></span><span>﻿</span></span> (if you’re not a mathematician or if you need some help remembering, see references 1 and 2). </p><p id="e6b55303-c0fb-49e2-9489-b043e8d47444" class="">This second order Partial Differential equation equation is a cornerstone of classical mathematics and physics. Among its applications, it is used to describe the behavior of scalar fields such as gravitational, electric, and fluid potentials in a<strong> state of equilibrium</strong>. In probability, it is closely related with the concept of continuous <strong>martingales</strong>, and hence it is an important concept in mathematical finance. </p><p id="9685c7df-11a6-43cc-8d74-c713c21a5182" class="">
-</p><p id="69d9e695-3b02-4932-bca6-ee8092b9e989" class="">Adentrémonos un poco más en el lado probabilistico,</p><p id="b6a22af4-43d6-42d9-b0b7-aad2797e9bd4" class="">
-</p><p id="29f97546-084b-4355-871f-c41d9f8ef735" class="">The <strong>Dirichlet problem</strong> for Laplace&#x27;s equation, an ubiquitous problem in mathematical modelling, consists of finding a solution <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi></mrow><annotation encoding="application/x-tex">f</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span></span></span></span></span><span>﻿</span></span> to the Laplace equation on some domain <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi></mrow><annotation encoding="application/x-tex">D</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span></span></span></span></span><span>﻿</span></span>, such that <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi></mrow><annotation encoding="application/x-tex">f</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span></span></span></span></span><span>﻿</span></span> on the boundary of <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi></mrow><annotation encoding="application/x-tex">D</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span></span></span></span></span><span>﻿</span></span> is equal to some given function <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>g</mi></mrow><annotation encoding="application/x-tex">g</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span></span></span></span></span><span>﻿</span></span>. i.e.,</p><figure id="499cdf73-cf37-464c-9a6d-4ed39b76e9a9" class="equation"><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')</style><div class="equation-container"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mn>0</mn><mo separator="true">,</mo><mspace width="1em"/><mi>x</mi><mo>∈</mo><mi>D</mi><mo separator="true">,</mo><mspace linebreak="newline"></mspace><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mi>g</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo separator="true">,</mo><mspace width="1em"/><mi>x</mi><mo>∈</mo><mi mathvariant="normal">∂</mi><mi>D</mi><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">\Delta f(x) =0,\quad x\in D,\\ f(x)=g(x),\quad x\in \partial D.</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">Δ</span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8389em;vertical-align:-0.1944em;"></span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:1em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="mpunct">,</span></span><span class="mspace newline"></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right:1em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord" style="margin-right:0.05556em;">∂</span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="mord">.</span></span></span></span></span></div></figure><p id="49000977-07ca-41aa-99a2-bbe0a658968f" class="">Explicit solutions to this problem are difficult to find, and frequently, numerical methods are employed to approximate its solutions. The Finite Element method is one of the most used techniques in this matter. However, there is a Monte Carlo approach, based on a probabilistic interpretation of the problem that allows us to solve numerically without big complications. </p><p id="05c1ff03-7337-4772-b019-f66accef799c" class="">
-</p><p id="38a1c1a2-e197-4c15-8b9f-9ade76e7c578" class="">If <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi><mo>=</mo><mo stretchy="false">(</mo><msub><mi>X</mi><mi>t</mi></msub><mo>:</mo><mi>t</mi><mo>≥</mo><mn>0</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">X=(X_t:t\geq 0)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7719em;vertical-align:-0.136em;"></span><span class="mord mathnormal">t</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≥</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">0</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span> with law <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="double-struck">P</mi></mrow><annotation encoding="application/x-tex">\mathbb{P}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6889em;"></span><span class="mord mathbb">P</span></span></span></span></span><span>﻿</span></span>, is a Brownian Motion in <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="double-struck">R</mi><mi>d</mi></msup></mrow><annotation encoding="application/x-tex">\mathbb{R}^d</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8491em;"></span><span class="mord"><span class="mord mathbb">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8491em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">d</span></span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>, and <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>τ</mi><mi>D</mi></msub><mo>=</mo><mi>inf</mi><mo>⁡</mo><mo stretchy="false">{</mo><mi>t</mi><mo>&gt;</mo><mn>0</mn><mo>:</mo><msub><mi>X</mi><mi>t</mi></msub><mo mathvariant="normal">∉</mo><mi>D</mi><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">\tau_D=\inf\{t&gt;0:X_t\notin D\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1132em;">τ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.1132em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">D</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mop">in<span style="margin-right:0.07778em;">f</span></span><span class="mopen">{</span><span class="mord mathnormal">t</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel"><span class="mord"><span class="mrel">∈</span></span><span class="mord vbox"><span class="thinbox"><span class="llap"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="inner"><span class="mord"><span class="mord">/</span><span class="mspace" style="margin-right:0.0556em;"></span></span></span><span class="fix"></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="mclose">}</span></span></span></span></span><span>﻿</span></span>, and <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>g</mi></mrow><annotation encoding="application/x-tex">g</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span></span></span></span></span><span>﻿</span></span> is a bounded continuous function defined on <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mo>∪</mo><mi mathvariant="normal">∂</mi><mi>D</mi></mrow><annotation encoding="application/x-tex">D\cup\partial D</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∪</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord" style="margin-right:0.05556em;">∂</span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span></span></span></span></span><span>﻿</span></span>, then for <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>∈</mo><mi>D</mi><mo>∪</mo><mi mathvariant="normal">∂</mi><mi>D</mi></mrow><annotation encoding="application/x-tex">x \in D\cup\partial D</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∪</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord" style="margin-right:0.05556em;">∂</span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span></span></span></span></span><span>﻿</span></span></p><figure id="4faf94f2-5690-4313-8742-b113c518ebf6" class="equation"><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')</style><div class="equation-container"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>u</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mi mathvariant="double-struck">E</mi><mrow><mo fence="true">[</mo><mi>g</mi><mo stretchy="false">(</mo><msub><mi>X</mi><msub><mi>τ</mi><mi>D</mi></msub></msub><mo stretchy="false">)</mo><mi mathvariant="normal">∣</mi><msub><mi>X</mi><mn>0</mn></msub><mo>=</mo><mi>x</mi><mo fence="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">u(x)=\mathbb{E}\left[ g(X_{\tau_D}) |X_{0}=x\right]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">u</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.0003em;vertical-align:-0.2503em;"></span><span class="mord mathbb">E</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;">[</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.1132em;">τ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3567em;margin-left:-0.1132em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">D</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1433em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2503em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mord">∣</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord mathnormal">x</span><span class="mclose delimcenter" style="top:0em;">]</span></span></span></span></span></span></div></figure><p id="2dc7f449-da40-4ed0-b2e9-ef75886257f4" class="">is the only continuous solution to the Dirichlet problem.</p><p id="9353dc12-f027-43f4-ad1d-6803bb4350fc" class="">By the ‘law of the unconscious statistician, the function can be written as</p><figure id="c5e926ce-6d44-460d-8628-fc95102941fd" class="equation"><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')</style><div class="equation-container"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>u</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><msub><mo>∫</mo><mrow><mi mathvariant="normal">∂</mi><mi>D</mi></mrow></msub><mi mathvariant="double-struck">P</mi><mo stretchy="false">(</mo><msub><mi>X</mi><msub><mi>τ</mi><mi>D</mi></msub></msub><mo>∈</mo><mi mathvariant="normal">d</mi><mi>y</mi><mi mathvariant="normal">∣</mi><msub><mi>X</mi><mn>0</mn></msub><mo>=</mo><mn>0</mn><mo stretchy="false">)</mo><mi>g</mi><mo stretchy="false">(</mo><mi>y</mi><mo stretchy="false">)</mo><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">u(x)=\int_{\partial D} \mathbb{P}(X_{\tau_D}\in {\rm d}y | X_0=0) g(y),</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">u</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.2719em;vertical-align:-0.9119em;"></span><span class="mop"><span class="mop op-symbol large-op" style="margin-right:0.44445em;position:relative;top:-0.0011em;">∫</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:-0.4258em;"><span style="top:-1.7881em;margin-left:-0.4445em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight" style="margin-right:0.05556em;">∂</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">D</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.9119em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathbb">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.1132em;">τ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3567em;margin-left:-0.1132em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">D</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1433em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2503em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord"><span class="mord mathrm">d</span></span></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mord">∣</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">0</span><span class="mclose">)</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mclose">)</span><span class="mpunct">,</span></span></span></span></span></div></figure><p id="a0e085f5-67cb-4b70-87ac-adcebd66a4ab" class="">and, this representation this gives us a way of writing every possible solution of the Dirichlet problem. The distribution <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="double-struck">P</mi><mo stretchy="false">(</mo><msub><mi>X</mi><msub><mi>τ</mi><mi>D</mi></msub></msub><mo>∈</mo><mi mathvariant="normal">d</mi><mi>y</mi><mi mathvariant="normal">∣</mi><msub><mi>X</mi><mn>0</mn></msub><mo>=</mo><mn>0</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\mathbb{P}(X_{\tau_D}\in {\rm d}y | X_0=0) </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0003em;vertical-align:-0.2503em;"></span><span class="mord mathbb">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.1132em;">τ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3567em;margin-left:-0.1132em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">D</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1433em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2503em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord"><span class="mord mathrm">d</span></span></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mord">∣</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">0</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span>, is a key object in the theory of <a href="https://en.wikipedia.org/wiki/Harmonic_function">harmonic functions</a> (those who solve the Laplace equation on  <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi></mrow><annotation encoding="application/x-tex">D</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span></span></span></span></span><span>﻿</span></span>), and it is known as the Poisson kernel of <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">D.</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="mord">.</span></span></span></span></span><span>﻿</span></span></p><h3 id="f363eb88-c530-4ac8-be3a-0cc1b3fb8231" class="">Fractional Laplacian and the <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.0037em;">α</span></span></span></span></span><span>﻿</span></span>-stable process</h3><p id="e37aeadb-40fa-4a77-95ad-e6248a3930ea" class="">Many real-world systems exhibit dynamics that cannot be adequately captured by integer-order derivatives. Once again, in probability, there are discontinuous processes for which a ‘martingale’ behaviour leads us to the consideration of an oddbod known as <strong>the fractional Laplacian, </strong>and an analogous fractional Laplace equation<strong>. </strong><del>(Yes, fractional calculus and fractional analysis are a thing)</del></p><p id="e3be73b7-00b8-4466-8b7b-ade3674da583" class="">
-</p><p id="521b5139-0340-4c52-8294-5cbe9a4c9dc0" class="">The fractional Laplacian extends the traditional Laplacian operator to non-integer orders of differentiation. It is often denoted as <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mo>−</mo><mi mathvariant="normal">Δ</mi><msup><mo stretchy="false">)</mo><mrow><mi>α</mi><mi mathvariant="normal">/</mi><mn>2</mn></mrow></msup><mo separator="true">,</mo><mtext> </mtext><mn>0</mn><mo>&lt;</mo><mi>α</mi><mo>&lt;</mo><mn>2</mn><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">(-\Delta)^{\alpha/2},\, 0&lt;\alpha&lt;2,</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.138em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">−</span><span class="mord">Δ</span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.888em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.0037em;">α</span><span class="mord mtight">/2</span></span></span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">0</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8389em;vertical-align:-0.1944em;"></span><span class="mord">2</span><span class="mpunct">,</span></span></span></span></span><span>﻿</span></span> and, by capturing the notion of derivatives of non-integer order, it provides a more nuanced and flexible approach to modeling various phenomena (See reference 3). </p><p id="bd8fb103-2c9a-4125-8e40-299d8a9a97e7" class="">Its applications are far-reaching, impacting fields such as anomalous diffusion processes, image processing, finance, and quantum mechanics. </p><p id="3881124d-dfee-4877-af1a-f033feb9116b" class="">
-</p><p id="e1c27634-2280-4ff4-83eb-583ca723328b" class="">In this blog entry I introduce the fractional Laplace equation and a method to solve it <strong>numerically</strong> in: </p><ol type="1" id="cd197ef9-e92c-4bf3-bec5-782016ba6484" class="numbered-list" start="1"><li>The exterior of a bounded convex domain, this with the walk-on-spheres algorithm (see reference 4)</li></ol><ol type="1" id="90e6cff8-557e-47e8-a3a5-ead2a98cfd34" class="numbered-list" start="2"><li>The interior of a bounded convex domain using the walk-on-half-spaces </li></ol><p id="df4049e8-4061-45be-a69d-51097ce58fd2" class="">
-</p><h3 id="fde1e353-61ec-4c4e-bb96-a262d6857d92" class="">References</h3><p id="4feb9ebb-7ce0-4736-b984-d1e848fd5eaa" class="">
-</p><ol type="1" id="39bedf1a-8052-47af-a9b9-f819192c6450" class="numbered-list" start="1"><li>Gilbert Strang. 2015. Laplace Equation [Video]. YouTube. <a href="https://www.youtube.com/watch?v=-D4GDdxJrpg">URL</a></li></ol><ol type="1" id="ccbbfe73-45a3-4fe5-ac84-b90c62a8d2a1" class="numbered-list" start="2"><li>Khan Academy. 2016. Laplacian Intuition [Video]. YouTube. <a href="https://www.youtube.com/watch?v=EW08rD-GFh0&amp;t=2s">URL</a></li></ol><ol type="1" id="f473d23b-28be-43c2-ab19-0c4be2ddd193" class="numbered-list" start="3"><li>Kwaśnicki, M. (2017). Ten equivalent definitions of the fractional Laplace operator. <em>Fractional Calculus and Applied Analysis</em>, <em>20</em>(1), 7-51.</li></ol><ol type="1" id="c7e0ff92-ae24-434b-a210-6e85695bbb18" class="numbered-list" start="4"><li>Kyprianou, A. E., Osojnik, A., &amp; Shardlow, T. (2018). Unbiased ‘walk-on-spheres’ Monte Carlo methods for the fractional Laplacian. <em>IMA Journal of Numerical Analysis</em>, <em>38</em>(3), 1550-1578</li></ol><ol type="1" id="ea08d6be-ce92-403a-b91c-ac2ccf1c1403" class="numbered-list" start="5"><li>Qi, Y., Seyb, D., Bitterli, B., &amp; Jarosz, W. (2022, July). A<a href="https://onlinelibrary.wiley.com/doi/full/10.1111/cgf.14586"> bidirectional formulation for Walk on Spheres</a>. In <em>Computer Graphics Forum</em> (Vol. 41, No. 4, pp. 51-62).</li></ol><p id="c5119787-8969-45f0-9ead-9df309ed39f0" class="">
-</p><p id="ca935cdc-072d-4412-b296-1329dca562a7" class="">
-</p><p id="bb3fa92a-d8c2-445f-8015-9924ef16ff94" class="">
-</p><p id="8a20064e-fb4b-4e6e-a230-f4ca73f434fa" class="">
-</p><p id="a76662b5-6226-413e-9b8e-0c4711c353ac" class="">
-</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Walking on half-spaces </title>
+	<style>
+		@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+		:root {
+			--bg-color: #fafafa;
+			--text-main: #333333;
+			--text-muted: #666666;
+			--heading-color: #111111;
+			--accent-color: #2563eb;
+			--border-color: #e5e7eb;
+			--code-bg: #f3f4f6;
+		}
+
+		* {
+			box-sizing: border-box;
+		}
+
+		html,
+		body {
+			margin: 0;
+			padding: 0;
+			background-color: var(--bg-color);
+			font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+			color: var(--text-main);
+			line-height: 1.7;
+			font-size: 18px;
+			text-rendering: optimizeLegibility;
+			-webkit-font-smoothing: antialiased;
+		}
+
+		body {
+			padding: 40px 20px;
+		}
+
+		article.page {
+			max-width: 720px;
+			margin: 0 auto;
+			background: #ffffff;
+			padding: 60px 80px;
+			border-radius: 12px;
+			box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+		}
+
+		@media (max-width: 768px) {
+			article.page {
+				padding: 40px 30px;
+			}
+		}
+
+		h1,
+		h2,
+		h3,
+		h4,
+		h5 {
+			color: var(--heading-color);
+			margin-top: 2em;
+			margin-bottom: 0.75em;
+			font-weight: 700;
+			line-height: 1.3;
+		}
+
+		h1.page-title {
+			font-size: 2.5rem;
+			margin-top: 0;
+			margin-bottom: 0.2em;
+			letter-spacing: -0.02em;
+		}
+
+		.page-description {
+			font-size: 1.25rem;
+			color: var(--text-muted);
+			margin-bottom: 2em;
+		}
+
+		p {
+			margin-top: 0;
+			margin-bottom: 1.5em;
+		}
+
+		a {
+			color: var(--accent-color);
+			text-decoration: none;
+			border-bottom: 1px solid transparent;
+			transition: border-color 0.2s ease;
+		}
+
+		a:hover {
+			border-bottom-color: var(--accent-color);
+		}
+
+		figure {
+			margin: 2.5em 0;
+			text-align: center;
+		}
+
+		figure.image img {
+			max-width: 100%;
+			height: auto;
+			border-radius: 8px;
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+		}
+
+		figcaption {
+			margin-top: 0.75em;
+			font-size: 0.875rem;
+			color: var(--text-muted);
+			font-style: italic;
+		}
+
+		.equation-container {
+			overflow-x: auto;
+			padding: 1em 0;
+			margin: 1.5em 0;
+		}
+
+		ol,
+		ul {
+			margin-top: 0;
+			margin-bottom: 1.5em;
+			padding-left: 1.5em;
+		}
+
+		li {
+			margin-bottom: 0.5em;
+		}
+
+		code {
+			background-color: var(--code-bg);
+			padding: 0.2em 0.4em;
+			border-radius: 4px;
+			font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+			font-size: 0.9em;
+			color: #d946ef;
+		}
+
+		blockquote {
+			margin: 2em 0;
+			padding: 1em 1.5em;
+			border-left: 4px solid var(--accent-color);
+			background-color: #f8fafc;
+			border-radius: 0 8px 8px 0;
+			color: var(--text-muted);
+			font-style: italic;
+		}
+
+		del {
+			color: var(--text-muted);
+		}
+
+		hr {
+			border: 0;
+			height: 1px;
+			background: var(--border-color);
+			margin: 3em 0;
+		}
+
+		.page-body>p:nth-child(2) {
+			/* Tags section styling */
+			font-size: 0.9em;
+			color: var(--text-muted);
+			background: #f1f5f9;
+			padding: 10px 15px;
+			border-radius: 6px;
+			display: inline-block;
+			margin-bottom: 2.5em;
+		}
+	</style>
+</head>
+
+<body>
+	<article id="3c8db4bd-2dbb-44c8-a687-decbb7608ac0" class="page sans">
+		<header>
+			<h1 class="page-title">Walking on half-spaces </h1>
+			<p class="page-description"></p>
+		</header>
+		<div class="page-body">
+			<p id="90e2e1b4-3855-44ea-95ab-1072af4a0be1" class="">A Monte Carlo approach to solve fractional PDEs</p>
+			<p id="64096d0a-86d9-46e7-9343-27b7925c9981" class="">
+			</p>
+			<p id="6280a8df-a70a-4e01-ae99-53c57c31f9d8" class="">Tags: Fractional analysis, Dirichlet problem,
+				Feynman-Kac, Martingales, \alpha-stable-process, Laplace equation, fractional Laplacian.</p>
+			<p id="b8d3929c-64bc-4fe0-a917-855f051989cc" class="">
+			</p>
+			<h3 id="5cdabbea-74bf-486b-b48c-56f9f399d4c5" class="">Vanilla Laplacian and Brownian motion</h3>
+			<p id="762f0b5f-f3c7-4316-99d5-25db3d62dffc" class="">Every mathematician is familiar with the Laplace
+				equation. </p>
+			<figure id="5017557c-d5a9-418c-8e0a-3ae3471a0a59" class="equation">
+				<style>
+					@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')
+				</style>
+				<div class="equation-container"><span class="katex-display"><span class="katex"><span
+								class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+									<semantics>
+										<mrow>
+											<mi mathvariant="normal">Δ</mi>
+											<mi>f</mi>
+											<mo>=</mo>
+											<mn>0.</mn>
+										</mrow>
+										<annotation encoding="application/x-tex">\Delta f=0.</annotation>
+									</semantics>
+								</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+										class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span
+										class="mord">Δ</span><span class="mord mathnormal"
+										style="margin-right:0.10764em;">f</span><span class="mspace"
+										style="margin-right:0.2778em;"></span><span class="mrel">=</span><span
+										class="mspace" style="margin-right:0.2778em;"></span></span><span
+									class="base"><span class="strut" style="height:0.6444em;"></span><span
+										class="mord">0.</span></span></span></span></span></div>
+			</figure>
+			<p id="b8664e23-d2ae-41f6-8f09-86f21ce0106a" class="">where <style>
+					@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')
+				</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+					style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+							class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+									<semantics>
+										<mrow>
+											<mi mathvariant="normal">Δ</mi>
+											<mi>f</mi>
+											<mo>=</mo>
+											<mi mathvariant="normal">∇</mi>
+											<mo>⋅</mo>
+											<mi mathvariant="normal">∇</mi>
+											<mi>f</mi>
+										</mrow>
+										<annotation encoding="application/x-tex">\Delta f = \nabla \cdot \nabla f
+										</annotation>
+									</semantics>
+								</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+										class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span
+										class="mord">Δ</span><span class="mord mathnormal"
+										style="margin-right:0.10764em;">f</span><span class="mspace"
+										style="margin-right:0.2778em;"></span><span class="mrel">=</span><span
+										class="mspace" style="margin-right:0.2778em;"></span></span><span
+									class="base"><span class="strut" style="height:0.6833em;"></span><span
+										class="mord">∇</span><span class="mspace"
+										style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span
+										class="mspace" style="margin-right:0.2222em;"></span></span><span
+									class="base"><span class="strut"
+										style="height:0.8889em;vertical-align:-0.1944em;"></span><span
+										class="mord">∇</span><span class="mord mathnormal"
+										style="margin-right:0.10764em;">f</span></span></span></span></span><span>﻿</span></span>
+				 is called the Laplacian operator and <style>
+					@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')
+				</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+					style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+							class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+									<semantics>
+										<mrow>
+											<mi mathvariant="normal">∇</mi>
+											<mi>f</mi>
+											<mo>=</mo>
+											<mrow>
+												<mo fence="true">(</mo>
+												<mfrac>
+													<mrow>
+														<mi mathvariant="normal">∂</mi>
+														<mi>f</mi>
+													</mrow>
+													<mrow>
+														<mi mathvariant="normal">∂</mi>
+														<msub>
+															<mi>x</mi>
+															<mn>1</mn>
+														</msub>
+													</mrow>
+												</mfrac>
+												<mo separator="true">,</mo>
+												<mo>…</mo>
+												<mo separator="true">,</mo>
+												<mfrac>
+													<mi mathvariant="normal">∂</mi>
+													<mrow>
+														<mi mathvariant="normal">∂</mi>
+														<mi>f</mi>
+														<msub>
+															<mi>x</mi>
+															<mi>d</mi>
+														</msub>
+													</mrow>
+												</mfrac>
+												<mo fence="true">)</mo>
+											</mrow>
+										</mrow>
+										<annotation encoding="application/x-tex">\nabla f = \left ( \frac{\partial f
+											}{\partial x_1} , \ldots , \frac{\partial }{\partial f x_d} \right )
+										</annotation>
+									</semantics>
+								</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+										class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span
+										class="mord">∇</span><span class="mord mathnormal"
+										style="margin-right:0.10764em;">f</span><span class="mspace"
+										style="margin-right:0.2778em;"></span><span class="mrel">=</span><span
+										class="mspace" style="margin-right:0.2778em;"></span></span><span
+									class="base"><span class="strut"
+										style="height:1.8em;vertical-align:-0.65em;"></span><span class="minner"><span
+											class="mopen delimcenter" style="top:0em;"><span
+												class="delimsizing size2">(</span></span><span class="mord"><span
+												class="mopen nulldelimiter"></span><span class="mfrac"><span
+													class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist"
+															style="height:0.9322em;"><span style="top:-2.655em;"><span
+																	class="pstrut" style="height:3em;"></span><span
+																	class="sizing reset-size6 size3 mtight"><span
+																		class="mord mtight"><span class="mord mtight"
+																			style="margin-right:0.05556em;">∂</span><span
+																			class="mord mtight"><span
+																				class="mord mathnormal mtight">x</span><span
+																				class="msupsub"><span
+																					class="vlist-t vlist-t2"><span
+																						class="vlist-r"><span
+																							class="vlist"
+																							style="height:0.3173em;"><span
+																								style="top:-2.357em;margin-left:0em;margin-right:0.0714em;"><span
+																									class="pstrut"
+																									style="height:2.5em;"></span><span
+																									class="sizing reset-size3 size1 mtight"><span
+																										class="mord mtight">1</span></span></span></span><span
+																							class="vlist-s">​</span></span><span
+																						class="vlist-r"><span
+																							class="vlist"
+																							style="height:0.143em;"><span></span></span></span></span></span></span></span></span></span><span
+																style="top:-3.23em;"><span class="pstrut"
+																	style="height:3em;"></span><span class="frac-line"
+																	style="border-bottom-width:0.04em;"></span></span><span
+																style="top:-3.4461em;"><span class="pstrut"
+																	style="height:3em;"></span><span
+																	class="sizing reset-size6 size3 mtight"><span
+																		class="mord mtight"><span class="mord mtight"
+																			style="margin-right:0.05556em;">∂</span><span
+																			class="mord mathnormal mtight"
+																			style="margin-right:0.10764em;">f</span></span></span></span></span><span
+															class="vlist-s">​</span></span><span class="vlist-r"><span
+															class="vlist"
+															style="height:0.4451em;"><span></span></span></span></span></span><span
+												class="mclose nulldelimiter"></span></span><span
+											class="mpunct">,</span><span class="mspace"
+											style="margin-right:0.1667em;"></span><span class="minner">…</span><span
+											class="mspace" style="margin-right:0.1667em;"></span><span
+											class="mpunct">,</span><span class="mspace"
+											style="margin-right:0.1667em;"></span><span class="mord"><span
+												class="mopen nulldelimiter"></span><span class="mfrac"><span
+													class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist"
+															style="height:0.8801em;"><span style="top:-2.655em;"><span
+																	class="pstrut" style="height:3em;"></span><span
+																	class="sizing reset-size6 size3 mtight"><span
+																		class="mord mtight"><span class="mord mtight"
+																			style="margin-right:0.05556em;">∂</span><span
+																			class="mord mathnormal mtight"
+																			style="margin-right:0.10764em;">f</span><span
+																			class="mord mtight"><span
+																				class="mord mathnormal mtight">x</span><span
+																				class="msupsub"><span
+																					class="vlist-t vlist-t2"><span
+																						class="vlist-r"><span
+																							class="vlist"
+																							style="height:0.3448em;"><span
+																								style="top:-2.3488em;margin-left:0em;margin-right:0.0714em;"><span
+																									class="pstrut"
+																									style="height:2.5em;"></span><span
+																									class="sizing reset-size3 size1 mtight"><span
+																										class="mord mathnormal mtight">d</span></span></span></span><span
+																							class="vlist-s">​</span></span><span
+																						class="vlist-r"><span
+																							class="vlist"
+																							style="height:0.1512em;"><span></span></span></span></span></span></span></span></span></span><span
+																style="top:-3.23em;"><span class="pstrut"
+																	style="height:3em;"></span><span class="frac-line"
+																	style="border-bottom-width:0.04em;"></span></span><span
+																style="top:-3.394em;"><span class="pstrut"
+																	style="height:3em;"></span><span
+																	class="sizing reset-size6 size3 mtight"><span
+																		class="mord mtight"><span class="mord mtight"
+																			style="margin-right:0.05556em;">∂</span></span></span></span></span><span
+															class="vlist-s">​</span></span><span class="vlist-r"><span
+															class="vlist"
+															style="height:0.4811em;"><span></span></span></span></span></span><span
+												class="mclose nulldelimiter"></span></span><span
+											class="mclose delimcenter" style="top:0em;"><span
+												class="delimsizing size2">)</span></span></span></span></span></span></span><span>﻿</span></span>
+				(if you’re not a mathematician or if you need some help remembering, see references 1 and 2). </p>
+			<p id="e6b55303-c0fb-49e2-9489-b043e8d47444" class="">This second order Partial Differential equation
+				equation is a cornerstone of classical mathematics and physics. Among its applications, it is used to
+				describe the behavior of scalar fields such as gravitational, electric, and fluid potentials in
+				a<strong> state of equilibrium</strong>. In probability, it is closely related with the concept of
+				continuous <strong>martingales</strong>, and hence it is an important concept in mathematical finance.
+			</p>
+			<p id="9685c7df-11a6-43cc-8d74-c713c21a5182" class="">
+			</p>
+			<p id="69d9e695-3b02-4932-bca6-ee8092b9e989" class="">Adentrémonos un poco más en el lado probabilistico,
+			</p>
+			<p id="b6a22af4-43d6-42d9-b0b7-aad2797e9bd4" class="">
+			</p>
+			<p id="29f97546-084b-4355-871f-c41d9f8ef735" class="">The <strong>Dirichlet problem</strong> for
+				Laplace&#x27;s equation, an ubiquitous problem in mathematical modelling, consists of finding a solution
+				<style>
+					@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')
+				</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+					style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+							class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+									<semantics>
+										<mrow>
+											<mi>f</mi>
+										</mrow>
+										<annotation encoding="application/x-tex">f</annotation>
+									</semantics>
+								</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+										class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span
+										class="mord mathnormal"
+										style="margin-right:0.10764em;">f</span></span></span></span></span><span>﻿</span></span>
+				to the Laplace equation on some domain <style>
+					@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')
+				</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+					style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+							class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+									<semantics>
+										<mrow>
+											<mi>D</mi>
+										</mrow>
+										<annotation encoding="application/x-tex">D</annotation>
+									</semantics>
+								</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+										class="strut" style="height:0.6833em;"></span><span class="mord mathnormal"
+										style="margin-right:0.02778em;">D</span></span></span></span></span><span>﻿</span></span>,
+				such that <style>
+					@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')
+				</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+					style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+							class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+									<semantics>
+										<mrow>
+											<mi>f</mi>
+										</mrow>
+										<annotation encoding="application/x-tex">f</annotation>
+									</semantics>
+								</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+										class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span
+										class="mord mathnormal"
+										style="margin-right:0.10764em;">f</span></span></span></span></span><span>﻿</span></span>
+				on the boundary of <style>
+					@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')
+				</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+					style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+							class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+									<semantics>
+										<mrow>
+											<mi>D</mi>
+										</mrow>
+										<annotation encoding="application/x-tex">D</annotation>
+									</semantics>
+								</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+										class="strut" style="height:0.6833em;"></span><span class="mord mathnormal"
+										style="margin-right:0.02778em;">D</span></span></span></span></span><span>﻿</span></span>
+				is equal to some given function <style>
+					@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')
+				</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+					style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+							class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+									<semantics>
+										<mrow>
+											<mi>g</mi>
+										</mrow>
+										<annotation encoding="application/x-tex">g</annotation>
+									</semantics>
+								</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+										class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span
+										class="mord mathnormal"
+										style="margin-right:0.03588em;">g</span></span></span></span></span><span>﻿</span></span>.
+				i.e.,
+			</p>
+			<figure id="499cdf73-cf37-464c-9a6d-4ed39b76e9a9" class="equation">
+				<style>
+					@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')
+				</style>
+				<div class="equation-container"><span class="katex-display"><span class="katex"><span
+								class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+									<semantics>
+										<mrow>
+											<mi mathvariant="normal">Δ</mi>
+											<mi>f</mi>
+											<mo stretchy="false">(</mo>
+											<mi>x</mi>
+											<mo stretchy="false">)</mo>
+											<mo>=</mo>
+											<mn>0</mn>
+											<mo separator="true">,</mo>
+											<mspace width="1em" />
+											<mi>x</mi>
+											<mo>∈</mo>
+											<mi>D</mi>
+											<mo separator="true">,</mo>
+											<mspace linebreak="newline"></mspace>
+											<mi>f</mi>
+											<mo stretchy="false">(</mo>
+											<mi>x</mi>
+											<mo stretchy="false">)</mo>
+											<mo>=</mo>
+											<mi>g</mi>
+											<mo stretchy="false">(</mo>
+											<mi>x</mi>
+											<mo stretchy="false">)</mo>
+											<mo separator="true">,</mo>
+											<mspace width="1em" />
+											<mi>x</mi>
+											<mo>∈</mo>
+											<mi mathvariant="normal">∂</mi>
+											<mi>D</mi>
+											<mi mathvariant="normal">.</mi>
+										</mrow>
+										<annotation encoding="application/x-tex">\Delta f(x) =0,\quad x\in D,\\
+											f(x)=g(x),\quad x\in \partial D.</annotation>
+									</semantics>
+								</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+										class="strut" style="height:1em;vertical-align:-0.25em;"></span><span
+										class="mord">Δ</span><span class="mord mathnormal"
+										style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span
+										class="mord mathnormal">x</span><span class="mclose">)</span><span
+										class="mspace" style="margin-right:0.2778em;"></span><span
+										class="mrel">=</span><span class="mspace"
+										style="margin-right:0.2778em;"></span></span><span class="base"><span
+										class="strut" style="height:0.8389em;vertical-align:-0.1944em;"></span><span
+										class="mord">0</span><span class="mpunct">,</span><span class="mspace"
+										style="margin-right:1em;"></span><span class="mspace"
+										style="margin-right:0.1667em;"></span><span
+										class="mord mathnormal">x</span><span class="mspace"
+										style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span
+										class="mspace" style="margin-right:0.2778em;"></span></span><span
+									class="base"><span class="strut"
+										style="height:0.8778em;vertical-align:-0.1944em;"></span><span
+										class="mord mathnormal" style="margin-right:0.02778em;">D</span><span
+										class="mpunct">,</span></span><span class="mspace newline"></span><span
+									class="base"><span class="strut"
+										style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal"
+										style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span
+										class="mord mathnormal">x</span><span class="mclose">)</span><span
+										class="mspace" style="margin-right:0.2778em;"></span><span
+										class="mrel">=</span><span class="mspace"
+										style="margin-right:0.2778em;"></span></span><span class="base"><span
+										class="strut" style="height:1em;vertical-align:-0.25em;"></span><span
+										class="mord mathnormal" style="margin-right:0.03588em;">g</span><span
+										class="mopen">(</span><span class="mord mathnormal">x</span><span
+										class="mclose">)</span><span class="mpunct">,</span><span class="mspace"
+										style="margin-right:1em;"></span><span class="mspace"
+										style="margin-right:0.1667em;"></span><span
+										class="mord mathnormal">x</span><span class="mspace"
+										style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span
+										class="mspace" style="margin-right:0.2778em;"></span></span><span
+									class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord"
+										style="margin-right:0.05556em;">∂</span><span class="mord mathnormal"
+										style="margin-right:0.02778em;">D</span><span
+										class="mord">.</span></span></span></span></span></div>
+			</figure>
+			<p id="49000977-07ca-41aa-99a2-bbe0a658968f" class="">Explicit solutions to this problem are difficult to
+				find, and frequently, numerical methods are employed to approximate its solutions. The Finite Element
+				method is one of the most used techniques in this matter. However, there is a Monte Carlo approach,
+				based on a probabilistic interpretation of the problem that allows us to solve numerically without big
+				complications. </p>
+			<p id="05c1ff03-7337-4772-b019-f66accef799c" class="">
+			</p>
+			<p id="38a1c1a2-e197-4c15-8b9f-9ade76e7c578" class="">If <style>
+					@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')
+				</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+					style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+							class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+									<semantics>
+										<mrow>
+											<mi>X</mi>
+											<mo>=</mo>
+											<mo stretchy="false">(</mo>
+											<msub>
+												<mi>X</mi>
+												<mi>t</mi>
+											</msub>
+											<mo>:</mo>
+											<mi>t</mi>
+											<mo>≥</mo>
+											<mn>0</mn>
+											<mo stretchy="false">)</mo>
+										</mrow>
+										<annotation encoding="application/x-tex">X=(X_t:t\geq 0)</annotation>
+									</semantics>
+								</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+										class="strut" style="height:0.6833em;"></span><span class="mord mathnormal"
+										style="margin-right:0.07847em;">X</span><span class="mspace"
+										style="margin-right:0.2778em;"></span><span class="mrel">=</span><span
+										class="mspace" style="margin-right:0.2778em;"></span></span><span
+									class="base"><span class="strut"
+										style="height:1em;vertical-align:-0.25em;"></span><span
+										class="mopen">(</span><span class="mord"><span class="mord mathnormal"
+											style="margin-right:0.07847em;">X</span><span class="msupsub"><span
+												class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist"
+														style="height:0.2806em;"><span
+															style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span
+																class="pstrut" style="height:2.7em;"></span><span
+																class="sizing reset-size6 size3 mtight"><span
+																	class="mord mathnormal mtight">t</span></span></span></span><span
+														class="vlist-s">​</span></span><span class="vlist-r"><span
+														class="vlist"
+														style="height:0.15em;"><span></span></span></span></span></span></span><span
+										class="mspace" style="margin-right:0.2778em;"></span><span
+										class="mrel">:</span><span class="mspace"
+										style="margin-right:0.2778em;"></span></span><span class="base"><span
+										class="strut" style="height:0.7719em;vertical-align:-0.136em;"></span><span
+										class="mord mathnormal">t</span><span class="mspace"
+										style="margin-right:0.2778em;"></span><span class="mrel">≥</span><span
+										class="mspace" style="margin-right:0.2778em;"></span></span><span
+									class="base"><span class="strut"
+										style="height:1em;vertical-align:-0.25em;"></span><span
+										class="mord">0</span><span
+										class="mclose">)</span></span></span></span></span><span>﻿</span></span> with
+				law <style>
+					@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')
+				</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+					style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+							class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+									<semantics>
+										<mrow>
+											<mi mathvariant="double-struck">P</mi>
+										</mrow>
+										<annotation encoding="application/x-tex">\mathbb{P}</annotation>
+									</semantics>
+								</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+										class="strut" style="height:0.6889em;"></span><span
+										class="mord mathbb">P</span></span></span></span></span><span>﻿</span></span>,
+				is a Brownian Motion in <style>
+					@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')
+				</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+					style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+							class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+									<semantics>
+										<mrow>
+											<msup>
+												<mi mathvariant="double-struck">R</mi>
+												<mi>d</mi>
+											</msup>
+										</mrow>
+										<annotation encoding="application/x-tex">\mathbb{R}^d</annotation>
+									</semantics>
+								</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+										class="strut" style="height:0.8491em;"></span><span class="mord"><span
+											class="mord mathbb">R</span><span class="msupsub"><span
+												class="vlist-t"><span class="vlist-r"><span class="vlist"
+														style="height:0.8491em;"><span
+															style="top:-3.063em;margin-right:0.05em;"><span
+																class="pstrut" style="height:2.7em;"></span><span
+																class="sizing reset-size6 size3 mtight"><span
+																	class="mord mathnormal mtight">d</span></span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>,
+				and <style>
+					@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')
+				</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+					style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+							class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+									<semantics>
+										<mrow>
+											<msub>
+												<mi>τ</mi>
+												<mi>D</mi>
+											</msub>
+											<mo>=</mo>
+											<mi>inf</mi>
+											<mo>⁡</mo>
+											<mo stretchy="false">{</mo>
+											<mi>t</mi>
+											<mo>&gt;</mo>
+											<mn>0</mn>
+											<mo>:</mo>
+											<msub>
+												<mi>X</mi>
+												<mi>t</mi>
+											</msub>
+											<mo mathvariant="normal">∉</mo>
+											<mi>D</mi>
+											<mo stretchy="false">}</mo>
+										</mrow>
+										<annotation encoding="application/x-tex">\tau_D=\inf\{t&gt;0:X_t\notin D\}
+										</annotation>
+									</semantics>
+								</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+										class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span
+										class="mord"><span class="mord mathnormal"
+											style="margin-right:0.1132em;">τ</span><span class="msupsub"><span
+												class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist"
+														style="height:0.3283em;"><span
+															style="top:-2.55em;margin-left:-0.1132em;margin-right:0.05em;"><span
+																class="pstrut" style="height:2.7em;"></span><span
+																class="sizing reset-size6 size3 mtight"><span
+																	class="mord mathnormal mtight"
+																	style="margin-right:0.02778em;">D</span></span></span></span><span
+														class="vlist-s">​</span></span><span class="vlist-r"><span
+														class="vlist"
+														style="height:0.15em;"><span></span></span></span></span></span></span><span
+										class="mspace" style="margin-right:0.2778em;"></span><span
+										class="mrel">=</span><span class="mspace"
+										style="margin-right:0.2778em;"></span></span><span class="base"><span
+										class="strut" style="height:1em;vertical-align:-0.25em;"></span><span
+										class="mop">in<span style="margin-right:0.07778em;">f</span></span><span
+										class="mopen">{</span><span class="mord mathnormal">t</span><span class="mspace"
+										style="margin-right:0.2778em;"></span><span class="mrel">&gt;</span><span
+										class="mspace" style="margin-right:0.2778em;"></span></span><span
+									class="base"><span class="strut" style="height:0.6444em;"></span><span
+										class="mord">0</span><span class="mspace"
+										style="margin-right:0.2778em;"></span><span class="mrel">:</span><span
+										class="mspace" style="margin-right:0.2778em;"></span></span><span
+									class="base"><span class="strut"
+										style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span
+											class="mord mathnormal" style="margin-right:0.07847em;">X</span><span
+											class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span
+														class="vlist" style="height:0.2806em;"><span
+															style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span
+																class="pstrut" style="height:2.7em;"></span><span
+																class="sizing reset-size6 size3 mtight"><span
+																	class="mord mathnormal mtight">t</span></span></span></span><span
+														class="vlist-s">​</span></span><span class="vlist-r"><span
+														class="vlist"
+														style="height:0.15em;"><span></span></span></span></span></span></span><span
+										class="mspace" style="margin-right:0.2778em;"></span><span class="mrel"><span
+											class="mord"><span class="mrel">∈</span></span><span class="mord vbox"><span
+												class="thinbox"><span class="llap"><span class="strut"
+														style="height:1em;vertical-align:-0.25em;"></span><span
+														class="inner"><span class="mord"><span
+																class="mord">/</span><span class="mspace"
+																style="margin-right:0.0556em;"></span></span></span><span
+														class="fix"></span></span></span></span></span><span
+										class="mspace" style="margin-right:0.2778em;"></span></span><span
+									class="base"><span class="strut"
+										style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal"
+										style="margin-right:0.02778em;">D</span><span
+										class="mclose">}</span></span></span></span></span><span>﻿</span></span>, and
+				<style>
+					@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')
+				</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+					style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+							class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+									<semantics>
+										<mrow>
+											<mi>g</mi>
+										</mrow>
+										<annotation encoding="application/x-tex">g</annotation>
+									</semantics>
+								</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+										class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span
+										class="mord mathnormal"
+										style="margin-right:0.03588em;">g</span></span></span></span></span><span>﻿</span></span>
+				is a bounded continuous function defined on <style>
+					@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')
+				</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+					style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+							class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+									<semantics>
+										<mrow>
+											<mi>D</mi>
+											<mo>∪</mo>
+											<mi mathvariant="normal">∂</mi>
+											<mi>D</mi>
+										</mrow>
+										<annotation encoding="application/x-tex">D\cup\partial D</annotation>
+									</semantics>
+								</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+										class="strut" style="height:0.6833em;"></span><span class="mord mathnormal"
+										style="margin-right:0.02778em;">D</span><span class="mspace"
+										style="margin-right:0.2222em;"></span><span class="mbin">∪</span><span
+										class="mspace" style="margin-right:0.2222em;"></span></span><span
+									class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord"
+										style="margin-right:0.05556em;">∂</span><span class="mord mathnormal"
+										style="margin-right:0.02778em;">D</span></span></span></span></span><span>﻿</span></span>,
+				then for <style>
+					@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')
+				</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+					style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+							class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+									<semantics>
+										<mrow>
+											<mi>x</mi>
+											<mo>∈</mo>
+											<mi>D</mi>
+											<mo>∪</mo>
+											<mi mathvariant="normal">∂</mi>
+											<mi>D</mi>
+										</mrow>
+										<annotation encoding="application/x-tex">x \in D\cup\partial D</annotation>
+									</semantics>
+								</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+										class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span
+										class="mord mathnormal">x</span><span class="mspace"
+										style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span
+										class="mspace" style="margin-right:0.2778em;"></span></span><span
+									class="base"><span class="strut" style="height:0.6833em;"></span><span
+										class="mord mathnormal" style="margin-right:0.02778em;">D</span><span
+										class="mspace" style="margin-right:0.2222em;"></span><span
+										class="mbin">∪</span><span class="mspace"
+										style="margin-right:0.2222em;"></span></span><span class="base"><span
+										class="strut" style="height:0.6944em;"></span><span class="mord"
+										style="margin-right:0.05556em;">∂</span><span class="mord mathnormal"
+										style="margin-right:0.02778em;">D</span></span></span></span></span><span>﻿</span></span>
+			</p>
+			<figure id="4faf94f2-5690-4313-8742-b113c518ebf6" class="equation">
+				<style>
+					@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')
+				</style>
+				<div class="equation-container"><span class="katex-display"><span class="katex"><span
+								class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+									<semantics>
+										<mrow>
+											<mi>u</mi>
+											<mo stretchy="false">(</mo>
+											<mi>x</mi>
+											<mo stretchy="false">)</mo>
+											<mo>=</mo>
+											<mi mathvariant="double-struck">E</mi>
+											<mrow>
+												<mo fence="true">[</mo>
+												<mi>g</mi>
+												<mo stretchy="false">(</mo>
+												<msub>
+													<mi>X</mi>
+													<msub>
+														<mi>τ</mi>
+														<mi>D</mi>
+													</msub>
+												</msub>
+												<mo stretchy="false">)</mo>
+												<mi mathvariant="normal">∣</mi>
+												<msub>
+													<mi>X</mi>
+													<mn>0</mn>
+												</msub>
+												<mo>=</mo>
+												<mi>x</mi>
+												<mo fence="true">]</mo>
+											</mrow>
+										</mrow>
+										<annotation encoding="application/x-tex">u(x)=\mathbb{E}\left[ g(X_{\tau_D})
+											|X_{0}=x\right]</annotation>
+									</semantics>
+								</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+										class="strut" style="height:1em;vertical-align:-0.25em;"></span><span
+										class="mord mathnormal">u</span><span class="mopen">(</span><span
+										class="mord mathnormal">x</span><span class="mclose">)</span><span
+										class="mspace" style="margin-right:0.2778em;"></span><span
+										class="mrel">=</span><span class="mspace"
+										style="margin-right:0.2778em;"></span></span><span class="base"><span
+										class="strut" style="height:1.0003em;vertical-align:-0.2503em;"></span><span
+										class="mord mathbb">E</span><span class="mspace"
+										style="margin-right:0.1667em;"></span><span class="minner"><span
+											class="mopen delimcenter" style="top:0em;">[</span><span
+											class="mord mathnormal" style="margin-right:0.03588em;">g</span><span
+											class="mopen">(</span><span class="mord"><span class="mord mathnormal"
+												style="margin-right:0.07847em;">X</span><span class="msupsub"><span
+													class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist"
+															style="height:0.1514em;"><span
+																style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span
+																	class="pstrut" style="height:2.7em;"></span><span
+																	class="sizing reset-size6 size3 mtight"><span
+																		class="mord mtight"><span
+																			class="mord mtight"><span
+																				class="mord mathnormal mtight"
+																				style="margin-right:0.1132em;">τ</span><span
+																				class="msupsub"><span
+																					class="vlist-t vlist-t2"><span
+																						class="vlist-r"><span
+																							class="vlist"
+																							style="height:0.3448em;"><span
+																								style="top:-2.3567em;margin-left:-0.1132em;margin-right:0.0714em;"><span
+																									class="pstrut"
+																									style="height:2.5em;"></span><span
+																									class="sizing reset-size3 size1 mtight"><span
+																										class="mord mathnormal mtight"
+																										style="margin-right:0.02778em;">D</span></span></span></span><span
+																							class="vlist-s">​</span></span><span
+																						class="vlist-r"><span
+																							class="vlist"
+																							style="height:0.1433em;"><span></span></span></span></span></span></span></span></span></span></span><span
+															class="vlist-s">​</span></span><span class="vlist-r"><span
+															class="vlist"
+															style="height:0.2503em;"><span></span></span></span></span></span></span><span
+											class="mclose">)</span><span class="mord">∣</span><span class="mord"><span
+												class="mord mathnormal" style="margin-right:0.07847em;">X</span><span
+												class="msupsub"><span class="vlist-t vlist-t2"><span
+														class="vlist-r"><span class="vlist"
+															style="height:0.3011em;"><span
+																style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span
+																	class="pstrut" style="height:2.7em;"></span><span
+																	class="sizing reset-size6 size3 mtight"><span
+																		class="mord mtight"><span
+																			class="mord mtight">0</span></span></span></span></span><span
+															class="vlist-s">​</span></span><span class="vlist-r"><span
+															class="vlist"
+															style="height:0.15em;"><span></span></span></span></span></span></span><span
+											class="mspace" style="margin-right:0.2778em;"></span><span
+											class="mrel">=</span><span class="mspace"
+											style="margin-right:0.2778em;"></span><span
+											class="mord mathnormal">x</span><span class="mclose delimcenter"
+											style="top:0em;">]</span></span></span></span></span></span></div>
+			</figure>
+			<p id="2dc7f449-da40-4ed0-b2e9-ef75886257f4" class="">is the only continuous solution to the Dirichlet
+				problem.</p>
+			<p id="9353dc12-f027-43f4-ad1d-6803bb4350fc" class="">By the ‘law of the unconscious statistician, the
+				function can be written as</p>
+			<figure id="c5e926ce-6d44-460d-8628-fc95102941fd" class="equation">
+				<style>
+					@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')
+				</style>
+				<div class="equation-container"><span class="katex-display"><span class="katex"><span
+								class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+									<semantics>
+										<mrow>
+											<mi>u</mi>
+											<mo stretchy="false">(</mo>
+											<mi>x</mi>
+											<mo stretchy="false">)</mo>
+											<mo>=</mo>
+											<msub>
+												<mo>∫</mo>
+												<mrow>
+													<mi mathvariant="normal">∂</mi>
+													<mi>D</mi>
+												</mrow>
+											</msub>
+											<mi mathvariant="double-struck">P</mi>
+											<mo stretchy="false">(</mo>
+											<msub>
+												<mi>X</mi>
+												<msub>
+													<mi>τ</mi>
+													<mi>D</mi>
+												</msub>
+											</msub>
+											<mo>∈</mo>
+											<mi mathvariant="normal">d</mi>
+											<mi>y</mi>
+											<mi mathvariant="normal">∣</mi>
+											<msub>
+												<mi>X</mi>
+												<mn>0</mn>
+											</msub>
+											<mo>=</mo>
+											<mn>0</mn>
+											<mo stretchy="false">)</mo>
+											<mi>g</mi>
+											<mo stretchy="false">(</mo>
+											<mi>y</mi>
+											<mo stretchy="false">)</mo>
+											<mo separator="true">,</mo>
+										</mrow>
+										<annotation encoding="application/x-tex">u(x)=\int_{\partial D}
+											\mathbb{P}(X_{\tau_D}\in {\rm d}y | X_0=0) g(y),</annotation>
+									</semantics>
+								</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+										class="strut" style="height:1em;vertical-align:-0.25em;"></span><span
+										class="mord mathnormal">u</span><span class="mopen">(</span><span
+										class="mord mathnormal">x</span><span class="mclose">)</span><span
+										class="mspace" style="margin-right:0.2778em;"></span><span
+										class="mrel">=</span><span class="mspace"
+										style="margin-right:0.2778em;"></span></span><span class="base"><span
+										class="strut" style="height:2.2719em;vertical-align:-0.9119em;"></span><span
+										class="mop"><span class="mop op-symbol large-op"
+											style="margin-right:0.44445em;position:relative;top:-0.0011em;">∫</span><span
+											class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span
+														class="vlist" style="height:-0.4258em;"><span
+															style="top:-1.7881em;margin-left:-0.4445em;margin-right:0.05em;"><span
+																class="pstrut" style="height:2.7em;"></span><span
+																class="sizing reset-size6 size3 mtight"><span
+																	class="mord mtight"><span class="mord mtight"
+																		style="margin-right:0.05556em;">∂</span><span
+																		class="mord mathnormal mtight"
+																		style="margin-right:0.02778em;">D</span></span></span></span></span><span
+														class="vlist-s">​</span></span><span class="vlist-r"><span
+														class="vlist"
+														style="height:0.9119em;"><span></span></span></span></span></span></span><span
+										class="mspace" style="margin-right:0.1667em;"></span><span
+										class="mord mathbb">P</span><span class="mopen">(</span><span class="mord"><span
+											class="mord mathnormal" style="margin-right:0.07847em;">X</span><span
+											class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span
+														class="vlist" style="height:0.1514em;"><span
+															style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span
+																class="pstrut" style="height:2.7em;"></span><span
+																class="sizing reset-size6 size3 mtight"><span
+																	class="mord mtight"><span class="mord mtight"><span
+																			class="mord mathnormal mtight"
+																			style="margin-right:0.1132em;">τ</span><span
+																			class="msupsub"><span
+																				class="vlist-t vlist-t2"><span
+																					class="vlist-r"><span class="vlist"
+																						style="height:0.3448em;"><span
+																							style="top:-2.3567em;margin-left:-0.1132em;margin-right:0.0714em;"><span
+																								class="pstrut"
+																								style="height:2.5em;"></span><span
+																								class="sizing reset-size3 size1 mtight"><span
+																									class="mord mathnormal mtight"
+																									style="margin-right:0.02778em;">D</span></span></span></span><span
+																						class="vlist-s">​</span></span><span
+																					class="vlist-r"><span class="vlist"
+																						style="height:0.1433em;"><span></span></span></span></span></span></span></span></span></span></span><span
+														class="vlist-s">​</span></span><span class="vlist-r"><span
+														class="vlist"
+														style="height:0.2503em;"><span></span></span></span></span></span></span><span
+										class="mspace" style="margin-right:0.2778em;"></span><span
+										class="mrel">∈</span><span class="mspace"
+										style="margin-right:0.2778em;"></span></span><span class="base"><span
+										class="strut" style="height:1em;vertical-align:-0.25em;"></span><span
+										class="mord"><span class="mord"><span
+												class="mord mathrm">d</span></span></span><span class="mord mathnormal"
+										style="margin-right:0.03588em;">y</span><span class="mord">∣</span><span
+										class="mord"><span class="mord mathnormal"
+											style="margin-right:0.07847em;">X</span><span class="msupsub"><span
+												class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist"
+														style="height:0.3011em;"><span
+															style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span
+																class="pstrut" style="height:2.7em;"></span><span
+																class="sizing reset-size6 size3 mtight"><span
+																	class="mord mtight">0</span></span></span></span><span
+														class="vlist-s">​</span></span><span class="vlist-r"><span
+														class="vlist"
+														style="height:0.15em;"><span></span></span></span></span></span></span><span
+										class="mspace" style="margin-right:0.2778em;"></span><span
+										class="mrel">=</span><span class="mspace"
+										style="margin-right:0.2778em;"></span></span><span class="base"><span
+										class="strut" style="height:1em;vertical-align:-0.25em;"></span><span
+										class="mord">0</span><span class="mclose">)</span><span class="mord mathnormal"
+										style="margin-right:0.03588em;">g</span><span class="mopen">(</span><span
+										class="mord mathnormal" style="margin-right:0.03588em;">y</span><span
+										class="mclose">)</span><span class="mpunct">,</span></span></span></span></span>
+				</div>
+			</figure>
+			<p id="a0e085f5-67cb-4b70-87ac-adcebd66a4ab" class="">and, this representation this gives us a way of
+				writing every possible solution of the Dirichlet problem. The distribution <style>
+					@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')
+				</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+					style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+							class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+									<semantics>
+										<mrow>
+											<mi mathvariant="double-struck">P</mi>
+											<mo stretchy="false">(</mo>
+											<msub>
+												<mi>X</mi>
+												<msub>
+													<mi>τ</mi>
+													<mi>D</mi>
+												</msub>
+											</msub>
+											<mo>∈</mo>
+											<mi mathvariant="normal">d</mi>
+											<mi>y</mi>
+											<mi mathvariant="normal">∣</mi>
+											<msub>
+												<mi>X</mi>
+												<mn>0</mn>
+											</msub>
+											<mo>=</mo>
+											<mn>0</mn>
+											<mo stretchy="false">)</mo>
+										</mrow>
+										<annotation encoding="application/x-tex">\mathbb{P}(X_{\tau_D}\in {\rm d}y |
+											X_0=0) </annotation>
+									</semantics>
+								</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+										class="strut" style="height:1.0003em;vertical-align:-0.2503em;"></span><span
+										class="mord mathbb">P</span><span class="mopen">(</span><span class="mord"><span
+											class="mord mathnormal" style="margin-right:0.07847em;">X</span><span
+											class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span
+														class="vlist" style="height:0.1514em;"><span
+															style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span
+																class="pstrut" style="height:2.7em;"></span><span
+																class="sizing reset-size6 size3 mtight"><span
+																	class="mord mtight"><span class="mord mtight"><span
+																			class="mord mathnormal mtight"
+																			style="margin-right:0.1132em;">τ</span><span
+																			class="msupsub"><span
+																				class="vlist-t vlist-t2"><span
+																					class="vlist-r"><span class="vlist"
+																						style="height:0.3448em;"><span
+																							style="top:-2.3567em;margin-left:-0.1132em;margin-right:0.0714em;"><span
+																								class="pstrut"
+																								style="height:2.5em;"></span><span
+																								class="sizing reset-size3 size1 mtight"><span
+																									class="mord mathnormal mtight"
+																									style="margin-right:0.02778em;">D</span></span></span></span><span
+																						class="vlist-s">​</span></span><span
+																					class="vlist-r"><span class="vlist"
+																						style="height:0.1433em;"><span></span></span></span></span></span></span></span></span></span></span><span
+														class="vlist-s">​</span></span><span class="vlist-r"><span
+														class="vlist"
+														style="height:0.2503em;"><span></span></span></span></span></span></span><span
+										class="mspace" style="margin-right:0.2778em;"></span><span
+										class="mrel">∈</span><span class="mspace"
+										style="margin-right:0.2778em;"></span></span><span class="base"><span
+										class="strut" style="height:1em;vertical-align:-0.25em;"></span><span
+										class="mord"><span class="mord"><span
+												class="mord mathrm">d</span></span></span><span class="mord mathnormal"
+										style="margin-right:0.03588em;">y</span><span class="mord">∣</span><span
+										class="mord"><span class="mord mathnormal"
+											style="margin-right:0.07847em;">X</span><span class="msupsub"><span
+												class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist"
+														style="height:0.3011em;"><span
+															style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span
+																class="pstrut" style="height:2.7em;"></span><span
+																class="sizing reset-size6 size3 mtight"><span
+																	class="mord mtight">0</span></span></span></span><span
+														class="vlist-s">​</span></span><span class="vlist-r"><span
+														class="vlist"
+														style="height:0.15em;"><span></span></span></span></span></span></span><span
+										class="mspace" style="margin-right:0.2778em;"></span><span
+										class="mrel">=</span><span class="mspace"
+										style="margin-right:0.2778em;"></span></span><span class="base"><span
+										class="strut" style="height:1em;vertical-align:-0.25em;"></span><span
+										class="mord">0</span><span
+										class="mclose">)</span></span></span></span></span><span>﻿</span></span>, is a
+				key object in the theory of <a href="https://en.wikipedia.org/wiki/Harmonic_function">harmonic
+					functions</a> (those who solve the Laplace equation on <style>
+					@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')
+				</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+					style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+							class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+									<semantics>
+										<mrow>
+											<mi>D</mi>
+										</mrow>
+										<annotation encoding="application/x-tex">D</annotation>
+									</semantics>
+								</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+										class="strut" style="height:0.6833em;"></span><span class="mord mathnormal"
+										style="margin-right:0.02778em;">D</span></span></span></span></span><span>﻿</span></span>),
+				and it is known as the Poisson kernel of <style>
+					@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')
+				</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+					style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+							class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+									<semantics>
+										<mrow>
+											<mi>D</mi>
+											<mi mathvariant="normal">.</mi>
+										</mrow>
+										<annotation encoding="application/x-tex">D.</annotation>
+									</semantics>
+								</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+										class="strut" style="height:0.6833em;"></span><span class="mord mathnormal"
+										style="margin-right:0.02778em;">D</span><span
+										class="mord">.</span></span></span></span></span><span>﻿</span></span></p>
+			<h3 id="f363eb88-c530-4ac8-be3a-0cc1b3fb8231" class="">Fractional Laplacian and the <style>
+					@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')
+				</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+					style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+							class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+									<semantics>
+										<mrow>
+											<mi>α</mi>
+										</mrow>
+										<annotation encoding="application/x-tex">\alpha</annotation>
+									</semantics>
+								</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+										class="strut" style="height:0.4306em;"></span><span class="mord mathnormal"
+										style="margin-right:0.0037em;">α</span></span></span></span></span><span>﻿</span></span>-stable
+				process</h3>
+			<p id="e37aeadb-40fa-4a77-95ad-e6248a3930ea" class="">Many real-world systems exhibit dynamics that cannot
+				be adequately captured by integer-order derivatives. Once again, in probability, there are discontinuous
+				processes for which a ‘martingale’ behaviour leads us to the consideration of an oddbod known as
+				<strong>the fractional Laplacian, </strong>and an analogous fractional Laplace equation<strong>.
+				</strong><del>(Yes, fractional calculus and fractional analysis are a thing)</del>
+			</p>
+			<p id="e3be73b7-00b8-4466-8b7b-ade3674da583" class="">
+			</p>
+			<p id="521b5139-0340-4c52-8294-5cbe9a4c9dc0" class="">The fractional Laplacian extends the traditional
+				Laplacian operator to non-integer orders of differentiation. It is often denoted as <style>
+					@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')
+				</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+					style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+							class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+									<semantics>
+										<mrow>
+											<mo stretchy="false">(</mo>
+											<mo>−</mo>
+											<mi mathvariant="normal">Δ</mi>
+											<msup>
+												<mo stretchy="false">)</mo>
+												<mrow>
+													<mi>α</mi>
+													<mi mathvariant="normal">/</mi>
+													<mn>2</mn>
+												</mrow>
+											</msup>
+											<mo separator="true">,</mo>
+											<mtext> </mtext>
+											<mn>0</mn>
+											<mo>&lt;</mo>
+											<mi>α</mi>
+											<mo>&lt;</mo>
+											<mn>2</mn>
+											<mo separator="true">,</mo>
+										</mrow>
+										<annotation encoding="application/x-tex">(-\Delta)^{\alpha/2},\,
+											0&lt;\alpha&lt;2,</annotation>
+									</semantics>
+								</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+										class="strut" style="height:1.138em;vertical-align:-0.25em;"></span><span
+										class="mopen">(</span><span class="mord">−</span><span
+										class="mord">Δ</span><span class="mclose"><span class="mclose">)</span><span
+											class="msupsub"><span class="vlist-t"><span class="vlist-r"><span
+														class="vlist" style="height:0.888em;"><span
+															style="top:-3.063em;margin-right:0.05em;"><span
+																class="pstrut" style="height:2.7em;"></span><span
+																class="sizing reset-size6 size3 mtight"><span
+																	class="mord mtight"><span
+																		class="mord mathnormal mtight"
+																		style="margin-right:0.0037em;">α</span><span
+																		class="mord mtight">/2</span></span></span></span></span></span></span></span></span><span
+										class="mpunct">,</span><span class="mspace"
+										style="margin-right:0.1667em;"></span><span class="mspace"
+										style="margin-right:0.1667em;"></span><span class="mord">0</span><span
+										class="mspace" style="margin-right:0.2778em;"></span><span
+										class="mrel">&lt;</span><span class="mspace"
+										style="margin-right:0.2778em;"></span></span><span class="base"><span
+										class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span
+										class="mord mathnormal" style="margin-right:0.0037em;">α</span><span
+										class="mspace" style="margin-right:0.2778em;"></span><span
+										class="mrel">&lt;</span><span class="mspace"
+										style="margin-right:0.2778em;"></span></span><span class="base"><span
+										class="strut" style="height:0.8389em;vertical-align:-0.1944em;"></span><span
+										class="mord">2</span><span
+										class="mpunct">,</span></span></span></span></span><span>﻿</span></span> and, by
+				capturing the notion of derivatives of non-integer order, it provides a more nuanced and flexible
+				approach to modeling various phenomena (See reference 3). </p>
+			<p id="bd8fb103-2c9a-4125-8e40-299d8a9a97e7" class="">Its applications are far-reaching, impacting fields
+				such as anomalous diffusion processes, image processing, finance, and quantum mechanics. </p>
+			<p id="3881124d-dfee-4877-af1a-f033feb9116b" class="">
+			</p>
+			<p id="e1c27634-2280-4ff4-83eb-583ca723328b" class="">In this blog entry I introduce the fractional Laplace
+				equation and a method to solve it <strong>numerically</strong> in: </p>
+			<ol type="1" id="cd197ef9-e92c-4bf3-bec5-782016ba6484" class="numbered-list" start="1">
+				<li>The exterior of a bounded convex domain, this with the walk-on-spheres algorithm (see reference 4)
+				</li>
+			</ol>
+			<ol type="1" id="90e6cff8-557e-47e8-a3a5-ead2a98cfd34" class="numbered-list" start="2">
+				<li>The interior of a bounded convex domain using the walk-on-half-spaces</li>
+			</ol>
+			<p id="df4049e8-4061-45be-a69d-51097ce58fd2" class="">
+			</p>
+			<h3 id="connection-to-alpha-stable" class="">The Generator and the Isotropic <style>
+					@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')
+				</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+					style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+							class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+									<semantics>
+										<mrow>
+											<mi>α</mi>
+										</mrow>
+										<annotation encoding="application/x-tex">\alpha</annotation>
+									</semantics>
+								</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+										class="strut" style="height:0.4306em;"></span><span class="mord mathnormal"
+										style="margin-right:0.0037em;">α</span></span></span></span></span><span>﻿</span></span>-stable
+				process</h3>
+			<p id="connection-txt" class="">The crucial link between the probabilistic interpretation and the analytic
+				problem is that the fractional Laplacian is the infinitesimal generator of a well-known stochastic
+				process: the isotropic <style>
+					@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')
+				</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+					style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+							class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+									<semantics>
+										<mrow>
+											<mi>α</mi>
+										</mrow>
+										<annotation encoding="application/x-tex">\alpha</annotation>
+									</semantics>
+								</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+										class="strut" style="height:0.4306em;"></span><span class="mord mathnormal"
+										style="margin-right:0.0037em;">α</span></span></span></span></span><span>﻿</span></span>-stable
+				Lévy process. Just as the standard Brownian motion has the classical Laplacian operator as its
+				generator, leading to connections between Brownian motion and harmonic functions, the <style>
+					@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')
+				</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+					style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+							class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+									<semantics>
+										<mrow>
+											<mi>α</mi>
+										</mrow>
+										<annotation encoding="application/x-tex">\alpha</annotation>
+									</semantics>
+								</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+										class="strut" style="height:0.4306em;"></span><span class="mord mathnormal"
+										style="margin-right:0.0037em;">α</span></span></span></span></span><span>﻿</span></span>-stable
+				process (with its discontinuous, jump-like paths) governs the solutions to the fractional Laplace
+				equation. This deep connection, explored thoroughly in potential analysis (see, for example, Bogdan,
+				Burdzy et al., "Potential Analysis of Stable Processes and its Extensions"), allows us to use simulated
+				paths of the <style>
+					@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')
+				</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+					style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+							class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+									<semantics>
+										<mrow>
+											<mi>α</mi>
+										</mrow>
+										<annotation encoding="application/x-tex">\alpha</annotation>
+									</semantics>
+								</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+										class="strut" style="height:0.4306em;"></span><span class="mord mathnormal"
+										style="margin-right:0.0037em;">α</span></span></span></span></span><span>﻿</span></span>-stable
+				process to evaluate boundary value problems numerically.</p>
+
+			<h3 id="walk-on-spheres" class="">1. Walk-on-spheres for the exterior domain</h3>
+			<p id="wos-txt" class="">The Walk-on-spheres (WoS) algorithm, originally devised for the classical Dirichlet
+				problem using Brownian motion, can be extended to the fractional setting for computing solutions outside
+				a bounded domain. Instead of moving continuously and generating a spherical surface jump when hitting
+				the local sphere, the <style>
+					@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')
+				</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+					style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+							class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+									<semantics>
+										<mrow>
+											<mi>α</mi>
+										</mrow>
+										<annotation encoding="application/x-tex">\alpha</annotation>
+									</semantics>
+								</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+										class="strut" style="height:0.4306em;"></span><span class="mord mathnormal"
+										style="margin-right:0.0037em;">α</span></span></span></span></span><span>﻿</span></span>-stable
+				process "jumps" across space. For the exterior problem, we sample the exit position of the <style>
+					@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')
+				</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+					style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+							class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+									<semantics>
+										<mrow>
+											<mi>α</mi>
+										</mrow>
+										<annotation encoding="application/x-tex">\alpha</annotation>
+									</semantics>
+								</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+										class="strut" style="height:0.4306em;"></span><span class="mord mathnormal"
+										style="margin-right:0.0037em;">α</span></span></span></span></span><span>﻿</span></span>-stable
+				process from successive spheres that do not intersect the boundary. By chaining these jumps, the random
+				walk eventually escapes to the target boundary region, allowing us to approximate the expectation via
+				Monte Carlo integration (Kyprianou et al., 2018).</p>
+
+			<h3 id="walk-on-half-spaces" class="">2. Walk-on-half-spaces for the interior domain</h3>
+			<p id="wohs-txt" class="">While Walk-on-spheres relies on isotropic jumps from the center of successive
+				maximal spheres, the Walk-on-half-spaces (WoHS) approach constructs the random walk by utilizing
+				half-spaces to bound the steps. This is particularly advantageous for the interior of bounded convex
+				domains. At each iteration, the algorithm samples the first hitting point of an appropriately chosen
+				bounding half-space by an <style>
+					@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')
+				</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+					style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+							class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+									<semantics>
+										<mrow>
+											<mi>α</mi>
+										</mrow>
+										<annotation encoding="application/x-tex">\alpha</annotation>
+									</semantics>
+								</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+										class="strut" style="height:0.4306em;"></span><span class="mord mathnormal"
+										style="margin-right:0.0037em;">α</span></span></span></span></span><span>﻿</span></span>-stable
+				process. Because the domain is convex, we can bound it with tangent hyperplanes, and the analytic
+				knowledge of the jump distribution of the stable process crossing a hyperplane makes this sampling
+				efficient.</p>
+			<figure id="wohs-figure" class="image"><a href="wohs.png"><img style="width:100%" src="wohs.png" /></a>
+				<figcaption>Walk-on-half-spaces algorithm step illustration.</figcaption>
+			</figure>
+			<p id="df4049e8-4061-45be-a69d-51097ce58fd2-end" class="">
+			</p>
+			<h3 id="fde1e353-61ec-4c4e-bb96-a262d6857d92" class="">References</h3>
+			<p id="4feb9ebb-7ce0-4736-b984-d1e848fd5eaa" class="">
+			</p>
+			<ol type="1" id="39bedf1a-8052-47af-a9b9-f819192c6450" class="numbered-list" start="1">
+				<li>Gilbert Strang. 2015. Laplace Equation [Video]. YouTube. <a
+						href="https://www.youtube.com/watch?v=-D4GDdxJrpg">URL</a></li>
+			</ol>
+			<ol type="1" id="ccbbfe73-45a3-4fe5-ac84-b90c62a8d2a1" class="numbered-list" start="2">
+				<li>Khan Academy. 2016. Laplacian Intuition [Video]. YouTube. <a
+						href="https://www.youtube.com/watch?v=EW08rD-GFh0&amp;t=2s">URL</a></li>
+			</ol>
+			<ol type="1" id="f473d23b-28be-43c2-ab19-0c4be2ddd193" class="numbered-list" start="3">
+				<li>Kwaśnicki, M. (2017). Ten equivalent definitions of the fractional Laplace operator. <em>Fractional
+						Calculus and Applied Analysis</em>, <em>20</em>(1), 7-51.</li>
+			</ol>
+			<ol type="1" id="c7e0ff92-ae24-434b-a210-6e85695bbb18" class="numbered-list" start="4">
+				<li>Kyprianou, A. E., Osojnik, A., &amp; Shardlow, T. (2018). Unbiased ‘walk-on-spheres’ Monte Carlo
+					methods for the fractional Laplacian. <em>IMA Journal of Numerical Analysis</em>, <em>38</em>(3),
+					1550-1578</li>
+			</ol>
+			<ol type="1" id="ea08d6be-ce92-403a-b91c-ac2ccf1c1403" class="numbered-list" start="5">
+				<li>Qi, Y., Seyb, D., Bitterli, B., &amp; Jarosz, W. (2022, July). A<a
+						href="https://onlinelibrary.wiley.com/doi/full/10.1111/cgf.14586"> bidirectional formulation for
+						Walk on Spheres</a>. In <em>Computer Graphics Forum</em> (Vol. 41, No. 4, pp. 51-62).</li>
+			</ol>
+			<p id="c5119787-8969-45f0-9ead-9df309ed39f0" class="">
+			</p>
+			<p id="ca935cdc-072d-4412-b296-1329dca562a7" class="">
+			</p>
+			<p id="bb3fa92a-d8c2-445f-8015-9924ef16ff94" class="">
+			</p>
+			<p id="8a20064e-fb4b-4e6e-a230-f4ca73f434fa" class="">
+			</p>
+			<p id="a76662b5-6226-413e-9b8e-0c4711c353ac" class="">
+			</p>
+		</div>
+	</article><span class="sans" style="font-size:14px;padding-top:2em"></span>
+</body>
+
+</html>

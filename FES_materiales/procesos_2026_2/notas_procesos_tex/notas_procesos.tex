@@ -549,7 +549,7 @@ Para aumentar nuestro entendimiento de la propiedad de Markov, probaremos la sig
 
 \end{proposition}
 
-\section{Probabilidades de Transición en $n$ Pasos}
+\section[Probabilidades de Transición en n Pasos]{Probabilidades de Transición en $n$ Pasos}
 
 Hasta ahora hemos estudiado las probabilidades de transición de un paso, definidas como $p_{ij} = \mathbb{P}(X_{n+1} = j \mid X_n = i)$. Sin embargo, en muchas aplicaciones es fundamental conocer la probabilidad de que la cadena pase del estado $i$ al estado $j$ transcurridos exactamente $n$ pasos, independientemente del instante inicial.
 
@@ -1315,7 +1315,6 @@ De hecho, de la matriz podemos ver que desde el estado 1 o 2, la única forma de
 \vspace{20pt}
 \hrule
 \vspace{10pt}
-
 {
 \color{blue}
 \noindent\textbf{--- Termina material del primer parcial ---}
@@ -1324,6 +1323,111 @@ De hecho, de la matriz podemos ver que desde el estado 1 o 2, la única forma de
 \vspace{10pt}
 \hrule
 \vspace{20pt}
+
+
+\section{Estados Recurrentes y Transitorios}
+
+Veremos a continuación que los estados de una cadena de Markov pueden ser clasificados, en una primera instancia, en dos tipos, dependiendo de si la cadena es capaz de regresar con certeza al estado de partida. Esta dicotomía es esencial para entender el comportamiento a largo plazo de la cadena: en algunos modelos, la cadena vuelve inevitablemente a ciertos estados; en otros, existe una probabilidad positiva de abandonar un estado para no regresar nunca.
+
+En esta sección utilizaremos la noción de \textbf{primeras visitas} introducida previamente. En particular, para un estado $i \in S$ recordemos que
+\[
+f_{ii} = \mathbb{P}(\tau_i^{(i)} < \infty \mid X_0 = i)
+\]
+es la probabilidad de volver a visitar el estado $i$ en algún tiempo futuro (en un tiempo finito), partiendo de $i$.
+
+
+\begin{definition}[Recurrencia y transitoriedad (I)]
+Se dice que un estado $i$ es \textbf{recurrente} si la probabilidad de eventualmente regresar a $i$, partiendo de $i$, es uno; es decir, si
+\[
+\mathbb{P}(X_n = i \text{ para alguna } n \geq 1 \mid X_0 = i) = 1.
+\]
+Un estado que no es recurrente se llama \textbf{transitorio}; en tal caso, la probabilidad anterior es estrictamente menor que uno.
+\end{definition}
+
+De manera intuitiva, un estado es recurrente si con probabilidad uno la cadena es capaz de regresar eventualmente a ese estado. Más aún, cuando la cadena regresa en algún tiempo finito, por la propiedad de Markov el proceso se \emph{reinicia} desde $i$ y, en ese sentido, puede regresar a $i$ una y otra vez con probabilidad uno. En cambio, el estado se llama transitorio si existe una probabilidad positiva de que la cadena, iniciando en él, ya no regrese nunca a ese estado.
+
+La definición anterior puede enunciarse de manera equivalente en términos de las probabilidades de primera visita.
+
+\begin{definition}[Recurrencia y transitoriedad (II)]
+Un estado $i$ es \textbf{recurrente} si $f_{ii} = 1$, es decir, si la probabilidad de regresar a $i$ en un tiempo finito es uno. Análogamente, un estado $i$ es \textbf{transitorio} si $f_{ii} < 1$.
+\end{definition}
+
+\begin{remark}
+La cantidad $f_{ii}$ se interpreta como una probabilidad de retorno \emph{eventual}. En contraste, las cantidades $p_{ii}^{(n)}$ miden la probabilidad de estar en $i$ \emph{exactamente} después de $n$ pasos. El criterio siguiente conecta ambas familias de cantidades.
+\end{remark}
+
+Además de la definición, tenemos el siguiente criterio útil para determinar si un estado es recurrente o transitorio.
+
+\begin{proposition}[Criterio de recurrencia/transitoriedad]
+Sea $\{X_n : n \in \mathbb{N}\}$ una cadena de Markov homogénea con espacio de estados $S$ y sea $i \in S$. Entonces:
+\begin{enumerate}
+    \item[(a)] El estado $i$ es \textbf{recurrente} si, y sólo si,
+    \[
+    \sum_{n=1}^{\infty} p_{ii}^{(n)} = \infty.
+    \]
+    \item[(b)] El estado $i$ es \textbf{transitorio} si, y sólo si,
+    \[
+    \sum_{n=1}^{\infty} p_{ii}^{(n)} < \infty.
+    \]
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+Fijemos un estado $i \in S$ y supongamos que la cadena inicia en $X_0 = i$. Definamos la variable aleatoria $N_i$ como el número total de visitas al estado $i$ \emph{después} del instante inicial:
+\[
+N_i = \sum_{n=1}^{\infty} \mathbf{1}_{\{X_n = i\}}.
+\]
+Por definición, la probabilidad de regresar al menos una vez al estado $i$ en un tiempo finito es $f_{ii}$. Si el proceso regresa, por la propiedad fuerte de Markov evaluada en ese primer instante de retorno, la cadena se reinicia. Por ende, la probabilidad de realizar al menos $k$ retornos, dado que ya presenciamos $k-1$ retornos, sigue siendo $f_{ii}$. Utilizando este argumento de manera inductiva, la suma de los primeros retornos nos da que la probabilidad de que haya al menos $k$ visitas es:
+\[
+\mathbb{P}(N_i \geq k \mid X_0 = i) = f_{ii}^k, \quad k \geq 1.
+\]
+Si reescribimos esto en su forma puntual, $\mathbb{P}(N_i = k \mid X_0 = i) = \mathbb{P}(N_i \geq k) - \mathbb{P}(N_i \geq k+1) = f_{ii}^k (1 - f_{ii})$. Es decir, vemos fácilmente que \textbf{la variable aleatoria $N_i$ tiene una distribución geométrica} sobre el conjunto $\{0, 1, 2, \dots\}$ con parámetro de ''éxito'' $1 - f_{ii}$.
+
+Procedamos a calcular $\mathbb{E}[N_i \mid X_0 = i]$ de dos maneras distintas. Usando la definición por variables indicadoras, la linealidad de la esperanza y el teorema de convergencia monótona nos otorgan:
+\[
+\mathbb{E}[N_i \mid X_0 = i] = \mathbb{E}\left[ \sum_{n=1}^{\infty} \mathbf{1}_{\{X_n = i\}} \;\middle|\; X_0 = i \right] = \sum_{n=1}^{\infty} \mathbb{P}(X_n = i \mid X_0 = i) = \sum_{n=1}^{\infty} p_{ii}^{(n)}.
+\]
+Alternativamente, como $N_i$ es una variable aleatoria no negativa, su esperanza puede obtenerse sumando las probabilidades de sus colas:
+\[
+\mathbb{E}[N_i \mid X_0 = i] = \sum_{k=1}^{\infty} \mathbb{P}(N_i \geq k \mid X_0 = i) = \sum_{k=1}^{\infty} f_{ii}^k.
+\]
+
+Para concluir, veamos los dos casos posibles:
+\begin{itemize}
+    \item Si $f_{ii} < 1$ (es decir, $i$ es transitorio), la suma de las colas es una serie geométrica convergente con valor $\frac{f_{ii}}{1 - f_{ii}} < \infty$. Igualando ambos cálculos, encontramos que $\sum_{n=1}^{\infty} p_{ii}^{(n)} < \infty$.
+    \item Si $f_{ii} = 1$ (es decir, $i$ es recurrente), los términos en la serie no decaen, por lo que la suma de las colas diverge ($\mathbb{E}[N_i \mid X_0 = i] = \infty$). Por equivalencia, esto implica directamente que $\sum_{n=1}^{\infty} p_{ii}^{(n)} = \infty$.
+\end{itemize}
+Esto demuestra los incisos (a) y (b) estableciendo el criterio de sumabilidad.
+\end{proof}
+
+\begin{remark}
+Como se evidenció en la prueba, $1 + \mathbb{E}[N_i \mid X_0 = i] = \sum_{n=0}^{\infty} p_{ii}^{(n)}$ representa el número total esperado de visitas al estado $i$, partiendo de $i$ e incluyendo el tiempo $t=0$. El criterio establece, de manera natural e intuitiva, que un estado es transitorio si su número total esperado de visitas es finito, lo cual concuerda con una probabilidad de retorno estrictamente menor a uno; por el contrario, un estado es recurrente si esperamos visitarlo un número infinito de veces.
+\end{remark}
+
+\begin{example}
+\textbf{Un estado absorbente es recurrente.} Si $i$ es absorbente, entonces $p_{ii}=1$ y por lo tanto $p_{ii}^{(n)}=1$ para todo $n\geq 1$. En consecuencia,
+\[
+\sum_{n=1}^{\infty} p_{ii}^{(n)} = \sum_{n=1}^{\infty} 1 = \infty,
+\]
+de modo que $i$ es recurrente.
+\end{example}
+
+\begin{example}
+\textbf{Un ejemplo transitorio en dos estados.} Considere la cadena con $S=\{0,1\}$ y
+\[
+P=\begin{pmatrix}
+1-p & p \\
+0 & 1
+\end{pmatrix}, \quad 0<p<1.
+\]
+Partiendo de $0$, se tiene $p_{00}^{(n)}=(1-p)^n$, y por lo tanto
+\[
+\sum_{n=1}^{\infty} p_{00}^{(n)} = \sum_{n=1}^{\infty}(1-p)^n = \frac{1-p}{p} < \infty.
+\]
+Así, el estado $0$ es transitorio. (En cambio, el estado $1$ es absorbente y por ende recurrente.)
+\end{example}
+
+
 
 
 

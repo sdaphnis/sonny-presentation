@@ -1,0 +1,141 @@
+\documentclass[12pt]{article}
+\usepackage{inputenc}
+\usepackage[spanish]{babel}
+\decimalpoint % Usar puntos (.) en lugar de comas (,) como separadores decimales
+\usepackage{geometry}
+\usepackage{amsmath} % Para entornos matemáticos avanzados
+\usepackage{amssymb} % Para el uso de \mathbb
+\usepackage{amsthm} % Para entornos de teoremas
+\usepackage{hyperref} % Para hipervínculos
+\usepackage{tikz} % Para diagramas y gráficos
+
+\geometry{margin=1in}
+
+% Definición de entornos personalizados
+\newtheorem{problem}{Problema}
+
+\title{Procesos Estocásticos I \\ Examen Parcial 1}
+\author{Semestre 2026-2}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\textbf{Instrucciones:} Resuelva los siguientes problemas. Encierre sus respuestas finales en un recuadro. Justifique cada paso de sus cálculos y razonamientos.
+
+
+\begin{problem}
+Considere una cadena de Markov de dos estados 0 y 1, con distribución inicial $\pi = \left(\frac{1}{2}, \frac{1}{2}\right)$ y matriz de probabilidades de transición:
+\[
+P = \begin{pmatrix}
+\frac{1}{3} & \frac{2}{3} \\
+\frac{3}{4} & \frac{1}{4}
+\end{pmatrix}.
+\]
+
+Encuentre:
+
+\begin{enumerate}
+ 
+    \item[(a)] $\mathbb{P}(X_5 = 1 \mid X_2 = 0)$.
+    
+    \item[(b)] $\mathbb{P}(X_3 = 0, X_2 = 0, X_1 = 0, X_0 = 1)$ 
+
+    \item[(c)] $\mathbb{P}(X_{100} = 0 \mid X_{98} = 0)$
+    
+    \item[(d)] $\mathbb{P}(X_3 = 0, X_2 = 0 \mid X_1 = 0)$.
+\end{enumerate}
+\end{problem}
+
+\begin{problem}
+Considere una cadena de Markov de dos estados $S = \{0, 1\}$ con matriz de transición:
+\[
+P = \begin{pmatrix}
+1-p & p \\
+0 & 1
+\end{pmatrix},
+\]
+donde $0 < p < 1$ y el estado 1 es absorbente. Sea $f_{0,1}^{(n)}$ la probabilidad de alcanzar el estado 1 desde el estado 0 por primera vez en exactamente $n$ pasos.
+
+\begin{enumerate}
+    \item[(a)] Calcule $f_{0,1}^{(1)}$, $f_{0,1}^{(2)}$ y $f_{0,1}^{(3)}$. 
+    
+    \item[(b)] En general, ¿cuál es la forma de $f_{0,1}^{(n)}$? Escriba una fórmula para $f_{0,1}^{(n)}$ en términos de $p$ y $n$.
+    
+    \item[(c)] ¿Cuál es la distribución de $\tau_1$ empezando desde el estado 0? 
+\end{enumerate}
+\end{problem}
+
+\begin{problem}
+Un proceso de ramificación se describe de la siguiente manera: comenzamos con un individuo (generación 0). En cada generación, cada individuo produce, independientemente de los demás, un número aleatorio de descendientes según una distribución de probabilidad $\{\eta_k : k = 0, 1, 2, \ldots\}$, donde $\eta_k = \mathbb{P}(\text{un individuo tiene } k \text{ descendientes})$. Sea $X_n$ el número total de individuos en la generación $n$.
+
+\begin{enumerate}
+    \item[(a)] Argumenten brevemente (en 3 oraciones) por qué el proceso $\{X_n : n \in \mathbb{N}\}$ es una cadena de Markov homogénea. ¿Cuál es el espacio de estados?
+    
+    \item[(b)] Suponga que cada individuo tiene 0 descendientes con probabilidad $\frac{1}{2}$, 1 descendiente con probabilidad $\frac{1}{4}$, y 2 descendientes con probabilidad $\frac{1}{4}$. Calcule $\mathbb{P}(X_2 = 2 \mid X_0 = 1)$.
+    
+    \item[(c)] Con la misma distribución del inciso (b), calcule $\mathbb{P}(X_2 = 0 \mid X_0 = 1)$. 
+    
+    \item[(d)] ¿Es el estado 0 absorbente en esta cadena? ¿Qué significado tiene esto en términos biológicos?
+\end{enumerate}
+\end{problem}
+
+\begin{problem}
+Una rata se mueve aleatoriamente en un laberinto con 6 cuartos conectados como se muestra en la figura. A partir de cada posición sólo se permite pasar a los estados como indica el diagrama, con idéntica probabilidad para todas las posibilidades. 
+Suponga que no se permite permanecer en la misma posición al efectuarse un movimiento.
+Sea $X_n$ el cuarto en el que se encuentra la rata después de $n$ pasos, comenzando en el cuarto 1.
+
+\begin{center}
+\begin{tikzpicture}[scale=1.2]
+
+% Parámetros
+\def\W{6}
+\def\H{4}
+\def\door{0.6} % tamaño de puerta
+
+% Marco exterior
+\draw[thick] (0,0) rectangle (\W,\H);
+
+% División vertical x=2 (con puertas arriba y abajo)
+\draw[thick] (2,0) -- (2,1-\door/2);
+\draw[thick] (2,1+\door/2) -- (2,3-\door/2);
+\draw[thick] (2,3+\door/2) -- (2,4);
+
+% División vertical x=4 (con puertas arriba y abajo)
+\draw[thick] (4,0) -- (4,1-\door/2);
+\draw[thick] (4,1+\door/2) -- (4,3-\door/2);
+\draw[thick] (4,3+\door/2) -- (4,4);
+
+% División horizontal y=2 (con tres puertas)
+\draw[thick] (0,2) -- (1-\door/2,2);
+\draw[thick] (1+\door/2,2) -- (3-\door/2,2);
+\draw[thick] (3+\door/2,2) -- (5-\door/2,2);
+\draw[thick] (5+\door/2,2) -- (6,2);
+
+% Numeración fila superior
+\node at (1,3) {\large 1};
+\node at (3,3) {\large 2};
+\node at (5,3) {\large 3};
+
+% Numeración fila inferior
+\node at (1,1) {\large 4};
+\node at (3,1) {\large 5};
+\node at (5,1) {\large 6};
+
+\end{tikzpicture}
+\end{center}
+
+\begin{enumerate}
+    \item[(a)] Escriba la matriz de transición $P$ para esta cadena de Markov.
+    
+    \item[(b)] Calcule $\mathbb{P}(X_4 = 5 \mid X_0 = 1)$.
+    
+    \item[(c)] Identifique todas las clases de comunicación. ¿Es la cadena irreducible?
+    
+    \item[(d)] Calcule el periodo de cada estado.
+    
+\end{enumerate}
+\end{problem}
+
+\end{document}
