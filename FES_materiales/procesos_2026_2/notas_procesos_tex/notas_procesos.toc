@@ -10,3 +10,7 @@
 \contentsline {section}{\numberline {1.8}Distribuciones Periódicas: Período de un Estado}{25}{section.1.8}%
 \contentsline {section}{\numberline {1.9}Primeras Visitas}{27}{section.1.9}%
 \contentsline {section}{\numberline {1.10}Estados Recurrentes y Transitorios}{30}{section.1.10}%
+\contentsline {subsection}{\numberline {1.10.1}Visitas a un estado: el caso general Nij}{35}{subsection.1.10.1}%
+\contentsline {section}{\numberline {1.11}Tiempo medio de retorno}{37}{section.1.11}%
+\contentsline {section}{\numberline {1.12}Propiedad fuerte de Markov}{38}{section.1.12}%
+\contentsline {section}{\numberline {1.13}Teorema ergódico}{38}{section.1.13}%

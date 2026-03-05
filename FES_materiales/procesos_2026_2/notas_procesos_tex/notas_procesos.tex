@@ -1427,9 +1427,252 @@ Partiendo de $0$, se tiene $p_{00}^{(n)}=(1-p)^n$, y por lo tanto
 Así, el estado $0$ es transitorio. (En cambio, el estado $1$ es absorbente y por ende recurrente.)
 \end{example}
 
+%\subsection{Una tercera caracterización: esperanza del número de visitas}
+
+El criterio anterior nos permite establecer una tercera caracterización, quizás la más intuitiva, basada en el número promedio de retornos.
+
+\begin{definition}[Recurrencia y transitoriedad (III)]
+Sea $N_i$ el número total de visitas al estado $i$ después del tiempo $0$. Decimos que el estado $i$ es \textbf{recurrente} si, y sólo si, el número promedio de retornos a él es infinito:
+\[
+\mathbb{E}[N_i \mid X_0 = i] = \infty.
+\]
+Equivalentemente, $i$ es \textbf{transitorio} si, y sólo si, $\mathbb{E}[N_i \mid X_0 = i] < \infty$.
+\end{definition}
+
+%Esta definición es consistente con lo que probamos anteriormente: para un estado recurrente, $N_i$ es infinito con probabilidad 1 (y por tanto su esperanza es infinita), mientras que para un transitorio $N_i$ es geométrico (y su esperanza es finita).
+
+\begin{example}[Caminata aleatoria simple en $\mathbb{Z}$]
+Consideremos la caminata aleatoria donde $p_{i,i+1}=p$ y $p_{i,i-1}=1-p$.
+Del análisis combinatorio (o utilizando la fórmula de Stirling), conocemos el comportamiento asintótico de $p_{00}^{(n)}$.
+
+\textbf{Caso simétrico ($p=1/2$):}
+Sabemos que $p_{00}^{(2n)} \sim \frac{1}{\sqrt{\pi n}}$.
+Al sumar estos términos, obtenemos una serie armónica generalizada (tipo $1/n^{1/2}$) que diverge:
+\[
+\sum_{n=1}^\infty p_{00}^{(n)} = \infty.
+\]
+Por lo tanto, la caminata aleatoria simétrica es \textbf{recurrente}.
+
+\textbf{Caso asimétrico ($p \neq 1/2$):}
+En este caso, la probabilidad de retorno decae, grosso modo, exponencialmente: $p_{00}^{(2n)} \sim \frac{(4p(1-p))^n}{\sqrt{\pi n}}$. Como $p \neq 1/2$, se tiene $4p(1-p) < 1$, por lo que la serie converge:
+\[
+\sum_{n=1}^\infty p_{00}^{(n)} < \infty.
+\]
+Por lo tanto, la caminata asimétrica es \textbf{transitoria}.
+\end{example}
+
+A continuación demostramos que la recurrencia es una propiedad compartida por todos los estados de una misma clase de comunicación.
+
+\begin{proposition}[La recurrencia es propiedad de clase]
+Sean $i, j \in S$ dos estados que se comunican ($i \leftrightarrow j$).
+\begin{enumerate}
+    \item[(a)] Si $i$ es recurrente, entonces $j$ es recurrente.
+    \item[(b)] Si $i$ es transitorio, entonces $j$ es transitorio.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+Demostraremos (a). Supongamos que $i$ es recurrente. Como $i \leftrightarrow j$, existen enteros $n, m \ge 0$ tales que $p_{ij}^{(n)} > 0$ y $p_{ji}^{(m)} > 0$.
+Para cualquier entero $k \ge 0$, consideremos la probabilidad de ir de $j$ a $j$ en $m+k+n$ pasos, forzando la trayectoria a pasar por $i$. Por la desigualdad de Chapman-Kolmogorov:
+\[
+p_{jj}^{(m+k+n)} \ge p_{ji}^{(m)} p_{ii}^{(k)} p_{ij}^{(n)}.
+\]
+Sumando sobre todos los $k \ge 0$:
+\[
+\sum_{k=0}^\infty p_{jj}^{(m+k+n)} \ge p_{ji}^{(m)} p_{ij}^{(n)} \sum_{k=0}^\infty p_{ii}^{(k)}.
+\]
+Como $i$ es recurrente, $\sum p_{ii}^{(k)} = \infty$. Dado que $p_{ji}^{(m)}$ y $p_{ij}^{(n)}$ son positivos, el lado derecho es infinito (producto de constantes positivas por infinito). Esto implica que $\sum_{t} p_{jj}^{(t)} = \infty$, por lo que $j$ es recurrente.
+La parte (b) se sigue por el contrarrecíproco de (a).
+\end{proof}
+
+Esto significa que, al descomponer la cadena en clases de comunicación, podemos clasificar cada clase entera como recurrente o transitoria. Si la cadena es irreducible, entonces \textbf{toda la cadena} es recurrente o \textbf{toda la cadena} es transitoria.
+
+\begin{example}
+En la cadena de dos estados  si $a, b \in (0,1)$, entonces la cadena es irreducible y recurrente. Calculemos explícitamente $f_{00}$ o recordemos $p_{00}^{(n)}$.
+\end{example}
+
+\begin{example}[Cadena de rachas]
+Consideremos la cadena de rachas de éxitos en lanzamientos de una moneda (con prob. de éxito $p$). Esta cadena es irreducible en $S = \{0, 1, 2, \dots\}$.
+Analicemos el estado 0. El regreso a 0 ocurre en el paso $n$ si observamos el primer ''águila'' (fracaso) exactamente en el paso $n$ (si partimos de 0 éxitos) no es exacto... más bien $p_{00}^{(n)}$ es la probabilidad de que la racha sea 0 al tiempo $n$, dado que era 0 al tiempo 0. La racha es 0 si el $n$-ésimo volado es águila.
+\[
+p_{00}^{(n)} = \mathbb{P}(\xi_n = \text{águila}) = 1-p = q.
+\]
+Entonces:
+\[
+\sum_{n=1}^\infty p_{00}^{(n)} = \sum_{n=1}^\infty q = \infty.
+\]
+Por lo tanto, el estado 0 es recurrente. Como es irreducible, \textbf{todos} los estados son recurrentes.
+\emph{Comentario:} Incluso un estado ``difícil'' de alcanzar como $9999$ (una racha de 9999 éxitos seguidos) es recurrente y será visitado infinitas veces con probabilidad 1.
+\end{example}
+
+\begin{proposition}[Existencia de recurrentes en espacios finitos]
+Toda cadena de Markov con espacio de estados finito tiene por lo menos un estado recurrente.
+\end{proposition}
+
+\begin{proof}
+Demostración por contradicción. Supongamos que todos los estados son transitorios.
+Sea $S$ finito. Si todos son transitorios, entonces para todo $i, j$, $\sum_{n=0}^\infty p_{ij}^{(n)} < \infty$.
+Consideremos la suma sobre $j$: para cada $n$, $\sum_{j \in S} p_{ij}^{(n)} = 1$.
+Sumando sobre $n$:
+\[
+\sum_{n=0}^\infty \sum_{j \in S} p_{ij}^{(n)} = \sum_{n=0}^\infty 1 = \infty.
+\]
+Intercambiando la suma (válido por ser $S$ finito):
+\[
+\sum_{j \in S} \left( \sum_{n=0}^\infty p_{ij}^{(n)} \right) = \infty.
+\]
+Esto contradice el hecho de que cada suma interna $\sum_{n} p_{ij}^{(n)}$ es finita (pues todo $j$ es transitorio) y la suma de un número finito de términos finitos debe ser finita.
+Por lo tanto, debe existir al menos un estado recurrente.
+\end{proof}
+
+La siguiente proposición nos da información sobre el comportamiento límite de las probabilidades de transición hacia estados transitorios.
+
+\begin{proposition}
+Si $j$ es un estado transitorio, entonces para todo $i$:
+\[
+\lim_{n \to \infty} p_{ij}^{(n)} = 0.
+\]
+\end{proposition}
+\begin{proof}
+Si $j$ es transitorio, la serie $\sum_{n=1}^\infty p_{ij}^{(n)}$ converge (esto es consecuencia de que $\mathbb{E}[N_{j}|X_0=i] < \infty$, como veremos en breve). Si el término general de una serie convergente no tiende a cero, tenemos una contradicción. Por lo tanto, $p_{ij}^{(n)} \to 0$.
+\end{proof}
 
 
+\subsection[Visitas a un estado: el caso general Nij]{Visitas a un estado: el caso general $N_{ij}$}
 
+Generalicemos la noción de visitas. Sea $N_{ij}$ el número total de visitas al estado $j$ hasta el tiempo $n$ partiendo desde $i$:
+\[
+N_{ij}(n) = \sum_{k=1}^{n} \mathbf{1}_{\{X_k = j\}} \quad \text{dado que } X_0 = i.
+\]
+y definamos $N_{ij} = \lim_{n \to \infty} N_{ij}(n)$ como el número total de visitas a $j$ a lo largo de toda la evolución de la cadena, partiendo de $i$.
+
+\begin{proposition}
+Para cualesquiera estados $i, j \in S$. La variable $N_{ij}$ con soporte en $\{0, 1, 2, \dots\} \cup \{\infty\}$ satisface las siguientes propiedades:
+\begin{enumerate}
+    \item \textbf{La cola de la distribución de $N_{ij}$:} 
+    \[  \mathbb{P}(N_{ij} \ge k):=\mathbb{P}(N_{i} \ge k \mid X_0 = i) = f_{ij} f_{jj}^{k-1}, \quad \text{para } k \ge 1. \]
+    
+    \item \textbf{La función de masa de $N_{ij}$:}
+    \[
+    \mathbb{P}(N_{ij}=k):=\mathbb{P}(N_{j} = k \mid X_0 = i) =
+    \begin{cases}
+    1 - f_{ij} & \text{si } k=0 \\
+    f_{ij} (1-f_{jj}) f_{jj}^{k-1} & \text{si } k \ge 1
+    \end{cases}
+    \]
+    
+    \item \textbf{La esperanza:}
+    \[
+    \mathbb{E}[N_{ij}]:=\mathbb{E}[N_{j} \mid X_0 = i] = \frac{f_{ij}}{1 - f_{jj}}.
+    \]
+    (Interpretamos $1/0$ como $\infty$ si $f_{jj}=1$).
+    
+    \item \textbf{Probabilidad de infinitas visitas:}
+    \begin{itemize}
+        \item Si $j$ es transitorio ($f_{jj} < 1$): $\mathbb{P}(N_{ij} = \infty) = 0$.
+        \item Si $j$ es recurrente ($f_{jj} = 1$): $\mathbb{P}(N_{ij} = \infty) = f_{ij}$.
+    \end{itemize}
+    
+    \item \textbf{Probabilidad de finitas visitas:}
+    \begin{itemize}
+        \item Si $j$ es transitorio: $\mathbb{P}(N_{ij} < \infty) = 1$.
+        \item Si $j$ es recurrente: $\mathbb{P}(N_{ij} < \infty) = 1 - f_{ij}$ (es la probabilidad de nunca visitarlo).
+    \end{itemize}
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+Demostraremos únicamente el primer inciso. Procedemos condicionando sobre el tiempo de la primera visita al estado $j$, denotado por $\tau_j$.
+\begin{equation} \label{prop_fuerte_de_markov_needed}
+\mathbb{P}(N_{j} \ge k \mid X_0 = i) = \sum_{n=1}^\infty \mathbb{P}(N_{j} \ge k \mid \tau_j = n, X_0 = i) \mathbb{P}(\tau_j = n \mid X_0 = i).    
+\end{equation}
+
+Si la primera visita ocurre en el tiempo $n$, por la propiedad fuerte de Markov el proceso se reinicia en $j$. Para acumular al menos $k$ visitas en total, se requieren al menos $k-1$ visitas adicionales (retornos) partiendo ahora desde $j$. Por la demostración del Criterio de Recurrencia (donde vimos que $N_{jj}$ es geométrico), sabemos que $\mathbb{P}(N_{jj} \ge k-1 \mid X_0 = j) = f_{jj}^{k-1}$.
+Sustituyendo esto en la suma:
+\[
+\mathbb{P}(N_{ij} \ge k \mid X_0 = i) = \sum_{n=1}^\infty f_{jj}^{k-1} f_{ij}^{(n)} = f_{jj}^{k-1} \sum_{n=1}^\infty f_{ij}^{(n)} = f_{jj}^{k-1} f_{ij}.
+\]
+Los demás incisos se siguen directamente de este resultado.
+\end{proof}
+
+Antes de enunciar el Teorema Ergódico, resumimos la intuición en la siguiente tabla de ideas:
+
+\begin{itemize}
+    \item \textbf{Transitoriedad y número de visitas:} Si $j$ es transitorio, entonces sin importar el estado inicial $i$, con probabilidad uno la cadena realiza sólo un número finito de visitas al estado $j$. El número esperado de visitas es siempre finito:
+    \[ \mathbb{E}[N_{ij}] = \sum_{n=1}^\infty p_{ij}^{(n)} < \infty \implies \lim_{n \to \infty} p_{ij}^{(n)} = 0. \]
+    
+    \item \textbf{Recurrencia y número de visitas:} Si $j$ es recurrente y se inicia en $j$, entonces con probabilidad uno la cadena regresa a $j$ una infinidad de veces, y el número esperado de visitas es infinito. Si la cadena inicia en cualquier otro estado $i$, existe la posibilidad de que nunca visite $j$ ($f_{ij} < 1$). Pero si la cadena visita $j$ alguna vez (con prob. $f_{ij}$), entonces regresará a $j$ una infinidad de veces.
+\end{itemize}
+
+\section{Tiempo medio de retorno}
+
+Hemos visto que si una cadena de Markov inicia en un estado recurrente, entonces regresa a él una infinidad de veces con probabilidad uno. Ya definimos $\tau_j$ como el tiempo de primera visita. Ahora definiremos el tiempo medio de retorno.
+
+\begin{definition}[Tiempo medio de retorno]
+Para un estado recurrente $j$, definimos el tiempo medio de retorno $\mu_{jj}$ como la esperanza de $\tau_j$ partiendo de $j$:
+\[
+\mu_{jj} = \mathbb{E}[\tau_j \mid X_0 = j] = \sum_{n=1}^\infty n f_{jj}^{(n)}.
+\]
+\end{definition}
+
+\begin{example}[Cadena de dos estados]
+Consideremos nuevamente la cadena de dos estados ($0, 1$) con matriz de transición
+\[
+P = \begin{pmatrix}
+1-a & a \\
+b & 1-b
+\end{pmatrix}.
+\]
+Queremos calcular el tiempo medio de retorno al estado 0 usando la definición $\mu_{00} = \sum_{n=1}^\infty n f_{00}^{(n)}$.
+Primero calculemos las probabilidades de primer retorno $f_{00}^{(n)}$:
+\begin{itemize}
+    \item Para $n=1$: El único camino es $0 \to 0$. Así, $f_{00}^{(1)} = p_{00} = 1-a$.
+    \item Para $n > 1$: El camino debe ser de la forma $0 \to 1 \to 1 \dots \to 1 \to 0$. Es decir, salimos de 0 a 1 (probabilidad $a$), permanecemos en 1 durante $n-2$ pasos (probabilidad $(1-b)^{n-2}$), y finalmente regresamos a 0 (probabilidad $b$).
+    \[ f_{00}^{(n)} = a (1-b)^{n-2} b, \quad n \ge 2. \]
+\end{itemize}
+Ahora calculamos la esperanza:
+\begin{align*}
+\mu_{00} &= 1 \cdot f_{00}^{(1)} + \sum_{n=2}^\infty n f_{00}^{(n)} \\
+&= (1-a) + \sum_{n=2}^\infty n \cdot a b (1-b)^{n-2}.
+\end{align*}
+Haciendo el cambio de variable $k = n-2$ (de modo que $n=k+2$), la suma se convierte en:
+\[
+ab \sum_{k=0}^\infty (k+2) (1-b)^k = ab \left[ \sum_{k=0}^\infty k(1-b)^k + 2\sum_{k=0}^\infty (1-b)^k \right].
+\]
+Recordando las series geométricas para $|1-b| < 1$ (pues $b \in (0,1)$):
+$\sum_{k=0}^\infty (1-b)^k = \frac{1}{1-(1-b)} = \frac{1}{b}$ y $\sum_{k=0}^\infty k(1-b)^k = \frac{1-b}{b^2}$.
+Sustituyendo estos valores:
+\[
+\mu_{00} = (1-a) + ab \left[ \frac{1-b}{b^2} + \frac{2}{b} \right] = (1-a) + a \frac{1-b}{b} + 2a = 1 + a + \frac{a}{b} - a = 1 + \frac{a}{b}.
+\]
+Concluimos que el tiempo medio de retorno es finito. Por simetría, $\mu_{11} = 1 + \frac{b}{a}$.
+\end{example}
+
+\begin{example}[Recurrencia nula en la caminata aleatoria simétrica]
+Consideremos la caminata aleatoria simétrica simple en $\mathbb{Z}$ ($p=1/2$).
+Ya sabemos que este estado es recurrente ($\sum p_{00}^{(n)} = \infty$). Veremos ahora que su tiempo medio de retorno es infinito, lo que se conoce como \textbf{recurrencia nula}.
+
+Una forma intuitiva de verlo es mediante el siguiente argumento de esperanza condicional.
+Sea $\mu = \mathbb{E}[\tau_0 \mid X_0=0]$ el tiempo medio de retorno. Condicionando en el primer paso:
+\[
+\mu = 1 + \frac{1}{2}\mathbb{E}[\text{tiempo para ir de } 1 \to 0] + \frac{1}{2}\mathbb{E}[\text{tiempo para ir de } -1 \to 0].
+\]
+Por simetría, el tiempo esperado para ir de $1 \to 0$ es igual al de $-1 \to 0$. Llamemos a este valor $x$. Entonces $\mu = 1 + x$.
+Ahora bien, para ir de $1$ a $0$, damos un paso.
+\begin{itemize}
+    \item Con probabilidad $1/2$ vamos a $0$ (tardamos 1 paso).
+    \item Con probabilidad $1/2$ vamos a $2$. Estando en $2$, para llegar a $0$ primero debemos llegar a $1$ (tiempo esperado $x$) y luego de $1$ a $0$ (tiempo esperado $x$).
+\end{itemize}
+Esto nos da la ecuación para $x$:
+\[
+x = 1 + \frac{1}{2}(0) + \frac{1}{2}(2x) = 1 + x.
+\]
+Obtenemos la ecuación $x = 1 + x$, la cual no tiene solución finita. Esto sugiere que $x = \infty$, y por tanto el tiempo medio de retorno $\mu = 1 + x$ también es infinito.
+\end{example}
+
+\section{Propiedad fuerte de Markov}
+
+\section{Teorema ergódico}
 
 
 \end{document}
