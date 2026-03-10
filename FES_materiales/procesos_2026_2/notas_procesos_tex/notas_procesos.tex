@@ -1492,17 +1492,9 @@ En la cadena de dos estados  si $a, b \in (0,1)$, entonces la cadena es irreduci
 \end{example}
 
 \begin{example}[Cadena de rachas]
-Consideremos la cadena de rachas de éxitos en lanzamientos de una moneda (con prob. de éxito $p$). Esta cadena es irreducible en $S = \{0, 1, 2, \dots\}$.
-Analicemos el estado 0. El regreso a 0 ocurre en el paso $n$ si observamos el primer ''águila'' (fracaso) exactamente en el paso $n$ (si partimos de 0 éxitos) no es exacto... más bien $p_{00}^{(n)}$ es la probabilidad de que la racha sea 0 al tiempo $n$, dado que era 0 al tiempo 0. La racha es 0 si el $n$-ésimo volado es águila.
-\[
-p_{00}^{(n)} = \mathbb{P}(\xi_n = \text{águila}) = 1-p = q.
-\]
-Entonces:
-\[
-\sum_{n=1}^\infty p_{00}^{(n)} = \sum_{n=1}^\infty q = \infty.
-\]
-Por lo tanto, el estado 0 es recurrente. Como es irreducible, \textbf{todos} los estados son recurrentes.
-\emph{Comentario:} Incluso un estado ``difícil'' de alcanzar como $9999$ (una racha de 9999 éxitos seguidos) es recurrente y será visitado infinitas veces con probabilidad 1.
+Consideremos la cadena de rachas de éxitos (obtener sol) en lanzamientos de una moneda (con prob. de éxito $p$). Esta cadena es irreducible en $S = \{0, 1, 2, \dots\}$.
+No es difícil demostrar, por ejemplo calculando $f_{0,0}$, que el estado 0 es recurrente. Como es irreducible, \textbf{todos} los estados son recurrentes.
+\emph{Comentario:} Incluso un estado ``difícil'' de alcanzar como $9999$ (una racha de 9999 éxitos seguidos) es recurrente y será visitado en promedio infinitas veces con probabilidad 1. Cabe preguntarse ¿Qué tan frecuentes serán esas visitas?.
 \end{example}
 
 \begin{proposition}[Existencia de recurrentes en espacios finitos]
@@ -1530,11 +1522,45 @@ La siguiente proposición nos da información sobre el comportamiento límite de
 \begin{proposition}
 Si $j$ es un estado transitorio, entonces para todo $i$:
 \[
-\lim_{n \to \infty} p_{ij}^{(n)} = 0.
+\sum_{n=1}^\infty p_{i,j}^{(n)} < \infty \quad \Rightarrow \quad \lim_{n \to \infty} p_{ij}^{(n)} = 0.
 \]
 \end{proposition}
 \begin{proof}
-Si $j$ es transitorio, la serie $\sum_{n=1}^\infty p_{ij}^{(n)}$ converge (esto es consecuencia de que $\mathbb{E}[N_{j}|X_0=i] < \infty$, como veremos en breve). Si el término general de una serie convergente no tiende a cero, tenemos una contradicción. Por lo tanto, $p_{ij}^{(n)} \to 0$.
+Sea $f_{ij}^{(n)}=\mathbb{P}_i(T_j=n)$ la probabilidad de que la cadena visite
+$j$ por primera vez en el tiempo $n$. Para $n\ge1$,
+\[
+p_{ij}^{(n)}=\sum_{k=1}^{n} f_{ij}^{(k)}\, p_{jj}^{(n-k)} .
+\]
+
+Sumando en $n$ desde $1$ hasta $\infty$ obtenemos
+\[
+\sum_{n=1}^{\infty} p_{ij}^{(n)}
+  = \sum_{n=1}^{\infty}\sum_{k=1}^{n} f_{ij}^{(k)}\, p_{jj}^{(n-k)}.
+\]
+
+Como todos los términos son no negativos, podemos cambiar el orden de suma:
+\[
+\sum_{n=1}^{\infty} p_{ij}^{(n)}
+= \sum_{k=1}^{\infty} f_{ij}^{(k)} 
+  \sum_{m=0}^{\infty} p_{jj}^{(m)} .
+\]
+
+Observamos que
+\[
+\sum_{k=1}^{\infty} f_{ij}^{(k)} = f_{ij} \le 1 .
+\]
+
+Además, como $j$ es transitorio,
+\[
+\sum_{m=0}^{\infty} p_{jj}^{(m)} < \infty .
+\]
+
+Por lo tanto,
+\[
+\sum_{n=1}^{\infty} p_{ij}^{(n)}
+= f_{ij}\sum_{m=0}^{\infty} p_{jj}^{(m)} < \infty .
+\]
+Concluimos que la serie $\sum_{n=1}^{\infty} p_{ij}^{(n)}$ converge.
 \end{proof}
 
 
@@ -1595,7 +1621,20 @@ Sustituyendo esto en la suma:
 Los demás incisos se siguen directamente de este resultado.
 \end{proof}
 
-Antes de enunciar el Teorema Ergódico, resumimos la intuición en la siguiente tabla de ideas:
+\begin{remark}[Propiedad fuerte de Markov]
+En la última demostración hemos utilizado la \textbf{propiedad fuerte de Markov}. Enunciémosla brevemente.
+
+Sea $\tau$ un \emph{tiempo de paro} respecto a la filtración natural de la cadena, es decir, una variable aleatoria con valores en $\mathbb{N} \cup \{\infty\}$ tal que el evento $\{\tau = n\}$ depende únicamente de $X_0, X_1, \dots, X_n$. La propiedad fuerte de Markov establece que, condicionado en que $\tau < \infty$ y en el valor $X_\tau = i$, el proceso posterior $\{X_{\tau+n}\}_{n \ge 0}$ tiene la misma distribución que la cadena iniciando en $i$:
+\[
+\mathbb{P}(X_{\tau+n} = j \mid X_\tau = i,\; \tau < \infty) = p_{ij}^{(n)}.
+\]
+
+\textbf{¿En qué se diferencia de la propiedad de Markov ordinaria?} La propiedad de Markov aplica en tiempos \emph{deterministas} $n$: el futuro depende del presente pero no del pasado. La propiedad fuerte extiende esto a tiempos de paro \emph{aleatorios}, como el tiempo de primera visita $\tau_j$. Esto no es evidente: el tiempo $\tau_j$ puede ser arbitrariamente grande y la cadena vista antes de $\tau_j$ puede revelar información complicada sobre el pasado.
+
+\end{remark}
+
+
+Antes de enunciar el teorema ergódico, resumamos las implicaciones de la clasificación en recurrente/transitorio para el número de visitas a un estado $j$ partiendo de un estado $i$ cualquiera.
 
 \begin{itemize}
     \item \textbf{Transitoriedad y número de visitas:} Si $j$ es transitorio, entonces sin importar el estado inicial $i$, con probabilidad uno la cadena realiza sólo un número finito de visitas al estado $j$. El número esperado de visitas es siempre finito:
@@ -1670,9 +1709,112 @@ x = 1 + \frac{1}{2}(0) + \frac{1}{2}(2x) = 1 + x.
 Obtenemos la ecuación $x = 1 + x$, la cual no tiene solución finita. Esto sugiere que $x = \infty$, y por tanto el tiempo medio de retorno $\mu = 1 + x$ también es infinito.
 \end{example}
 
-\section{Propiedad fuerte de Markov}
+\subsection{Análisis del primer paso}
+
+El \textbf{análisis del primer paso} es una técnica general para calcular tiempos esperados (de visita, de retorno, de absorción, etc.) en cadenas de Markov. La idea es condicionar sobre el valor de $X_1$ ---el primer paso--- y usar la propiedad de Markov para traducir el problema en un sistema de ecuaciones lineales.
+
+\textbf{Método general.} Sea $h_i = \mathbb{E}[\tau_j \mid X_0 = i]$ el tiempo esperado para alcanzar por primera vez el estado objetivo $j$, partiendo de $i$. Condicionando sobre $X_1$:
+\[
+h_i = \mathbb{E}[\tau_j \mid X_0 = i] = \sum_{k \in S} p_{ik} \,\mathbb{E}[\tau_j \mid X_0 = i,\, X_1 = k].
+\]
+Por la propiedad de Markov, dado $X_1 = k$, estamos en el estado $k$ y el tiempo restante para llegar a $j$ tiene la misma distribución que $\tau_j$ partiendo de $k$. Como ya gastamos 1 paso, obtenemos:
+\[
+h_i = 1 + \sum_{k \neq j} p_{ik}\, h_k, \qquad i \neq j,
+\]
+con la condición de frontera $h_j = 0$.
+
+Este sistema lineal, uno por cada estado $i \neq j$, determina los tiempos esperados. En particular, para calcular el tiempo medio de retorno ($i = j$), basta notar que desde $j$ damos un paso obligatorio a algún vecino $k$, de modo que:
+\[
+\mu_{jj} = 1 + \sum_{k \neq j} p_{jk}\, h_k^{(j)},
+\]
+donde $h_k^{(j)}$ es la solución del sistema anterior con objetivo $j$.
+
+\begin{example}[Cadena de tres estados]
+Consideremos la cadena con $S = \{0, 1, 2\}$ y matriz de transición
+\[
+P = \begin{pmatrix}
+1/2 & 1/2 & 0 \\
+1/4 & 1/2 & 1/4 \\
+0   & 1/2 & 1/2
+\end{pmatrix}.
+\]
+Queremos calcular el tiempo medio de retorno al estado $0$, es decir, $\mu_{00}$.
+
+Definimos $h_i = \mathbb{E}[\tau_0 \mid X_0 = i]$ con $h_0 = 0$. Las ecuaciones de primer paso para $i = 1$ e $i = 2$ son:
+\begin{align*}
+h_1 &= 1 + p_{10} h_0 + p_{11} h_1 + p_{12} h_2 = 1 + \frac{1}{4}(0) + \frac{1}{2} h_1 + \frac{1}{4} h_2, \\
+h_2 &= 1 + p_{21} h_1 + p_{22} h_2 = 1 + \frac{1}{2} h_1 + \frac{1}{2} h_2.
+\end{align*}
+De la segunda ecuación, despejando $h_2$:
+\[
+h_2 - \frac{1}{2} h_2 = 1 + \frac{1}{2} h_1 \implies h_2 = 2 + h_1.
+\]
+Sustituyendo en la primera:
+\[
+h_1 = 1 + \frac{1}{2} h_1 + \frac{1}{4}(2 + h_1) = 1 + \frac{1}{2} h_1 + \frac{1}{2} + \frac{1}{4} h_1 = \frac{3}{2} + \frac{3}{4} h_1.
+\]
+Despejando: $\frac{1}{4} h_1 = \frac{3}{2}$, por lo que $h_1 = 6$ y $h_2 = 8$.
+
+Por último, el tiempo medio de retorno desde $0$ es:
+\[
+\mu_{00} = 1 + p_{01} h_1 + p_{02} h_2 = 1 + \frac{1}{2}(6) + 0 = 4.
+\]
+La cadena tarda en promedio 4 pasos en regresar al estado 0.
+\end{example}
 
 \section{Teorema ergódico}
 
+El Teorema Ergódico es el resultado central que describe el comportamiento asintótico de una cadena de Markov irreducible. Conecta el tiempo medio de retorno $\mu_{jj}$ con la fracción de tiempo que la cadena pasa en el estado $j$ a largo plazo.
+
+Antes de enunciarlo, recordemos que para una cadena irreducible, ya establecimos que todos los estados son del mismo tipo (recurrentes o transitorios), y que si son recurrentes, la cadena visita cada estado una infinidad de veces. La pregunta natural es: ¿con qué \emph{frecuencia} visita cada estado?
+
+\begin{theorem}[Teorema ergódico para cadenas de Markov]
+Sea $\{X_n\}$ una cadena de Markov irreducible. Para cualesquiera estados $i, j \in S$ se cumple
+\[
+\lim_{n \to \infty} \frac{N_{ij}(n)}{n} = \frac{1}{\mu_{jj}} \qquad \text{c.s.},
+\]
+donde $N_{ij}(n) = \sum_{k=0}^{n} \mathbf{1}_{\{X_k = j\}}$ es el número de visitas a $j$ hasta el tiempo $n$, y $\mu_{jj} = \mathbb{E}[\tau_j \mid X_0 = j]$ es el tiempo medio de retorno. Si $\mu_{jj} = \infty$ (recurrencia nula), el límite es $0$.
+\end{theorem}
+
+\begin{proof}
+\textbf{Caso transitorio.} Si la cadena es transitoria, entonces $N_{ij}(n) < \infty$ casi seguramente para todo $i, j$, por lo que $N_{ij}(n)/n \to 0$ casi seguramente. Además, $\mu_{jj} = \infty$ en este caso, de modo que ambos lados son iguales a cero.
+
+\textbf{Caso recurrente.} Supongamos que la cadena es recurrente. Sea $\tau_{ij} = \min\{n \ge 1 : X_n = j \mid X_0 = i\}$ el tiempo de primera visita de $i$ a $j$. Por irreducibilidad y recurrencia, $\mathbb{P}(\tau_{ij} < \infty) = 1$.
+
+Notemos que para $n \ge 1$ se cumple la identidad
+\[
+N_{ij}(n) = N_{jj}(n - \tau_{ij}),
+\]
+es decir, el número de visitas que hace a $j$ partiendo desde $i$ hasta el tiempo $n$ es igual al número de retornos que hace a $j$ partiendo desde $j$ hasta el tiempo $n - \tau_{ij}$, pues la primera visita tarda exactamente $\tau_{ij}$ pasos. Por lo tanto, es suficiente demostrar la convergencia para $N_{jj}(n)/n$, ya que
+\[
+\frac{N_{ij}(n)}{n} = \frac{N_{jj}(n - \tau_{ij})}{n - \tau_{ij}} \cdot \frac{n - \tau_{ij}}{n} \xrightarrow[n\to\infty]{} \frac{1}{\mu_{jj}} \cdot 1,
+\]
+donde en el último paso usamos que $\tau_{ij}$ es finito c.s. y la convergencia de $N_{jj}(n)/n$ que demostraremos a continuación.
+
+\textbf{Convergencia de $N_{jj}(n)/n$.} Sea $Y^{(k)}$ la longitud del $k$-ésimo intervalo entre visitas consecutivas al estado $j$, es decir, el tiempo transcurrido entre la visita $(k-1)$-ésima y la $k$-ésima. Por la propiedad fuerte de Markov (aplicada en cada tiempo de visita), las variables $Y^{(1)}, Y^{(2)}, \dots$ son independientes e idénticamente distribuidas con media $\mu_{jj}$.
+
+Sea $N = N_{jj}(n)$ el número de visitas hasta el tiempo $n$. Entonces la suma de los primeros $N$ intervalos no excede $n$, mientras que la de los primeros $N+1$ sí lo hace:
+\[
+Y^{(1)} + \cdots + Y^{(N)} \le n < Y^{(1)} + \cdots + Y^{(N+1)}.
+\]
+Dividiendo entre $N$:
+\[
+\frac{Y^{(1)} + \cdots + Y^{(N)}}{N} \le \frac{n}{N} < \frac{Y^{(1)} + \cdots + Y^{(N+1)}}{N}.
+\]
+Como la cadena es recurrente, $N = N_{jj}(n) \to \infty$ cuando $n \to \infty$. Por la \textbf{Ley de los Grandes Números}, ambos extremos de la desigualdad convergen a $\mu_{jj}$ casi seguramente. Por el teorema del emparedado, concluimos que $n/N \to \mu_{jj}$ c.s., es decir,
+\[
+\lim_{n \to \infty} \frac{N_{jj}(n)}{n} = \frac{1}{\mu_{jj}} \qquad \text{c.s.}
+\]
+\end{proof}
+
+\begin{remark}[Interpretación]
+El número $\pi_j = 1/\mu_{jj}$ representa la \textbf{fracción de tiempo} que la cadena pasa en el estado $j$ a largo plazo. Si $\mu_{jj} < \infty$ (recurrencia positiva), $\pi_j > 0$ y el estado es visitado con frecuencia positiva. Si $\mu_{jj} = \infty$ (recurrencia nula o transitoriedad), $\pi_j = 0$.
+
+Tomando esperanza en el límite y usando el Teorema de Convergencia Dominada, para una cadena irreducible se cumple que
+\[
+\frac{1}{\mu_{jj}} = \lim_{n \to \infty} \frac{1}{n} \sum_{k=0}^{n-1} p_{ij}^{(k)}.
+\]
+Este es el resultado que relaciona el tiempo medio de retorno con el promedio de las probabilidades de transición, y es la base de la teoría de distribuciones estacionarias que estudiaremos a continuación.
+\end{remark}
 
 \end{document}
