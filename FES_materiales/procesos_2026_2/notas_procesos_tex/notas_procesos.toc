@@ -14,3 +14,4 @@
 \contentsline {section}{\numberline {1.11}Tiempo medio de retorno}{37}{section.1.11}%
 \contentsline {subsection}{\numberline {1.11.1}Análisis del primer paso}{39}{subsection.1.11.1}%
 \contentsline {section}{\numberline {1.12}Teorema ergódico}{40}{section.1.12}%
+\contentsline {section}{\numberline {1.13}Recurrencia positiva y nula}{44}{section.1.13}%

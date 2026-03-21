@@ -1,0 +1,6 @@
+- numero promedio de volados hasta obtener SS y SAA
+- prop 1.12
+- tiempo que tarda en salir de un loop de anuncios de un tipo
+- prop 1.8 con formalidad y PFM
+-formula general para el problema del mono
+- demostración de que en la caminata aleatoria los estados son recurrentes cuando p=1/2 y transitorios cuando p\neq 1/2

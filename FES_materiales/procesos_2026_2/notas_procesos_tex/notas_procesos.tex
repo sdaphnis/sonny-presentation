@@ -1762,6 +1762,21 @@ Por último, el tiempo medio de retorno desde $0$ es:
 La cadena tarda en promedio 4 pasos en regresar al estado 0.
 \end{example}
 
+\begin{example}
+    Considere una sucesión de lanzamientos de una moneda justa. Estamos interesados en la cantidad de lanzamientos que se necesitan para obtener la secuencia ``Sol, Sol, Sol'' por primera vez. Modelamos esto como una cadena de Markov con estados que representan el progreso hacia la secuencia objetivo. Cada estado de la cadena medirá el número de éxitos consecutivos obtenidos hasta el momento. El estado 0 representa no haber obtenido ningún éxito, el estado 1 representa haber obtenido un éxito, el estado 2 representa haber obtenido dos éxitos consecutivos, y el estado 3 representa haber obtenido la secuencia completa (tres éxitos consecutivos). El estado 3 es absorbente.
+    Dando lugar a una matriz de transición:
+    \[
+    P = \begin{pmatrix}
+    1/2 & 1/2 & 0   & 0 \\
+    1/2  & 0 & 1/2 & 0 \\
+    1/2   & 0   & 0 & 1/2 \\
+    1/2   & 0   & 0   & 1
+    \end{pmatrix}.
+    \]
+    Para calcular el tiempo esperado para alcanzar el estado 3 partiendo de 0, definimos $h_i = \mathbb{E}[\tau_3 \mid X_0 = i]$ con $h_3 = 0$. Las ecuaciones de primer paso son:
+    Resolviendo el sistema no es difícil encontrar que $h_0=14$.
+\end{example}
+
 \section{Teorema ergódico}
 
 El Teorema Ergódico es el resultado central que describe el comportamiento asintótico de una cadena de Markov irreducible. Conecta el tiempo medio de retorno $\mu_{jj}$ con la fracción de tiempo que la cadena pasa en el estado $j$ a largo plazo.
@@ -1773,7 +1788,7 @@ Sea $\{X_n\}$ una cadena de Markov irreducible. Para cualesquiera estados $i, j 
 \[
 \lim_{n \to \infty} \frac{N_{ij}(n)}{n} = \frac{1}{\mu_{jj}} \qquad \text{c.s.},
 \]
-donde $N_{ij}(n) = \sum_{k=0}^{n} \mathbf{1}_{\{X_k = j\}}$ es el número de visitas a $j$ hasta el tiempo $n$, y $\mu_{jj} = \mathbb{E}[\tau_j \mid X_0 = j]$ es el tiempo medio de retorno. Si $\mu_{jj} = \infty$ (recurrencia nula), el límite es $0$.
+donde $N_{ij}(n) = \sum_{k=1}^{n} \mathbf{1}_{\{X_k = j\}}$ es el número de visitas a $j$ hasta el tiempo $n$, y $\mu_{jj} = \mathbb{E}[\tau_j \mid X_0 = j]$ es el tiempo medio de retorno. Si $\mu_{jj} = \infty$, el límite es $0$.
 \end{theorem}
 
 \begin{proof}
@@ -1783,9 +1798,9 @@ donde $N_{ij}(n) = \sum_{k=0}^{n} \mathbf{1}_{\{X_k = j\}}$ es el número de vis
 
 Notemos que para $n \ge 1$ se cumple la identidad
 \[
-N_{ij}(n) = N_{jj}(n - \tau_{ij}),
+N_{ij}(n) = 1+ N_{jj}(n - \tau_{ij}),
 \]
-es decir, el número de visitas que hace a $j$ partiendo desde $i$ hasta el tiempo $n$ es igual al número de retornos que hace a $j$ partiendo desde $j$ hasta el tiempo $n - \tau_{ij}$, pues la primera visita tarda exactamente $\tau_{ij}$ pasos. Por lo tanto, es suficiente demostrar la convergencia para $N_{jj}(n)/n$, ya que
+es decir, el número de visitas que hace a $j$ partiendo desde $i$ hasta el tiempo $n$ es igual al número de retornos que hace a $j$ partiendo desde $j$ hasta el tiempo $n - \tau_{ij}$ más la primera visita, pues la primera visita tarda exactamente $\tau_{ij}$ pasos. Por lo tanto, es suficiente demostrar la convergencia para $N_{jj}(n)/n$, ya que
 \[
 \frac{N_{ij}(n)}{n} = \frac{N_{jj}(n - \tau_{ij})}{n - \tau_{ij}} \cdot \frac{n - \tau_{ij}}{n} \xrightarrow[n\to\infty]{} \frac{1}{\mu_{jj}} \cdot 1,
 \]
@@ -1801,20 +1816,151 @@ Dividiendo entre $N$:
 \[
 \frac{Y^{(1)} + \cdots + Y^{(N)}}{N} \le \frac{n}{N} < \frac{Y^{(1)} + \cdots + Y^{(N+1)}}{N}.
 \]
-Como la cadena es recurrente, $N = N_{jj}(n) \to \infty$ cuando $n \to \infty$. Por la \textbf{Ley de los Grandes Números}, ambos extremos de la desigualdad convergen a $\mu_{jj}$ casi seguramente. Por el teorema del emparedado, concluimos que $n/N \to \mu_{jj}$ c.s., es decir,
+Como la cadena es recurrente, $N = N_{jj}(n) \to \infty$ cuando $n \to \infty$. Por la \textbf{Ley de los Grandes Números}, ambos extremos de la desigualdad convergen a $\mu_{jj}$ casi seguramente. Por el teorema del sandwich, concluimos que $n/N \to \mu_{jj}$ c.s., es decir,
 \[
 \lim_{n \to \infty} \frac{N_{jj}(n)}{n} = \frac{1}{\mu_{jj}} \qquad \text{c.s.}
 \]
 \end{proof}
 
 \begin{remark}[Interpretación]
-El número $\pi_j = 1/\mu_{jj}$ representa la \textbf{fracción de tiempo} que la cadena pasa en el estado $j$ a largo plazo. Si $\mu_{jj} < \infty$ (recurrencia positiva), $\pi_j > 0$ y el estado es visitado con frecuencia positiva. Si $\mu_{jj} = \infty$ (recurrencia nula o transitoriedad), $\pi_j = 0$.
+El número $\pi_j = 1/\mu_{jj}$ representa la \textbf{fracción de tiempo} que la cadena pasa en el estado $j$ a largo plazo. Si $\mu_{jj} < \infty$, $\pi_j > 0$ y el estado es visitado con frecuencia positiva. Si $\mu_{jj} = \infty$, $\pi_j = 0$. Note que $\mu_{jj}=\infty$ no implica que el estado $j$ sea transitorio. Más aún, no significa que no sea visitado, sino que es visitado con frecuencia cada vez menor a medida que pasa el tiempo. Este fenómeno se conoce como \textbf{recurrencia nula}.
 
 Tomando esperanza en el límite y usando el Teorema de Convergencia Dominada, para una cadena irreducible se cumple que
 \[
-\frac{1}{\mu_{jj}} = \lim_{n \to \infty} \frac{1}{n} \sum_{k=0}^{n-1} p_{ij}^{(k)}.
+\frac{1}{\mu_{jj}} = \lim_{n \to \infty} \frac{1}{n} \sum_{k=1}^{n} p_{ij}^{(k)}.
 \]
-Este es el resultado que relaciona el tiempo medio de retorno con el promedio de las probabilidades de transición, y es la base de la teoría de distribuciones estacionarias que estudiaremos a continuación.
+Este es el resultado que relaciona el tiempo medio de retorno con el promedio de las probabilidades de transición, y es la base de la teoría de distribuciones estacionarias que estudiaremos en secciones siguientes.
 \end{remark}
+
+
+\begin{example}
+    \textbf{Preferencias musicales a largo plazo.} Una persona alterna entre tres géneros musicales: Pop (P), Rock (R) y Jazz (J), con preferencias modeladas por la cadena de Markov:
+    \[
+    P = \begin{pmatrix}
+    0.5 & 0.5 & 0 \\
+    0.25 & 0.5 & 0.25 \\
+    0.5 & 0 & 0.5
+    \end{pmatrix}.
+    \]
+
+    Estamos interesados en calcular qué proporción de tiempo, a largo plazo, la persona escuchará Pop.
+
+    \medskip
+
+    Sea $\mu_{PP}$ el tiempo medio de retorno a Pop. Definimos:
+    \begin{itemize}
+        \item $h_R$: tiempo esperado para llegar a P empezando en R
+        \item $h_J$: tiempo esperado para llegar a P empezando en J
+    \end{itemize}
+
+    Por análisis de primer paso:
+
+    \[
+    h_R = 1 + 0.5\,h_R + 0.25\,h_J
+    \]
+    \[
+    h_J = 1 + 0.5\,h_J
+    \]
+
+    De la segunda ecuación:
+    \[
+    h_J = 2
+    \]
+
+    Sustituyendo en la primera:
+    \[
+    h_R = 1 + 0.5h_R + 0.25(2)
+    = 1 + 0.5h_R + 0.5
+    \]
+    \[
+    0.5h_R = 1.5 \;\Rightarrow\; h_R = 3
+    \]
+
+    Ahora, desde P:
+    \[
+    \mu_{PP} = 1 + 0.5\,h_R + 0 \cdot h_J
+    = 1 + 0.5(3) = 2.5 = \frac{5}{2}
+    \]
+
+    Aplicando el Teorema Ergódico:
+    \[
+    \pi_P = \frac{1}{\mu_{PP}} = \frac{2}{5} = 0.4
+    \]
+
+    Por lo tanto, a largo plazo la persona escuchará Pop aproximadamente el $\boxed{40\%}$ del tiempo.
+\end{example}
+\begin{example}
+    \textbf{Tiempo medio de retorno en la cadena de rachas.}
+    Consideremos la cadena de rachas con espacio de estados $S = \{0,1,2,\dots\}$, donde $j$ representa una racha actual de $j$ éxitos consecutivos, con probabilidades de transición $p_{j,j+1}=p$ y $p_{j,0}=q:=1-p$. Queremos calcular $\mu_{jj} = 1/\pi_j$ vía el Teorema Ergódico; para ello calculamos $\lim_{n\to\infty}p_{ij}^{(n)}$.
+
+    Fijado el estado objetivo $j$, aplicamos convenientemente Chapman-Kolmogorov separando toda trayectoria de longitud $m$ en un primer tramo de $m-j$ pasos y un segundo tramo de $j$ pasos:
+    \[
+        p_{ij}^{(m)} = \sum_{k \in S} p_{ik}^{(m-j)}\,p_{kj}^{(j)}.
+    \]
+    Observemos que $p_{kj}^{(j)}>0$ únicamente cuando $k=0$: la única manera de alcanzar $j$ en exactamente $j$ pasos es partir de $0$ y acumular $j$ éxitos consecutivos, lo cual ocurre con probabilidad $p^j$. Para cualquier otro $k$, o bien la trayectoria es geométricamente imposible en $j$ pasos, o bien requiere pasar por $j$ antes de completarlos. Por tanto, en el límite $m\to\infty$ solo sobrevive ese término:
+    \[
+        \lim_{m\to\infty} p_{ij}^{(m)} = \lim_{m\to\infty} p_{i,0}^{(m-j)}\cdot p^j.
+    \]
+    Ahora bien, hemos demostrado previamente que $p_{i,0}^{(r)} = q$ para todo $r \ge 1$ y todo estado inicial $i$, por lo que $\lim_{m\to\infty}p_{i,0}^{(m-j)} = q$. De modo que
+    \[
+        \lim_{m\to\infty} p_{ij}^{(m)} = q\,p^j.
+    \]
+    Dado que esta sucesión converge, converge también en el sentido de Cesàro (pues la convergencia ordinaria implica la convergencia de las medias aritméticas), y por el Teorema Ergódico:
+    \[
+        \frac{1}{\mu_{jj}} = \lim_{n\to\infty}\frac{1}{n}\sum_{m=1}^n p_{ij}^{(m)} = \frac{1}{q\,p^j}.
+    \]
+    Para ilustrar la magnitud de este resultado, tomemos $p=1/2$ y $j=5000$:
+    \[
+        \mu_{5000,5000} = \frac{1}{q\,p^{5000}} = \frac{1}{\tfrac{1}{2}\cdot\bigl(\tfrac{1}{2}\bigr)^{5000}} = 2^{5001}.
+    \]
+    Este número posee más de $1500$ dígitos decimales y supera con creces la edad del universo medida en nanosegundos ($\approx 4\times 10^{26}$). Sin embargo, el Teorema Ergódico garantiza que el estado $5000$ es visitado \emph{infinitas veces} con probabilidad $1$; simplemente, la espera entre visitas consecutivas es astronómica.
+\end{example}
+
+\begin{example}
+    \textbf{El mono y Shakespeare.}
+    Un mono teclea caracteres de manera independiente y uniforme sobre un teclado de $m$ teclas. Deseamos estimar el tiempo esperado para que produzca la obra completa de Shakespeare, de longitud $N$ caracteres.
+
+    El proceso puede modelarse con la cadena de rachas: el estado $j\in\{0,1,\dots,N\}$ representa haber tecleado correctamente los últimos $j$ caracteres consecutivos de la obra. Las probabilidades de transición son $p_{j,j+1} = p := 1/m$ (acierta el siguiente carácter) y $p_{j,0} = q := 1-1/m$ (falla), con estado absorbente $N$ una vez completada la obra. Para el estado $j=N-1$, la transición exitosa lleva a $N$ también con probabilidad $p$.
+
+    Aproximamos $h_0 := \mathbb{E}_0[\tau_N]$ usando el análisis del primer paso junto con $\mu_{N,N}$. Por el resultado del ejemplo anterior, el tiempo medio de retorno al estado $N$ es $\mu_{N,N} = 1/(q\,p^N)$. Ahora bien, por análisis del primer paso desde el estado $N-1$:
+    \[
+        h_{N-1} = 1 + p \cdot 0 + q\, h_0 \implies h_{N-1} = 1 + q\,h_0.
+    \]
+     Dado que $\mu_{N,N} = h_{N-1} + \text{(tiempo de } N\text{ a }N-1) \approx h_0$ cuando $N$ es grande (pues el tiempo para ir de $N$ a $N-1$ es despreciable frente al tiempo de reconstruir la racha), concluimos:
+    \[
+        \mathbb{E}_0[\tau_N] \approx \mu_{N,N} = \frac{1}{q\,p^N} = \frac{m^N}{1 - 1/m}.
+    \]
+    Para $m=50$ teclas y $N=5\times 10^6$ caracteres:
+    \[
+        \mathbb{E}_0[\tau_N] \approx \frac{50^{5\times 10^6}}{1-1/50} = \frac{50}{49}\cdot 50^{5\times 10^6},
+    \]
+    un número con más de $8.5$ millones de dígitos decimales. A pesar de esto, el Teorema Ergódico garantiza que el mono \emph{producirá la obra con probabilidad $1$} si teclea indefinidamente.
+\end{example}
+
+% =====================================================================
+\section{Recurrencia positiva y nula}
+% =====================================================================
+
+Hemos visto que si una cadena de Markov inicia en un estado recurrente, entonces regresa a él una infinidad de veces con probabilidad uno. Sin embargo, esta recurrencia puede presentarse de dos formas: cuando el tiempo promedio de retorno es finito, o cuando es infinito. Esto lleva a la noción de \textbf{recurrencia positiva} y \textbf{recurrencia nula}, respectivamente.
+
+Consideremos un estado recurrente $j$. Recordemos que el tiempo de primera visita a $j$ a partir de cualquier estado $i$ es la variable aleatoria
+\[
+    \tau_{ij} := \min\{n \ge 1 : X_n = j \mid X_0 = i\}.
+\]
+La esperanza de esta variable aleatoria es el \textbf{tiempo medio de recurrencia}.
+
+\begin{definition}
+    El tiempo medio de recurrencia del estado recurrente $j$ a partir del estado $i$ se define como la esperanza de $\tau_{ij}$, y se denota por $\mu_{ij}$:
+    \[
+        \mu_{ij} := \mathbb{E}[\tau_{ij}] = \sum_{n=1}^{\infty} n\, f_{ij}^{(n)},
+    \]
+    donde $f_{ij}^{(n)} = P(X_n = j,\, X_k \neq j,\, 1\le k < n \mid X_0 = i)$ es la probabilidad de visitar $j$ por primera vez en el instante $n$. Decimos que $j$ es \textbf{recurrente positivo} si $\mu_{jj} < \infty$, y \textbf{recurrente nulo} si $\mu_{jj} = \infty$.
+\end{definition}
+
+La intuición es la siguiente: en ambos casos la cadena regresa a $j$ infinitas veces con probabilidad $1$, pero el ritmo al que lo hace difiere cualitativamente. Si $j$ es recurrente positivo, las visitas sucesivas están separadas por tiempos con media finita y la fracción de tiempo que la cadena pasa en $j$ es positiva ($\pi_j = 1/\mu_{jj} > 0$). Si $j$ es recurrente nulo, los retornos se vuelven cada vez más espaciados y esa fracción se diluye hasta cero ($\pi_j = 0$), aunque la cadena siga regresando siempre.
+
+\begin{proposition}
+    La recurrencia positiva y la recurrencia nula son propiedades de clase: si $i \leftrightarrow j$ y $i$ es recurrente positivo (respectivamente recurrente nulo), entonces $j$ también lo es.
+\end{proposition}
 
 \end{document}
