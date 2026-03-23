@@ -1688,7 +1688,7 @@ Concluimos que el tiempo medio de retorno es finito. Por simetría, $\mu_{11} = 
 \end{example}
 
 \begin{example}[Recurrencia nula en la caminata aleatoria simétrica]
-Consideremos la caminata aleatoria simétrica simple en $\mathbb{Z}$ ($p=1/2$).
+\label{ej:caminata_nula} aleatoria simétrica simple en $\mathbb{Z}$ ($p=1/2$).
 Ya sabemos que este estado es recurrente ($\sum p_{00}^{(n)} = \infty$). Veremos ahora que su tiempo medio de retorno es infinito, lo que se conoce como \textbf{recurrencia nula}.
 
 Una forma intuitiva de verlo es mediante el siguiente argumento de esperanza condicional.
@@ -1962,5 +1962,146 @@ La intuición es la siguiente: en ambos casos la cadena regresa a $j$ infinitas 
 \begin{proposition}
     La recurrencia positiva y la recurrencia nula son propiedades de clase: si $i \leftrightarrow j$ y $i$ es recurrente positivo (respectivamente recurrente nulo), entonces $j$ también lo es.
 \end{proposition}
+
+\begin{proof}
+    Supongamos que $i \leftrightarrow j$. Entonces existen enteros $r, s \ge 1$ tales que $p_{ij}^{(r)} > 0$ y $p_{ji}^{(s)} > 0$. Por Chapman-Kolmogorov:
+    \[
+        p_{jj}^{(r+n+s)} \ge p_{ji}^{(s)}\, p_{ii}^{(n)}\, p_{ij}^{(r)}.
+    \]
+    Sumando sobre $n$ e invocando el Teorema Ergódico, si $\pi_i = \lim_{n\to\infty}\frac{1}{n}\sum_{k=1}^n p_{ii}^{(k)} > 0$, entonces
+    \[
+        \pi_j = \lim_{n\to\infty}\frac{1}{n}\sum_{k=1}^n p_{jj}^{(k)} \ge p_{ji}^{(s)}\,\pi_i\, p_{ij}^{(r)} > 0,
+    \]
+    de modo que $\mu_{jj} = 1/\pi_j < \infty$ y $j$ es recurrente positivo. El argumento es simétrico intercambiando $i$ y $j$, de modo que $i$ es recurrente positivo si y solo si $j$ lo es. El caso nulo se obtiene por contraposición.
+\end{proof}
+
+\begin{example}
+    \textbf{Caminata aleatoria simple simétrica: recurrencia nula.}
+    En el ejemplo de recurrencia nula de la caminata aleatoria simétrica (véase el Ejemplo~\ref{ej:caminata_nula}), demostramos que el tiempo medio de retorno al origen satisface la ecuación $\mu_{00} = 1 + x$ con $x = 1 + x$, que no tiene solución finita, luego $\mu_{00} = \infty$. Como la cadena es irreducible (todos los estados se comunican), la recurrencia positiva y la nula son propiedades de clase, y basta con este cálculo en un único estado para concluir que \emph{todos} los estados de la caminata aleatoria simétrica son recurrentes nulos. Intuitivamente, la cadena regresa siempre al origen, pero lo hace cada vez más tarde: cuanto más tiempo ha transcurrido, más lejos se ha alejado en promedio y mayor es el tiempo que necesitará para regresar, de modo que el promedio de los tiempos de retorno diverge.
+\end{example}
+
+\begin{example}
+    \textbf{Cadena de rachas: recurrencia positiva.}
+    En el Ejemplo de tiempo medio de retorno en la cadena de rachas demostramos que $\mu_{jj} = 1/(q\,p^j) < \infty$ para todo estado $j \ge 0$. En particular $\mu_{00} = 1/q < \infty$, de modo que el estado $0$ es recurrente positivo. Al ser la cadena irreducible, todos sus estados son recurrentes positivos.
+\end{example}
+
+\begin{remark}
+    Todo estado de una cadena de Markov pertenece exactamente a una de las siguientes tres categorías: \textbf{transitorio}, \textbf{recurrente positivo} o \textbf{recurrente nulo}. Esta tricotomía es exhaustiva y las categorías son mutuamente excluyentes. Dado que la recurrencia, la recurrencia positiva y la recurrencia nula son todas propiedades de clase, la clasificación es constante dentro de cada clase de comunicación.
+\end{remark}
+
+Recordemos que en una cadena de Markov con espacio de estados finito hemos demostrado que debe existir al menos un estado recurrente. Este hecho, combinado con la finitud del espacio de estados, impone una restricción adicional sobre el tipo de recurrencia posible.
+\begin{proposition}
+En una cadena de Markov con espacio de estados finito, no existen estados recurrentes nulos.
+\end{proposition}
+
+\begin{proof}
+Sea $j$ un estado recurrente y consideremos el conjunto $C$ de estados que se comunican con $j$. Intuitivamente, una vez que la cadena entra en $C$, no puede escapar de él: en efecto, si desde algún estado de $C$ se pudiera alcanzar un estado fuera de $C$, entonces ese estado también tendría que ser recurrente, lo cual contradice la definición de $C$.
+
+En términos de probabilidades de transición, esto implica que para todo $i \in C$ y todo $n \geq 1$,
+\[
+\sum_{k \in C} p_{ik}^{(n)} = 1.
+\]
+
+Promediando,
+\[
+\frac{1}{n}\sum_{m=1}^n \sum_{k \in C} p_{ik}^{(m)} = 1,
+\]
+y como $C$ es finito, podemos intercambiar suma y promedio:
+\[
+\sum_{k \in C} \left( \frac{1}{n}\sum_{m=1}^n p_{ik}^{(m)} \right) = 1.
+\]
+
+Haciendo $n \to \infty$ y usando el Teorema Ergódico,
+\[
+\sum_{k \in C} \frac{1}{\mu_k} = 1.
+\]
+
+En particular, esta suma no puede ser nula, por lo que debe existir al menos un estado $k \in C$ tal que $\mu_k < \infty$, es decir, $k$ es recurrente positivo. Como la recurrencia positiva es una propiedad compartida entre estados que se comunican, se concluye que todo estado en $C$, y en particular $j$, es recurrente positivo.
+\end{proof}
+\begin{example}
+    \textbf{Cadena de 5 estados con dos clases de comunicación.} Consideremos la cadena con $S = \{1, 2, 3, 4, 5\}$ y matriz de transición
+    \[
+        P = \begin{pmatrix}
+            0   & 1/2 & 1/2 & 0   & 0   \\
+            1/2 & 0   & 1/2 & 0   & 0   \\
+            1/4 & 1/4 & 0   & 1/4 & 1/4 \\
+            0   & 0   & 0   & 1/2 & 1/2 \\
+            0   & 0   & 0   & 1/2 & 1/2
+        \end{pmatrix}.
+    \]
+    Las clases de comunicación son:
+    \begin{itemize}
+        \item $C_1 = \{1, 2\}$: los estados $1$ y $2$ se comunican entre sí, pero desde el estado $3$ se puede llegar a $C_1$ sin que $C_1$ pueda llegar a $3$; en realidad desde $1$ o $2$ no se llega a $3$. Inspeccionando: $p_{13}=1/2>0$ pero $p_{31}=1/4>0$ y $p_{12}=1/2>0$, $p_{21}=1/2>0$, $p_{23}=1/2>0$. Entonces $1\to 3\to 4$ pero $4\not\to 1$. Así $C_1=\{1,2\}$ es una clase transitoria.
+        \item $C_2 = \{4, 5\}$: $p_{45}=1/2$, $p_{54}=1/2$, $p_{44}=1/2$, $p_{55}=1/2$; no hay salida de $\{4,5\}$ pues $p_{4k}=0$ para $k\notin\{4,5\}$. Es una clase recurrente (positiva, por ser finita).
+        \item El estado $3$ es transitorio: desde $3$ se puede ir a $\{1,2\}$ o a $\{4,5\}$ con probabilidad positiva, pero no hay retorno desde ninguno de esos conjuntos a $3$.
+    \end{itemize}
+
+    \textbf{Tiempos de retorno en $C_2$.} Desde el estado $4$ la cadena va a $4$ o a $5$ con igual probabilidad $1/2$, y desde $5$ ocurre exactamente lo mismo. Por simetría total, a largo plazo la cadena no tiene motivo alguno para preferir un estado sobre el otro, de modo que pasa la misma fracción de tiempo en $4$ que en $5$. Como ambas fracciones deben sumar $1$, cada una vale $\pi_4 = \pi_5 = 1/2$. Por el Teorema Ergódico:
+    \[
+        \mu_{44} = \frac{1}{\pi_4} = 2, \qquad \mu_{55} = \frac{1}{\pi_5} = 2.
+    \]
+    En promedio, partiendo del estado $4$ (o del $5$), la cadena regresa a ese mismo estado tras $2$ pasos.
+\end{example}
+
+% =====================================================================
+\section{Evolución de la distribución de $X_n$}
+% =====================================================================
+
+Hasta ahora hemos estudiado el comportamiento de la cadena desde un estado inicial fijo: la probabilidad de estar en $j$ en el paso $n$ partiendo de $i$ es $p_{ij}^{(n)}$. Sin embargo, en muchas situaciones el estado inicial no se conoce con certeza sino que está determinado por una distribución de probabilidad. Nos interesa entonces describir cómo evoluciona esa distribución con el tiempo y; en particular, si es que, a largo plazo, converge y hacia qué límite.
+
+\medskip
+
+Denotamos por $\pi^{(n)}$ el vector fila de distribución de $X_n$, es decir,
+\[
+    \pi^{(n)}_j := \mathbb{P}(X_n = j), \qquad j \in S.
+\]
+En particular, $\pi^{(0)}$ es la \textbf{distribución inicial} de la cadena. Aprovechamos aquí para enmendar un abuso de notación que hemos cometido en secciones anteriores: definimos $\pi_j := 1/\mu_{jj}$ como la proporción de tiempo asintótica que la cadena pasa en $j$. Para evitar confusión con la distribución de $X_n$, reservamos de ahora en adelante la notación $\pi^{(0)}$ para la distribución inicial y escribimos $\pi$ (sin supraíndice) para el vector de proporciones asintóticas $(\pi_j)_{j\in S}$.
+
+Establecer una recurrencia para la evolución de la distribución es simple: por la ley de la probabilidad total,
+\[
+    \pi^{(n)}_j = \mathbb{P}(X_n = j) = \sum_{i \in S} \mathbb{P}(X_{n-1}=i)\,p_{ij} = \sum_{i\in S} \pi^{(n-1)}_i\, p_{ij},
+\]
+que en notación matricial se escribe
+\[
+    \pi^{(n)} = \pi^{(n-1)} P.
+\]
+Iterando, $\pi^{(n)} = \pi^{(0)} P^n$.
+
+\begin{example}[Convergencia de la distribución]
+    Consideremos la cadena de dos estados $S=\{0,1\}$ con matriz
+    \[
+        P = \begin{pmatrix} 0.7 & 0.3 \\ 0.4 & 0.6 \end{pmatrix}
+    \]
+    y distribución inicial $\pi^{(0)} = (1, 0)$ (la cadena comienza en $0$ con certeza). Las primeras iteraciones dan:
+    \begin{align*}
+        \pi^{(1)} &= (0.7,\ 0.3),\\
+        \pi^{(2)} &= (0.7\cdot0.7+0.3\cdot0.4,\ 0.7\cdot0.3+0.3\cdot0.6) = (0.61,\ 0.39),\\
+        \pi^{(3)} &\approx (0.574,\ 0.426),\\
+        \pi^{(10)} &\approx (0.572,\ 0.428).
+    \end{align*}
+    La sucesión $(\pi^{(n)})$ parece estabilizarse alrededor de $(4/7, 3/7) \approx (0.571, 0.429)$, independientemente del punto de partida.
+\end{example}
+
+\begin{example}[Distribución que oscila]
+    Consideremos la cadena en $S=\{0,1\}$ con matriz
+    \[
+        P = \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix}
+    \]
+    y distribución inicial $\pi^{(0)} = (1, 0)$. Entonces:
+    \[
+        \pi^{(1)} = (0,1),\quad \pi^{(2)} = (1,0),\quad \pi^{(3)} = (0,1),\quad \ldots
+    \]
+    La distribución oscila indefinidamente entre $(1,0)$ y $(0,1)$: la cadena es periódica de período $2$ y la sucesión $(\pi^{(n)})$ no converge.
+\end{example}
+
+Estos ejemplos muestran que la convergencia de $\pi^{(n)}$ no está garantizada en general. Nuestro objetivo en lo que sigue es entender cuándo y hacia qué límite converge esta distribución. El punto de partida natural es identificar qué distribuciones son \emph{invariantes} bajo la acción de $P$, es decir, distribuciones que, una vez alcanzadas, ya no cambian.
+
+\begin{definition}
+    Un vector de probabilidad $\pi = (\pi_j)_{j\in S}$ (con $\pi_j \ge 0$ y $\sum_j \pi_j = 1$) se llama \textbf{distribución invariante} o \textbf{distribución estacionaria} si
+    \[
+        \pi = \pi P,
+    \]
+    es decir, $\pi_j = \sum_{i\in S} \pi_i\, p_{ij}$ para todo $j \in S$. Si la cadena se inicia con $\pi^{(0)} = \pi$, entonces $\pi^{(n)} = \pi$ para todo $n \ge 0$.
+\end{definition}
 
 \end{document}
