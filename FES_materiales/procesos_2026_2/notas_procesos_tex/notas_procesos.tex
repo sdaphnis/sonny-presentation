@@ -28,6 +28,7 @@
 
 % Definición de entornos personalizados
 \newtheorem{theorem}{Teorema}[chapter]
+\newtheorem{lemma}{Lema}[section]
 \newtheorem{definition}{Definición}[chapter]
 \newtheorem{proposition}{Proposición}[chapter]
 \newtheorem{example}{Ejemplo}[chapter]
@@ -1905,7 +1906,7 @@ Este es el resultado que relaciona el tiempo medio de retorno con el promedio de
     \[
         \lim_{m\to\infty} p_{ij}^{(m)} = q\,p^j.
     \]
-    Dado que esta sucesión converge, converge también en el sentido de Cesàro (pues la convergencia ordinaria implica la convergencia de las medias aritméticas), y por el Teorema Ergódico:
+    Dado que esta sucesión converge, converge también en el sentido de Cesàro\footnote{La convergencia en el sentido de Cesaro no necesariamente implica la convergencia ordinaria. Por ejemplo, considere la sucesión $(-1)^n$; sus medias aritméticas convergen a $0$ aunque la sucesión original no converge.} (pues la convergencia ordinaria implica la convergencia de las medias aritméticas), y por el Teorema Ergódico:
     \[
         \frac{1}{\mu_{jj}} = \lim_{n\to\infty}\frac{1}{n}\sum_{m=1}^n p_{ij}^{(m)} = \frac{1}{q\,p^j}.
     \]
@@ -1989,35 +1990,39 @@ La intuición es la siguiente: en ambos casos la cadena regresa a $j$ infinitas 
     Todo estado de una cadena de Markov pertenece exactamente a una de las siguientes tres categorías: \textbf{transitorio}, \textbf{recurrente positivo} o \textbf{recurrente nulo}. Esta tricotomía es exhaustiva y las categorías son mutuamente excluyentes. Dado que la recurrencia, la recurrencia positiva y la recurrencia nula son todas propiedades de clase, la clasificación es constante dentro de cada clase de comunicación.
 \end{remark}
 
-Recordemos que en una cadena de Markov con espacio de estados finito hemos demostrado que debe existir al menos un estado recurrente. Este hecho, combinado con la finitud del espacio de estados, impone una restricción adicional sobre el tipo de recurrencia posible.
+Recordemos que en una cadena de Markov con espacio de estados finito hemos demostrado que debe existir al menos un estado recurrente. Este hecho, combinado con la finitud del espacio de estados, impone una restricción adicional sobre el tipo de recurrencia posible. Para establecerlo necesitamos la siguiente noción.
+
+\begin{definition}
+    Una clase de comunicación $C$ se llama \textbf{clase cerrada} si ningún estado de $C$ puede alcanzar un estado fuera de $C$, es decir, si para todo $i \in C$ y todo $j \notin C$ se tiene $p_{ij}^{(n)} = 0$ para todo $n \ge 1$.
+\end{definition}
+
+En términos intuitivos, una clase cerrada es un conjunto de estados del que la cadena no puede escapar: una vez que entra en $C$, permanece en $C$ para siempre. La siguiente propiedad vincula las clases cerradas con la recurrencia.
+
+\begin{lemma}
+    Todo estado recurrente de una cadena de Markov pertenece a una clase de comunicación cerrada.
+\end{lemma}
+\begin{proof}[Demostración (tarea)]
+    Supongamos que $i$ es recurrente y que desde algún $i' \in C$ (la clase de $i$) se puede alcanzar un estado $j \notin C$. Entonces existiría una trayectoria $i \to \cdots \to i' \to j$. Como $j \notin C$, el estado $j$ no puede alcanzar a $i$, de modo que una vez que la cadena llega a $j$ nunca regresa a $i$. Esto contradice la recurrencia de $i$, que exige el retorno con probabilidad $1$.
+\end{proof}
+
 \begin{proposition}
 En una cadena de Markov con espacio de estados finito, no existen estados recurrentes nulos.
 \end{proposition}
 
 \begin{proof}
-Sea $j$ un estado recurrente y consideremos el conjunto $C$ de estados que se comunican con $j$. Intuitivamente, una vez que la cadena entra en $C$, no puede escapar de él: en efecto, si desde algún estado de $C$ se pudiera alcanzar un estado fuera de $C$, entonces ese estado también tendría que ser recurrente, lo cual contradice la definición de $C$.
+    Sea $j$ un estado recurrente en una cadena finita y sea $C$ su clase de comunicación. Por el Lema anterior, $C$ es una clase cerrada, lo que significa que para todo $i \in C$ y todo $n \ge 1$:
+    \[
+        \sum_{k \in C} p_{ik}^{(n)} = 1.
+    \]
+    En efecto, como ninguna probabilidad puede salir de $C$, toda la masa de probabilidad permanece en $C$ en cada paso.
 
-En términos de probabilidades de transición, esto implica que para todo $i \in C$ y todo $n \geq 1$,
-\[
-\sum_{k \in C} p_{ik}^{(n)} = 1.
-\]
-
-Promediando,
-\[
-\frac{1}{n}\sum_{m=1}^n \sum_{k \in C} p_{ik}^{(m)} = 1,
-\]
-y como $C$ es finito, podemos intercambiar suma y promedio:
-\[
-\sum_{k \in C} \left( \frac{1}{n}\sum_{m=1}^n p_{ik}^{(m)} \right) = 1.
-\]
-
-Haciendo $n \to \infty$ y usando el Teorema Ergódico,
-\[
-\sum_{k \in C} \frac{1}{\mu_k} = 1.
-\]
-
-En particular, esta suma no puede ser nula, por lo que debe existir al menos un estado $k \in C$ tal que $\mu_k < \infty$, es decir, $k$ es recurrente positivo. Como la recurrencia positiva es una propiedad compartida entre estados que se comunican, se concluye que todo estado en $C$, y en particular $j$, es recurrente positivo.
+    Supongamos ahora por contradicción que $j$ es recurrente nulo, es decir, $\mu_{jj} = \infty$. Por el Teorema Ergódico, $\pi_j = 1/\mu_{jj} = 0$. Como la recurrencia nula es una propiedad de clase, $\pi_k = 0$ para todo $k \in C$. Tomando medias de Cesàro en la igualdad de arriba e intercambiando (suma finita y límite):
+    \[
+        \sum_{k \in C} \pi_k = \sum_{k \in C} \lim_{n\to\infty}\frac{1}{n}\sum_{m=1}^n p_{ik}^{(m)} = \lim_{n\to\infty}\frac{1}{n}\sum_{m=1}^n \sum_{k\in C} p_{ik}^{(m)} = 1.
+    \]
+    Pero $C$ es finita y $\pi_k = 0$ para todo $k \in C$, luego $\sum_{k\in C}\pi_k = 0 \neq 1$, una contradicción. Por tanto no puede existir ningún estado recurrente nulo en una cadena finita.
 \end{proof}
+
 \begin{example}
     \textbf{Cadena de 5 estados con dos clases de comunicación.} Consideremos la cadena con $S = \{1, 2, 3, 4, 5\}$ y matriz de transición
     \[
@@ -2031,9 +2036,8 @@ En particular, esta suma no puede ser nula, por lo que debe existir al menos un 
     \]
     Las clases de comunicación son:
     \begin{itemize}
-        \item $C_1 = \{1, 2\}$: los estados $1$ y $2$ se comunican entre sí, pero desde el estado $3$ se puede llegar a $C_1$ sin que $C_1$ pueda llegar a $3$; en realidad desde $1$ o $2$ no se llega a $3$. Inspeccionando: $p_{13}=1/2>0$ pero $p_{31}=1/4>0$ y $p_{12}=1/2>0$, $p_{21}=1/2>0$, $p_{23}=1/2>0$. Entonces $1\to 3\to 4$ pero $4\not\to 1$. Así $C_1=\{1,2\}$ es una clase transitoria.
+        \item $C_1 = \{1, 2\, 3\}$
         \item $C_2 = \{4, 5\}$: $p_{45}=1/2$, $p_{54}=1/2$, $p_{44}=1/2$, $p_{55}=1/2$; no hay salida de $\{4,5\}$ pues $p_{4k}=0$ para $k\notin\{4,5\}$. Es una clase recurrente (positiva, por ser finita).
-        \item El estado $3$ es transitorio: desde $3$ se puede ir a $\{1,2\}$ o a $\{4,5\}$ con probabilidad positiva, pero no hay retorno desde ninguno de esos conjuntos a $3$.
     \end{itemize}
 
     \textbf{Tiempos de retorno en $C_2$.} Desde el estado $4$ la cadena va a $4$ o a $5$ con igual probabilidad $1/2$, y desde $5$ ocurre exactamente lo mismo. Por simetría total, a largo plazo la cadena no tiene motivo alguno para preferir un estado sobre el otro, de modo que pasa la misma fracción de tiempo en $4$ que en $5$. Como ambas fracciones deben sumar $1$, cada una vale $\pi_4 = \pi_5 = 1/2$. Por el Teorema Ergódico:
@@ -2047,7 +2051,7 @@ En particular, esta suma no puede ser nula, por lo que debe existir al menos un 
 \section{Evolución de la distribución de $X_n$}
 % =====================================================================
 
-Hasta ahora hemos estudiado el comportamiento de la cadena desde un estado inicial fijo: la probabilidad de estar en $j$ en el paso $n$ partiendo de $i$ es $p_{ij}^{(n)}$. Sin embargo, en muchas situaciones el estado inicial no se conoce con certeza sino que está determinado por una distribución de probabilidad. Nos interesa entonces describir cómo evoluciona esa distribución con el tiempo y; en particular, si es que, a largo plazo, converge y hacia qué límite.
+Hasta ahora hemos estudiado el comportamiento de la cadena desde un estado inicial dado: la probabilidad de estar en $j$ en el paso $n$ partiendo de $i$ es $p_{ij}^{(n)}$. Sin embargo, en muchas situaciones el estado inicial no se conoce con certeza sino que está determinado por una distribución de probabilidad. Nos interesa entonces describir cómo evoluciona esa distribución con el tiempo y; en particular, si es que, a largo plazo, converge y hacia qué límite.
 
 \medskip
 
@@ -2055,7 +2059,7 @@ Denotamos por $\pi^{(n)}$ el vector fila de distribución de $X_n$, es decir,
 \[
     \pi^{(n)}_j := \mathbb{P}(X_n = j), \qquad j \in S.
 \]
-En particular, $\pi^{(0)}$ es la \textbf{distribución inicial} de la cadena. Aprovechamos aquí para enmendar un abuso de notación que hemos cometido en secciones anteriores: definimos $\pi_j := 1/\mu_{jj}$ como la proporción de tiempo asintótica que la cadena pasa en $j$. Para evitar confusión con la distribución de $X_n$, reservamos de ahora en adelante la notación $\pi^{(0)}$ para la distribución inicial y escribimos $\pi$ (sin supraíndice) para el vector de proporciones asintóticas $(\pi_j)_{j\in S}$.
+En particular, $\pi^{(0)}$ es la \textbf{distribución inicial} de la cadena. Aprovechamos aquí para enmendar un abuso de notación que hemos cometido en secciones anteriores: definimos $\pi_j := 1/\mu_{jj}$ como la proporción de tiempo asintótica que la cadena pasa en $j$. Para evitar confusión con la distribución de $X_n$, reservamos de ahora en adelante la notación $\pi^{(0)}$ para la distribución inicial y escribimos $\pi$ (sin superíndice) para el vector de proporciones asintóticas $(\pi_j)_{j\in S}$.
 
 Establecer una recurrencia para la evolución de la distribución es simple: por la ley de la probabilidad total,
 \[
@@ -2103,5 +2107,45 @@ Estos ejemplos muestran que la convergencia de $\pi^{(n)}$ no está garantizada 
     \]
     es decir, $\pi_j = \sum_{i\in S} \pi_i\, p_{ij}$ para todo $j \in S$. Si la cadena se inicia con $\pi^{(0)} = \pi$, entonces $\pi^{(n)} = \pi$ para todo $n \ge 0$.
 \end{definition}
+
+Los tres ejemplos siguientes muestran que la existencia y unicidad de una distribución estacionaria no están garantizadas en general.
+
+\begin{example}[Existencia única]
+    Consideremos la cadena de dos estados $S = \{0, 1\}$ con matriz
+    \[
+        P = \begin{pmatrix} 1-a & a \\ b & 1-b \end{pmatrix}, \qquad a, b \in (0,1).
+    \]
+    La ecuación $\pi = \pi P$ se traduce en el sistema
+    \[
+        \pi_0 = (1-a)\pi_0 + b\pi_1, \qquad \pi_1 = a\pi_0 + (1-b)\pi_1,
+    \]
+    que junto con $\pi_0 + \pi_1 = 1$ tiene solución única:
+    \[
+        \pi_0 = \frac{b}{a+b}, \qquad \pi_1 = \frac{a}{a+b}.
+    \]
+    Para cualquier $a, b \in (0,1)$ existe una única distribución estacionaria. Intuitivamente, como la cadena puede transitar en ambas direcciones entre $0$ y $1$ con probabilidad positiva, existe un único balance entre los flujos de entrada y salida de cada estado.
+\end{example}
+
+\begin{example}[Infinitas distribuciones estacionarias]
+    Consideremos la cadena con $S = \{0, 1, 2\}$ y matriz
+    \[
+        P = \begin{pmatrix} 1 & 0 & 0 \\ 1/3 & 1/3 & 1/3 \\ 0 & 0 & 1 \end{pmatrix}.
+    \]
+    Los estados $0$ y $2$ son absorbentes ($p_{00}=1$, $p_{22}=1$) y forman dos clases de comunicación distintas; el estado $1$ es transitorio. La ecuación $\pi = \pi P$ da:
+    \[
+        \pi_0 = \pi_0 + \tfrac{1}{3}\pi_1, \quad
+        \pi_1 = \tfrac{1}{3}\pi_1, \quad
+        \pi_2 = \tfrac{1}{3}\pi_1 + \pi_2,
+    \]
+    de donde $\pi_1 = 0$. La única restricción restante es $\pi_0 + \pi_2 = 1$, con $\pi_0, \pi_2 \ge 0$ arbitrarios. Para cada $\alpha \in [0,1]$, el vector $\pi = (\alpha, 0, 1-\alpha)$ es una distribución estacionaria. En particular hay infinitas soluciones, que se pueden escribir como combinación convexa de las dos estacionarias extremas $(1,0,0)$ y $(0,0,1)$, cada una concentrada en uno de los estados absorbentes.
+\end{example}
+
+\begin{example}[No existencia]
+    Para la caminata aleatoria simple simétrica en $\mathbb{Z}$ (con $p_{j,j+1}=p_{j,j-1}=1/2$ para todo $j\in\mathbb{Z}$), la ecuación $\pi = \pi P$ se traduce en
+    \[
+        \pi_j = \frac{1}{2}\pi_{j-1} + \frac{1}{2}\pi_{j+1}, \qquad j \in \mathbb{Z},
+    \]
+    o equivalentemente $\pi_{j+1} - \pi_j = \pi_j - \pi_{j-1}$: las diferencias sucesivas son constantes. Llamando $d := \pi_1 - \pi_0$, se tiene $\pi_n = \pi_0 + nd$ para todo $n \ge 1$. Pero $|\pi_n - \pi_0| \le 1$ para todo $n$ (ambos son probabilidades), de modo que $|nd| \le 1$ para todo $n$, lo que fuerza $d = 0$. Por simetría el mismo argumento aplica para $n < 0$, de modo que $\pi_j = c$ (constante) para todo $j \in \mathbb{Z}$. Sin embargo, una distribución de probabilidad sobre $\mathbb{Z}$ no puede ser constante no nula: $\sum_{j\in\mathbb{Z}} c = \infty \neq 1$. Tomando $c=0$ se satisface la ecuación en diferencias pero no la condición de normalización. Concluimos que no existe ninguna distribución estacionaria para esta cadena. Esto es coherente con el hecho de que la caminata es recurrente nula ($\mu_{jj} = \infty$) y por tanto $\pi_j = 1/\mu_{jj} = 0$ para todo $j$.
+\end{example}
 
 \end{document}

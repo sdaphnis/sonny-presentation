@@ -4,3 +4,4 @@
 - prop 1.8 con formalidad y PFM
 -formula general para el problema del mono
 - demostración de que en la caminata aleatoria los estados son recurrentes cuando p=1/2 y transitorios cuando p\neq 1/2
+-demostracion de que un estado recurrente pertenece a una clase cerrada
