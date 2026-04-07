@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1775426101.5939 "/Users/sonnymedina/Desktop/Personal webpage/sonny-presentation/FES_materiales/procesos_2026_2/notas_procesos_tex/notas_procesos.tex" "notas_procesos.pdf" "notas_procesos" 1775426102.8877 0
-  "/Users/sonnymedina/Desktop/Personal webpage/sonny-presentation/FES_materiales/procesos_2026_2/notas_procesos_tex/notas_procesos.tex" 1775419149.66634 119280 047e6995c607aab03191c1a7e8c40ab1 ""
+["pdflatex"] 1775587341.37067 "/Users/sonnymedina/Desktop/Personal webpage/sonny-presentation/FES_materiales/procesos_2026_2/notas_procesos_tex/notas_procesos.tex" "notas_procesos.pdf" "notas_procesos" 1775587342.15404 0
+  "/Users/sonnymedina/Desktop/Personal webpage/sonny-presentation/FES_materiales/procesos_2026_2/notas_procesos_tex/notas_procesos.tex" 1775587340.98652 121772 3461db448c526ba591b995819543e7c4 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1136849721 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/jknappen/ec/tcrm1200.tfm" 1136768653 1536 74b7293ec3713bb7fdca8dd1bd1f469c ""
@@ -122,10 +122,10 @@
   "/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1770311260 5467155 19efa205003f9ecad95fbbaa6ff24da1 ""
   "/usr/local/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt" 1741450574 3345740 46b66fdb0378f7bf5921b5eabf1762b8 ""
   "/usr/local/texlive/2025/texmf.cnf" 1741450484 577 418a7058ec8e006d8704f60ecd22c938 ""
-  "notas_procesos.aux" 1775426102.80166 2925 22e5c27729b41519d08fe157871ec32c "pdflatex"
-  "notas_procesos.out" 1775426102.80301 4040 93fb36276a67d4808ef1ee2ab2e7f8dc "pdflatex"
-  "notas_procesos.tex" 1775419149.66634 119280 047e6995c607aab03191c1a7e8c40ab1 ""
-  "notas_procesos.toc" 1775426102.80336 1600 7f2310e691c4fdbe03a69eba3703df1a "pdflatex"
+  "notas_procesos.aux" 1775587342.10056 3079 e18680dbf7f0b67025693e8a2a21c4bb "pdflatex"
+  "notas_procesos.out" 1775587342.10144 4352 df15ee2810b9ed3356045ee29a3c3214 "pdflatex"
+  "notas_procesos.tex" 1775587340.98652 121772 3461db448c526ba591b995819543e7c4 ""
+  "notas_procesos.toc" 1775587342.1016 1713 2046d7c026e7a71bc59cc0405dcbc6e0 "pdflatex"
   (generated)
   "notas_procesos.aux"
   "notas_procesos.log"

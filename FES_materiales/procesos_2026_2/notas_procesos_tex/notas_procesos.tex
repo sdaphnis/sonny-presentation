@@ -2048,7 +2048,7 @@ En una cadena de Markov con espacio de estados finito, no existen estados recurr
 \end{example}
 
 % =====================================================================
-\section{Evolución de la distribución de $X_n$}
+\section{Evolución de la distribución de \texorpdfstring{$X_n$}{Xn}}
 % =====================================================================
 
 Hasta ahora hemos estudiado el comportamiento de la cadena desde un estado inicial dado: la probabilidad de estar en $j$ en el paso $n$ partiendo de $i$ es $p_{ij}^{(n)}$. Sin embargo, en muchas situaciones el estado inicial no se conoce con certeza sino que está determinado por una distribución de probabilidad. Nos interesa entonces describir cómo evoluciona esa distribución con el tiempo y; en particular, si es que, a largo plazo, converge y hacia qué límite.
@@ -2147,5 +2147,36 @@ Los tres ejemplos siguientes muestran que la existencia y unicidad de una distri
     \]
     o equivalentemente $\pi_{j+1} - \pi_j = \pi_j - \pi_{j-1}$: las diferencias sucesivas son constantes. Llamando $d := \pi_1 - \pi_0$, se tiene $\pi_n = \pi_0 + nd$ para todo $n \ge 1$. Pero $|\pi_n - \pi_0| \le 1$ para todo $n$ (ambos son probabilidades), de modo que $|nd| \le 1$ para todo $n$, lo que fuerza $d = 0$. Por simetría el mismo argumento aplica para $n < 0$, de modo que $\pi_j = c$ (constante) para todo $j \in \mathbb{Z}$. Sin embargo, una distribución de probabilidad sobre $\mathbb{Z}$ no puede ser constante no nula: $\sum_{j\in\mathbb{Z}} c = \infty \neq 1$. Tomando $c=0$ se satisface la ecuación en diferencias pero no la condición de normalización. Concluimos que no existe ninguna distribución estacionaria para esta cadena. Esto es coherente con el hecho de que la caminata es recurrente nula ($\mu_{jj} = \infty$) y por tanto $\pi_j = 1/\mu_{jj} = 0$ para todo $j$.
 \end{example}
+
+Estos tres ejemplos ilustran el panorama completo: para cualquier cadena de Markov, exactamente una de las siguientes situaciones se presenta: no existe ninguna distribución estacionaria, existe exactamente una, o existe una infinidad de ellas. Nótese que si $\pi$ y $\pi'$ son dos distribuciones estacionarias distintas, entonces para cualquier $\alpha \in [0,1]$ la combinación convexa $\alpha\pi + (1-\alpha)\pi'$ también satisface $(\alpha\pi + (1-\alpha)\pi')P = \alpha\pi P + (1-\alpha)\pi' P = \alpha\pi + (1-\alpha)\pi'$, y es un vector de probabilidad. Por tanto el conjunto de distribuciones estacionarias es convexo: si hay dos, hay infinitas.
+
+Dados estos tres escenarios posibles, es natural preguntarse cuáles estados pueden tener masa positiva bajo una distribución estacionaria. La siguiente proposición responde esta pregunta: la distribución estacionaria, cuando existe, solo puede colocar masa en estados recurrentes positivos.
+
+\subsection{Soporte de la distribución estacionaria}
+
+\begin{proposition}
+    Sea $\pi$ una distribución estacionaria para una cadena de Markov. Si $j$ es un estado transitorio o recurrente nulo, entonces $\pi_j = 0$.
+\end{proposition}
+
+\begin{proof}
+    Recordemos que, por el Teorema Ergódico, si $j$ es transitorio o recurrente nulo entonces para cualquier estado inicial $i$:
+    \[
+        \lim_{n\to\infty} \frac{1}{n}\sum_{k=1}^n p_{ij}^{(k)} = \frac{1}{\mu_{jj}} = 0.
+    \]
+    Como $\pi$ es estacionaria,
+    \[
+        \pi_j = \sum_{i\in S} \pi_i\, p_{ij}^{(k)} \quad \text{para todo } k \ge 1.
+    \]
+    Promediando sobre $k = 1, \dots, n$:
+    \[
+        \pi_j = \frac{1}{n}\sum_{k=1}^n \pi_j = \frac{1}{n}\sum_{k=1}^n \sum_{i\in S} \pi_i\, p_{ij}^{(k)} = \sum_{i\in S} \pi_i \left(\frac{1}{n}\sum_{k=1}^n p_{ij}^{(k)}\right).
+    \]
+    Los sumandos están acotados por $\pi_i \in [0,1]$,  luego por el Teorema de Convergencia Dominada, podemos intercambiar el límite y la suma cuando $n \to \infty$:
+    \[
+        \pi_j = \sum_{i\in S} \pi_i \lim_{n\to\infty}\frac{1}{n}\sum_{k=1}^n p_{ij}^{(k)} = \sum_{i\in S} \pi_i \cdot 0 = 0. \qedhere
+    \]
+\end{proof}
+
+En otras palabras, toda distribución estacionaria tiene soporte contenido en el conjunto de estados recurrentes positivos. Combinado con el hecho de que la recurrencia positiva es una propiedad de clase, esto implica que la masa de $\pi$ se concentra íntegramente en las clases de comunicación recurrentes positivas de la cadena.
 
 \end{document}
