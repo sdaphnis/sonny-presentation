@@ -2179,4 +2179,167 @@ Dados estos tres escenarios posibles, es natural preguntarse cuáles estados pue
 
 En otras palabras, toda distribución estacionaria tiene soporte contenido en el conjunto de estados recurrentes positivos. Combinado con el hecho de que la recurrencia positiva es una propiedad de clase, esto implica que la masa de $\pi$ se concentra íntegramente en las clases de comunicación recurrentes positivas de la cadena.
 
+\begin{remark}
+    En particular, si $\pi_j > 0$ entonces $j$ es recurrente positivo. En efecto, si $j$ fuera transitorio o recurrente nulo, la proposición anterior implicaría $\pi_j = 0$, contradicción. Este hecho corrobora, una vez más, que la caminata aleatoria simple simétrica no tiene distribución estacionaria: todos sus estados son recurrentes nulos, de modo que cualquier vector que satisfaga la ecuación $\pi = \pi P$ debe cumplir $\pi_j = 0$ para todo $j \in \mathbb{Z}$, y por lo tanto no puede ser una distribución de probabilidad.
+\end{remark}
+
+\begin{example}[Clasificación de estados vía la distribución estacionaria]
+    Considera la cadena de Markov con espacio de estados $S = \{1, 2, 3, 4\}$ y matriz de transición
+    \[
+        P =
+        \begin{pmatrix}
+            \tfrac{1}{4} & \tfrac{1}{4} & \tfrac{1}{2} & 0 \\[4pt]
+            \tfrac{1}{4} & \tfrac{1}{4} & 0 & \tfrac{1}{2} \\[4pt]
+            0 & 0 & \tfrac{1}{2} & \tfrac{1}{2} \\[4pt]
+            0 & 0 & \tfrac{1}{2} & \tfrac{1}{2}
+        \end{pmatrix}.
+    \]
+    Determina cuáles estados son transitorios, recurrentes nulos y recurrentes positivos.
+
+    \medskip
+    \textbf{Solución.} Buscamos primero la distribución estacionaria resolviendo $\pi P = \pi$ con $\pi_j \ge 0$ y $\sum_j \pi_j = 1$.
+
+    \smallskip
+    Las ecuaciones de equilibrio $(\pi P)_j = \pi_j$ para $j = 1, 2$ son:
+    \[
+        \pi_1 = \tfrac{1}{4}\pi_1 + \tfrac{1}{4}\pi_2, \qquad \pi_2 = \tfrac{1}{4}\pi_1 + \tfrac{1}{4}\pi_2.
+    \]
+    Note que la primera se reduce a $\tfrac{3}{4}\pi_1 = \tfrac{1}{4}\pi_2$, es decir, $\pi_2 = 3\pi_1$. Sustituyendo esta relación en la segunda ecuación:
+    \[
+        \pi_2 = \tfrac{1}{4}\pi_1 + \tfrac{1}{4}(3\pi_1) = \pi_1,
+    \]
+    lo que junto con $\pi_2 = 3\pi_1$ fuerza $\pi_1 = 0$ y $\pi_2 = 0$.
+
+    \smallskip
+    Para $j = 3, 4$:
+    \[
+        \pi_3 = \tfrac{1}{2}\pi_3 + \tfrac{1}{2}\pi_4 \;\Longrightarrow\; \pi_3 = \pi_4.
+    \]
+    La condición de normalización con $\pi_1 = \pi_2 = 0$ da $\pi_3 + \pi_4 = 1$, de donde $\pi_3 = \pi_4 = \tfrac{1}{2}$.
+
+    \smallskip
+    La única distribución estacionaria es entonces
+    \[
+        \pi = \left(0,\; 0,\; \tfrac{1}{2},\; \tfrac{1}{2}\right).
+    \]
+    De la proposición anterior se concluye:
+    \begin{itemize}
+        \item $\pi_3 = \pi_4 = \tfrac{1}{2} > 0$ $\;\Rightarrow\;$ los estados $3$ y $4$ son \textbf{recurrentes positivos}.
+        \item $\pi_1 = \pi_2 = 0$ $\;\Rightarrow\;$ los estados $1$ y $2$ no son recurrentes positivos. Como la cadena es finita, no hay estados recurrentes nulos; por consiguiente, $1$ y $2$ son \textbf{transitorios}.
+    \end{itemize}
+\end{example}
+
+Se presenta a continuación una solución al problema de encontrar condiciones suficientes que garanticen la existencia y unicidad de la distribución estacionaria.
+
+\begin{proposition}[Existencia y unicidad de la distribución estacionaria]
+    Toda cadena de Markov que es irreducible y recurrente positiva tiene una única distribución estacionaria, dada por
+    \[
+        \pi_j = \frac{1}{\mu_{jj}}, \quad j \in S,
+    \]
+    donde $\mu_{jj}$ es el tiempo medio de recurrencia del estado $j$. En particular, toda cadena finita e irreducible tiene una única distribución estacionaria.
+\end{proposition}
+
+\begin{proof}
+    Sea $\pi_j = 1/\mu_{jj}$. Demostraremos que $\pi$ define una distribución estacionaria y que es la única.
+
+    \medskip
+    \textbf{Existencia.}
+    Recordemos que el teorema ergódico asegura, para cualquier par de estados $i, j \in S$:
+    \[
+        \frac{1}{n}\sum_{m=1}^{n} p_{ij}^{(m)} \;\xrightarrow{n\to\infty}\; \frac{1}{\mu_{jj}}.
+    \]
+
+    \smallskip
+    \textit{(1) $\pi$ satisface la ecuación de invarianza $\pi P = \pi$.}
+    Por la ecuación de Chapman-Kolmogorov, para cualesquiera $i, j \in S$ y $n \ge 1$:
+    \[
+        p_{ij}^{(n+1)} = \sum_{k \in S} p_{ik}^{(n)}\, p_{kj}.
+    \]
+    Promediando ambos lados sobre $n = 1, \dots, N$ y dividiendo por $N$:
+    \[
+        \frac{1}{N}\sum_{n=1}^N p_{ij}^{(n+1)}
+        = \sum_{k \in S} \left(\frac{1}{N}\sum_{n=1}^N p_{ik}^{(n)}\right) p_{kj}.
+    \]
+    Como $p_{ik}^{(n)} \in [0,1]$, el intercambio de la suma sobre $k$ y el límite $N \to \infty$ está justificado por el Teorema de Convergencia Dominada. El lado izquierdo converge a $1/\mu_{jj}$ (el desplazamiento de índice de $n$ a $n+1$ no altera el límite de Cesàro), y cada término del lado derecho converge a $(1/\mu_{kk})\,p_{kj}$:
+    \[
+        \frac{1}{\mu_{jj}} = \sum_{k \in S} \frac{p_{kj}}{\mu_{kk}} = (\pi P)_j.
+    \]
+    Luego $\pi P = \pi$.
+
+    \smallskip
+    \textit{(2) $\pi$ suma a $1$.}
+    Fijamos cualquier estado inicial $i \in S$. Para cada $N$ se tiene $\sum_{j \in S} p_{ij}^{(m)} = 1$, luego:
+    \[
+        \sum_{j \in S} \frac{1}{N}\sum_{m=1}^N p_{ij}^{(m)} = 1.
+    \]
+    Como $\frac{1}{N}\sum_{m=1}^N p_{ij}^{(m)} \le 1$ para todo $j$ y todo $N$, por el Teorema de Convergencia Dominada podemos intercambiar suma y límite cuando $N \to \infty$:
+    \[
+        \sum_{j \in S} \frac{1}{\mu_{jj}} = \sum_{j \in S} \lim_{N\to\infty}\frac{1}{N}\sum_{m=1}^N p_{ij}^{(m)} = 1.
+    \]
+    Por tanto $\pi$ es un vector de probabilidad que satisface $\pi P = \pi$: es una distribución estacionaria.
+
+    \medskip
+    \textbf{Unicidad.}
+    Sea $\nu$ cualquier distribución estacionaria. Como $\nu = \nu P^m$ para todo $m \ge 1$, promediando sobre $m = 1, \dots, n$:
+    \[
+        \nu_j = \sum_{i' \in S} \nu_{i'} \left(\frac{1}{n}\sum_{m=1}^n p_{i'j}^{(m)}\right).
+    \]
+    Dado que $0 \le \nu_{i'} \le 1$, aplicamos nuevamente el Teorema de Convergencia Dominada para pasar al límite:
+    \[
+        \nu_j = \sum_{i' \in S} \nu_{i'} \cdot \frac{1}{\mu_{jj}}
+              = \frac{1}{\mu_{jj}}\underbrace{\sum_{i' \in S} \nu_{i'}}_{=1} = \frac{1}{\mu_{jj}}.
+    \]
+    Cualquier distribución estacionaria debe coincidir con $(1/\mu_{jj})_{j \in S}$, lo que establece la unicidad.
+
+    \medskip
+    Para el caso finito e irreducible: en una cadena finita no existen estados recurrentes nulos, luego todos son recurrentes positivos y la cadena satisface las hipótesis de la proposición.
+\end{proof}
+
+\begin{example}[Cadena irreducible de dos estados]
+    Sea $S = \{0, 1\}$ con parámetros $\alpha, \beta \in (0,1)$ y matriz de transición
+    \[
+        P = \begin{pmatrix} 1-\alpha & \alpha \\ \beta & 1-\beta \end{pmatrix},
+    \]
+    donde $\alpha$ es la probabilidad de pasar de $0$ a $1$ y $\beta$ la de pasar de $1$ a $0$.
+
+    \medskip
+    La cadena es irreducible (desde cualquier estado se alcanza el otro en un paso) y el espacio de estados es finito, por lo que, por la proposición anterior, existe una única distribución estacionaria. La ecuación $\pi P = \pi$ se reduce a
+    \[
+        \pi_0 = (1-\alpha)\pi_0 + \beta\pi_1 \;\Longrightarrow\; \alpha\pi_0 = \beta\pi_1.
+    \]
+    Junto con $\pi_0 + \pi_1 = 1$, se obtiene
+    \[
+        \pi_0 = \frac{\beta}{\alpha+\beta}, \qquad \pi_1 = \frac{\alpha}{\alpha+\beta}.
+    \]
+    Los tiempos medios de recurrencia son entonces $\mu_{00} = 1/\pi_0 = (\alpha+\beta)/\beta$ y $\mu_{11} = 1/\pi_1 = (\alpha+\beta)/\alpha$: a largo plazo, el estado $0$ se visita cada $(\alpha+\beta)/\beta$ pasos y el estado $1$ cada $(\alpha+\beta)/\alpha$ pasos.
+
+    \medskip
+    Como caso particular, si $\alpha = \beta$ (cadena simétrica), $\pi = (1/2, 1/2)$ independientemente del valor común de $\alpha$. Si $\alpha \ll \beta$, la cadena pasa la mayor parte del tiempo en el estado $0$.
+\end{example}
+
+\begin{example}[Distribución estacionaria de la cadena de rachas]
+    Recordemos la cadena de rachas con espacio de estados $S = \{0, 1, 2, \dots\}$, donde el estado $j$ representa una racha actual de $j$ éxitos consecutivos. Las probabilidades de transición son
+    \[
+        p_{j,\,j+1} = p, \qquad p_{j,\,0} = q := 1-p, \qquad j \ge 0.
+    \]
+    La cadena es irreducible y, como demostramos anteriormente, todos sus estados son recurrentes positivos con tiempo medio de recurrencia $\mu_{jj} = 1/(q\,p^j)$. Por la proposición de existencia y unicidad, la distribución estacionaria es
+    \[
+        \pi_j = \frac{1}{\mu_{jj}} = q\,p^j, \qquad j \ge 0.
+    \]
+    Verificamos directamente que es una distribución de probabilidad:
+    \[
+        \sum_{j=0}^{\infty} \pi_j = q \sum_{j=0}^{\infty} p^j = q \cdot \frac{1}{1-p} = \frac{q}{q} = 1. \checkmark
+    \]
+    Verificamos también la invarianza $\pi P = \pi$. Para el estado $0$:
+    \[
+        (\pi P)_0 = \sum_{j=0}^{\infty} \pi_j\, p_{j,0} = \sum_{j=0}^{\infty} q\,p^j \cdot q = q^2 \cdot \frac{1}{1-p} = q = \pi_0. \checkmark
+    \]
+    Para el estado $k \ge 1$, el único estado que transiciona hacia $k$ es el estado $k-1$ (con probabilidad $p$):
+    \[
+        (\pi P)_k = \pi_{k-1}\, p_{k-1,\,k} = q\,p^{k-1} \cdot p = q\,p^k = \pi_k. \checkmark
+    \]
+    La distribución estacionaria es pues una distribución geométrica en $\{0,1,2,\dots\}$ con parámetro $q$: la proporción de tiempo que la cadena pasa en el estado $j$ a largo plazo es $q\,p^j$, que decrece exponencialmente con $j$. En particular, rachas largas son posibles pero cada vez menos frecuentes.
+\end{example}
+
+
 \end{document}

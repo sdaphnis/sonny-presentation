@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1775587341.37067 "/Users/sonnymedina/Desktop/Personal webpage/sonny-presentation/FES_materiales/procesos_2026_2/notas_procesos_tex/notas_procesos.tex" "notas_procesos.pdf" "notas_procesos" 1775587342.15404 0
-  "/Users/sonnymedina/Desktop/Personal webpage/sonny-presentation/FES_materiales/procesos_2026_2/notas_procesos_tex/notas_procesos.tex" 1775587340.98652 121772 3461db448c526ba591b995819543e7c4 ""
+["pdflatex"] 1775883858.06843 "/Users/sonnymedina/Desktop/Personal webpage/sonny-presentation/FES_materiales/procesos_2026_2/notas_procesos_tex/notas_procesos.tex" "notas_procesos.pdf" "notas_procesos" 1775883858.85597 0
+  "/Users/sonnymedina/Desktop/Personal webpage/sonny-presentation/FES_materiales/procesos_2026_2/notas_procesos_tex/notas_procesos.tex" 1775883858.61878 130957 0767c5f12f2694956a84ff216d5be0a5 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1136849721 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/jknappen/ec/tcrm1200.tfm" 1136768653 1536 74b7293ec3713bb7fdca8dd1bd1f469c ""
@@ -51,9 +51,11 @@
   "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb" 1248133631 32726 0a1aea6fcd6468ee2cf64d891f5c43c8 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsl12.pfb" 1248133631 34586 5a65dc15601f9c74fe3fb3f37b3b8b6f ""
   "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb" 1248133631 32569 5e5ddc8df908dea60932f3c484a54c0d ""
+  "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb" 1248133631 32587 1788b0c1c5b39540c96f5e42ccd6dae8 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb" 1248133631 32626 4f5c1b83753b1dd3a97d1b399a005b4b ""
   "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb" 1248133631 36118 fad905eba93cff5bce1e185fe980a177 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmti8.pfb" 1248133631 35660 fb24af7afbadb71801619f1415838111 ""
+  "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb" 1248133631 31764 459c573c03a4949a528c2cc7f557e217 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb" 1248133631 34694 ad62b13721ee8eda1dcc8993c8bd7041 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb" 1215737283 136101 f533469f523533d38317ab5729d00c8a ""
   "/usr/local/texlive/2025/texmf-dist/tex/context/base/mkii/supp-pdf.mkii" 1461363279 71627 94eb9990bed73c364d7f53f960cc8c5b ""
@@ -122,10 +124,10 @@
   "/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1770311260 5467155 19efa205003f9ecad95fbbaa6ff24da1 ""
   "/usr/local/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt" 1741450574 3345740 46b66fdb0378f7bf5921b5eabf1762b8 ""
   "/usr/local/texlive/2025/texmf.cnf" 1741450484 577 418a7058ec8e006d8704f60ecd22c938 ""
-  "notas_procesos.aux" 1775587342.10056 3079 e18680dbf7f0b67025693e8a2a21c4bb "pdflatex"
-  "notas_procesos.out" 1775587342.10144 4352 df15ee2810b9ed3356045ee29a3c3214 "pdflatex"
-  "notas_procesos.tex" 1775587340.98652 121772 3461db448c526ba591b995819543e7c4 ""
-  "notas_procesos.toc" 1775587342.1016 1713 2046d7c026e7a71bc59cc0405dcbc6e0 "pdflatex"
+  "notas_procesos.aux" 1775883858.79185 3079 8d2777f7bcf629d2a6af637b88de556e "pdflatex"
+  "notas_procesos.out" 1775883858.79289 4352 df15ee2810b9ed3356045ee29a3c3214 "pdflatex"
+  "notas_procesos.tex" 1775883858.61878 130957 0767c5f12f2694956a84ff216d5be0a5 ""
+  "notas_procesos.toc" 1775883858.79308 1713 2046d7c026e7a71bc59cc0405dcbc6e0 "pdflatex"
   (generated)
   "notas_procesos.aux"
   "notas_procesos.log"
