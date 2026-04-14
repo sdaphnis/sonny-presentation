@@ -6,3 +6,5 @@
 - demostración de que en la caminata aleatoria los estados son recurrentes cuando p=1/2 y transitorios cuando p\neq 1/2
 -demostracion de que un estado recurrente pertenece a una clase cerrada
 - Cesaro con la serie shifteada 1
+- Distribucion estacionaria de la urna de ehrenfest
+- regular+doblemente estocástica = uniforme

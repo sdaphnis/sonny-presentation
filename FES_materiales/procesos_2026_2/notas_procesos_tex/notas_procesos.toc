@@ -17,3 +17,4 @@
 \contentsline {section}{\numberline {1.13}Recurrencia positiva y nula}{44}{section.1.13}%
 \contentsline {section}{\numberline {1.14}Evolución de la distribución de $X_n$}{47}{section.1.14}%
 \contentsline {subsection}{\numberline {1.14.1}Soporte de la distribución estacionaria}{50}{subsection.1.14.1}%
+\contentsline {section}{\numberline {1.15}Distribuciones límite}{55}{section.1.15}%

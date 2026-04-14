@@ -2341,5 +2341,221 @@ Se presenta a continuación una solución al problema de encontrar condiciones s
     La distribución estacionaria es pues una distribución geométrica en $\{0,1,2,\dots\}$ con parámetro $q$: la proporción de tiempo que la cadena pasa en el estado $j$ a largo plazo es $q\,p^j$, que decrece exponencialmente con $j$. En particular, rachas largas son posibles pero cada vez menos frecuentes.
 \end{example}
 
+\begin{example}[Cadena de 3 estados con tasas de servicio distintas]
+    Considera una cadena con espacio de estados $S = \{1, 2, 3\}$ y matriz de transición
+    \[
+        P = \begin{pmatrix}
+            0 & \tfrac{2}{3} & \tfrac{1}{3} \\[4pt]
+            \tfrac{1}{2} & 0 & \tfrac{1}{2} \\[4pt]
+            1 & 0 & 0
+        \end{pmatrix}.
+    \]
+    Como desde cualquier estado se puede llegar a cualquier otro en a lo sumo dos pasos, la cadena es irreducible. Al ser finita e irreducible, la proposición garantiza la existencia de una única distribución estacionaria. La encontramos resolviendo $\pi P = \pi$:
+    \begin{align*}
+        \pi_1 &= \tfrac{1}{2}\pi_2 + \pi_3, \\
+        \pi_2 &= \tfrac{2}{3}\pi_1, \\
+        \pi_3 &= \tfrac{1}{3}\pi_1 + \tfrac{1}{2}\pi_2.
+    \end{align*}
+    De la segunda ecuación, $\pi_2 = \tfrac{2}{3}\pi_1$. Sustituyendo en la tercera:
+    \[
+        \pi_3 = \tfrac{1}{3}\pi_1 + \tfrac{1}{2}\cdot\tfrac{2}{3}\pi_1 = \tfrac{1}{3}\pi_1 + \tfrac{1}{3}\pi_1 = \tfrac{2}{3}\pi_1.
+    \]
+    La condición de normalización $\pi_1 + \pi_2 + \pi_3 = 1$ da:
+    \[
+        \pi_1 + \tfrac{2}{3}\pi_1 + \tfrac{2}{3}\pi_1 = \pi_1\!\left(1 + \tfrac{4}{3}\right) = \tfrac{7}{3}\pi_1 = 1 \;\Longrightarrow\; \pi_1 = \tfrac{3}{7}.
+    \]
+    Por tanto:
+    \[
+        \pi = \left(\frac{3}{7},\; \frac{2}{7},\; \frac{2}{7}\right).
+    \]
+    Se puede verificar que la primera ecuación de equilibrio también se satisface: $\tfrac{1}{2}\cdot\tfrac{2}{7} + \tfrac{2}{7} = \tfrac{1}{7}+\tfrac{2}{7} = \tfrac{3}{7} = \pi_1$. \checkmark
+
+    Los tiempos medios de recurrencia son $\mu_{11} = 7/3$, $\mu_{22} = 7/2$ y $\mu_{33} = 7/2$: el estado $1$ es el más visitado (cada $7/3 \approx 2.33$ pasos), mientras que los estados $2$ y $3$ se visitan con la misma frecuencia (cada $3.5$ pasos).
+\end{example}
+
+% =====================================================================
+\section{Distribuciones límite}
+% =====================================================================
+
+Como hemos mencionado anteriormente, toda matriz de probabilidades de transición $P$ determina, junto con una distribución inicial $\pi^{(0)}$, una sucesión de distribuciones de probabilidad
+\[
+    \pi^{(n)} = \pi^{(n-1)}P = \pi^{(0)}P^n, \qquad n \ge 1.
+\]
+Bajo ciertas condiciones, esta sucesión converge a una distribución de probabilidad límite. Anticipando ese resultado, examinemos qué propiedades tendría dicho límite. Si
+\[
+    \pi = \lim_{n\to\infty} \pi^{(n)},
+\]
+tomando el límite en la recurrencia $\pi^{(n)} = \pi^{(n-1)}P$ obtenemos
+\begin{equation}\label{eq:lim_estacionaria}
+    \pi = \pi P,
+\end{equation}
+y tomando el límite en $\pi^{(n)} = \pi^{(0)}P^n$:
+\begin{equation}\label{eq:lim_potencias}
+    \pi = \pi^{(0)} \lim_{n\to\infty} P^n.
+\end{equation}
+Estas dos igualdades revelan varias cosas. Primero, toda posible distribución límite es estacionaria, por \eqref{eq:lim_estacionaria}. Segundo, la igualdad \eqref{eq:lim_potencias} muestra que $\pi$ está determinada por el límite de las potencias de $P$; en particular, si ese límite existe, todos los renglones de $\lim_{n\to\infty} P^n$ son iguales a $\pi$, y la distribución límite no depende de $\pi^{(0)}$. Se formula ahora la definición precisa.
+
+\begin{definition}[Distribución límite / distribución de equilibrio]
+    Sea $\{X_n\}$ una cadena de Markov con matriz de transición $P = (p_{ij})$ y distribución inicial $\pi^{(0)}$. Se llama \textbf{distribución límite} (o \textbf{distribución de equilibrio}) de la cadena al vector
+    \[
+        \pi = \lim_{n\to\infty} \pi^{(0)} P^n = \lim_{n\to\infty}\left(\sum_i \pi^{(0)}_i\, p_{ij}^{(n)}\right)_{j\in S},
+    \]
+    siempre que dicho límite exista. Nótese que el vector límite $\pi$ podría no ser una distribución de probabilidad genuina (sus entradas podrían sumar menos de 1 o ser todas cero); sin embargo, conservamos la denominación en la definición.
+\end{definition}
+
+Como hemos observado, toda distribución límite es estacionaria, pero el recíproco es en general falso: una distribución estacionaria no tiene por qué ser límite de $\pi^{(0)}P^n$.
+
+\begin{example}[Cadena periódica: estacionaria sin ser límite]
+    La cadena con dos estados $S = \{0,1\}$ y matriz de transición
+    \[
+        P = \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix}
+    \]
+    alterna determinísticamente entre los dos estados. Es inmediato verificar que $\pi = (1/2, 1/2)$ es estacionaria: $\pi P = (1/2, 1/2) = \pi$. Sin embargo, las potencias de $P$ no convergen:
+    \[
+        P^{2k} = \begin{pmatrix} 1 & 0 \\ 0 & 1 \end{pmatrix}, \qquad
+        P^{2k+1} = \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix}, \qquad k \ge 0.
+    \]
+    Por tanto, para cualquier distribución inicial $\pi^{(0)} \neq (1/2, 1/2)$, la sucesión $\pi^{(0)}P^n$ oscila y no converge. En particular, $(1/2, 1/2)$ es estacionaria pero \emph{no} es distribución límite de esta cadena.
+\end{example}
+
+El siguiente resultado establece qué propiedades debe satisfacer cualquier posible distribución límite, siempre que ésta exista.
+
+\begin{proposition}
+    Considera una cadena de Markov con probabilidades de transición $p_{ij}$ tales que los límites
+    \[
+        \pi_j := \lim_{n\to\infty} p_{ij}^{(n)}
+    \]
+    existen para cada $j$ y no dependen del estado $i$. Entonces:
+    \begin{enumerate}
+        \item $\displaystyle\sum_{j \in S} \pi_j \le 1$.
+        \item $\displaystyle\pi_j = \sum_{i \in S} \pi_i\, p_{ij}$ para todo $j \in S$.
+    \end{enumerate}
+    Cuando el espacio de estados es finito se cumple la igualdad en el resultado 1, obteniéndose una distribución estacionaria.
+\end{proposition}
+
+\begin{proof}
+    \textbf{Caso 1: espacio de estados finito.}
+    Supongamos $S = \{0, 1, \dots, N\}$. Para la primera afirmación, como la suma es finita podemos intercambiar límite y suma:
+    \[
+        \sum_{j=0}^{N} \pi_j = \sum_{j=0}^{N} \lim_{n\to\infty} p_{ij}^{(n)} = \lim_{n\to\infty} \sum_{j=0}^{N} p_{ij}^{(n)} = 1.
+    \]
+    Para la segunda, fijamos un estado inicial $k$ y usamos Chapman-Kolmogorov: $p_{kj}^{(m+1)} = \sum_{i=0}^N p_{ki}^{(m)}\,p_{ij}$. Tomando $m\to\infty$ e intercambiando límite y suma (la suma es finita):
+    \[
+        \sum_{i=0}^{N} \pi_i\, p_{ij} = \sum_{i=0}^{N} \lim_{m\to\infty} p_{ki}^{(m)}\, p_{ij} = \lim_{m\to\infty} \sum_{i=0}^{N} p_{ki}^{(m)}\, p_{ij} = \lim_{m\to\infty} p_{kj}^{(m+1)} = \pi_j.
+    \]
+
+    \medskip
+    \textbf{Caso 2: espacio de estados infinito.}
+    Para la primera afirmación, fijado cualquier $N \ge 1$, como las probabilidades son no negativas:
+    \[
+        \sum_{j=0}^{N} \pi_j = \sum_{j=0}^{N} \lim_{n\to\infty} p_{ij}^{(n)} = \lim_{n\to\infty} \sum_{j=0}^{N} p_{ij}^{(n)} \le \lim_{n\to\infty} 1 = 1.
+    \]
+    (El intercambio de límite y suma finita es siempre válido.) Haciendo $N \to \infty$ se obtiene $\sum_{j \in S} \pi_j \le 1$.
+
+    Para la segunda afirmación, fijamos $j$ y $N \ge 1$. Por Chapman-Kolmogorov y la no negatividad de $p_{ij}$:
+    \[
+        \sum_{i=0}^{N} \pi_i\, p_{ij} = \lim_{n\to\infty} \sum_{i=0}^{N} p_{ki}^{(n)}\, p_{ij} \le \lim_{n\to\infty} p_{kj}^{(n+1)} = \pi_j.
+    \]
+    Haciendo $N \to \infty$: $\sum_{i \in S} \pi_i\, p_{ij} \le \pi_j$.
+
+    \smallskip
+    Resta mostrar que si $\sum_{j \in S}\pi_j > 0$, las desigualdades son en realidad igualdades. Supongamos que para algún $j_0$ se tiene $\sum_{i} \pi_i\, p_{ij_0} < \pi_{j_0}$. Sumando sobre todos los estados $j$:
+    \[
+        \sum_j \sum_i \pi_i\, p_{ij} < \sum_j \pi_j.
+    \]
+    Pero $\sum_j \sum_i \pi_i\, p_{ij} = \sum_i \pi_i \sum_j p_{ij} = \sum_i \pi_i$, lo que da $\sum_i \pi_i < \sum_j \pi_j$, una contradicción. Por tanto la igualdad $\pi_j = \sum_i \pi_i\, p_{ij}$ vale para todo $j$.
+\end{proof}
+
+La proposición anterior caracteriza toda posible distribución límite, pero no garantiza su existencia. El siguiente teorema establece condiciones suficientes bajo las cuales los límites $p_{ij}^{(n)}$ sí existen, son independientes de $i$ y coinciden con la distribución estacionaria.
+
+\begin{theorem}[Convergencia al equilibrio]
+    Sea $\{X_n\}$ una cadena de Markov irreducible y recurrente positiva con distribución estacionaria $\pi$.
+    \begin{enumerate}
+        \item \textbf{Caso aperiódico.} Si la cadena es aperiódica, entonces
+        \[
+            \lim_{n\to\infty} p_{ij}^{(n)} = \pi_j \qquad \text{para todo } i, j \in S.
+        \]
+        \item \textbf{Caso periódico.} Si la cadena tiene período $d \ge 2$, entonces para cada par de estados $i, j \in S$ existe un entero $r$ con $0 \le r < d$ tal que $p_{ij}^{(n)} = 0$ siempre que $n \not\equiv r \pmod{d}$, y
+        \[
+            \lim_{m\to\infty} p_{ij}^{(md+r)} = d\,\pi_j \qquad \text{para todo } i, j \in S.
+        \]
+    \end{enumerate}
+\end{theorem}
+
+\begin{remark}[Método de acoplamiento]
+    La idea central de la demostración del caso aperiódico es el \emph{método de acoplamiento}: en lugar de analizar directamente la convergencia de $p_{ij}^{(n)}$, se construyen \textbf{dos copias de la misma cadena} corriendo en paralelo —una iniciada en el estado determinista $i$, otra iniciada con la distribución estacionaria $\pi$— y se estudia el momento en que ambas se encuentran por primera vez. Una vez que las dos trayectorias coinciden en algún estado, se ``pegan'' y evolucionan juntas de ahí en adelante. La clave es que: (a) la segunda copia tiene distribución $\pi$ en todo tiempo (por la invarianza de $\pi$), y (b) a partir del encuentro, la primera copia también tiene distribución $\pi$. Cuantificar con qué rapidez ocurre ese encuentro es entonces equivalente a cuantificar la convergencia hacia el equilibrio.
+\end{remark}
+
+\begin{proof}
+    \textbf{Caso aperiódico.}
+
+    \smallskip
+    \textit{Construcción.} Sean $(X_n)_{n\ge 0}$ y $(Y_n)_{n\ge 0}$ dos cadenas de Markov independientes con la misma matriz de transición $P$, definidas sobre el mismo espacio de probabilidad. Tomamos $X_0 = i$ (estado inicial fijo arbitrario) e $Y_0$ distribuido según $\pi$, de modo que $P(Y_0 = j) = \pi_j$ para todo $j \in S$.
+
+    \smallskip
+    \textit{La segunda copia permanece en equilibrio.} Como $\pi$ es la distribución estacionaria, si $Y_0 \sim \pi$ entonces $Y_1 \sim \pi$, $Y_2 \sim \pi$, y en general $Y_n \sim \pi$ para todo $n \ge 0$. En otras palabras, $P(Y_n = j) = \pi_j$ para todo $j$ y todo $n$. Esto se debe a que $\pi P = \pi$ implica, por inducción, $\pi P^n = \pi$.
+
+    \smallskip
+    \textit{Tiempo de acoplamiento.} Definimos
+    \[
+        T := \inf\{n \ge 0 : X_n = Y_n\},
+    \]
+    el primer instante en que las dos trayectorias visitan el mismo estado. Afirmamos que $T < \infty$ con probabilidad 1. Para verlo, observemos que el par $(X_n, Y_n)$ es a su vez una cadena de Markov sobre el espacio producto $S \times S$, con probabilidades de transición $P\otimes P$. Como la cadena original es irreducible y aperiódica, para cualesquiera $k, l \in S$ se tiene $p_{kl}^{(n)} > 0$ para todo $n$ suficientemente grande. En consecuencia, desde cualquier estado $(k, l) \in S \times S$ la cadena producto puede alcanzar cualquier estado diagonal $(s, s)$ con probabilidad positiva. Dado que $j$ es positivamente recurrente en la cadena original, el estado $(j, j)$ es también recurrente (en particular su tiempo medio de visita es finito), por lo que la cadena producto regresa a la diagonal $\{(s,s): s\in S\}$ con probabilidad 1, y en particular $T < \infty$ c.s.
+
+    \smallskip
+    \textit{Pegado.} Una vez que las dos copias se encuentran en el tiempo $T$ (es decir, $X_T = Y_T$), las ``pegamos'': definimos una nueva cadena
+    \[
+        \tilde{X}_n :=
+        \begin{cases}
+            X_n & \text{si } n < T, \\
+            Y_n & \text{si } n \ge T.
+        \end{cases}
+    \]
+    Por la propiedad fuerte de Markov, el proceso $(\tilde{X}_n)_{n\ge 0}$ tiene la misma distribución que $(X_n)_{n\ge 0}$: el pegado en $T$ es válido porque ambas copias comparten la misma dinámica y, a partir de $T$, arrancan desde el mismo estado. Al mismo tiempo, $\tilde{X}_n = Y_n$ para todo $n \ge T$.
+
+    \smallskip
+    \textit{Conclusión.} Para cualquier $n \ge 0$ y cualquier estado $j$, condicionamos sobre si el acoplamiento ya ocurrió o no antes del tiempo $n$:
+    \begin{align*}
+        P(\tilde{X}_n = j)
+        &= P(\tilde{X}_n = j,\; T \le n) + P(\tilde{X}_n = j,\; T > n).
+    \end{align*}
+    Cuando $T \le n$, por definición del pegado $\tilde{X}_n = Y_n$, de modo que $P(\tilde{X}_n = j, T \le n) = P(Y_n = j, T \le n)$. Sustituyendo:
+    \begin{align*}
+        P(\tilde{X}_n = j)
+        &= P(Y_n = j,\; T \le n) + P(\tilde{X}_n = j,\; T > n).
+    \end{align*}
+    Igualmente, descomponiendo $P(Y_n = j)$:
+    \[
+        P(Y_n = j) = P(Y_n = j,\; T \le n) + P(Y_n = j,\; T > n).
+    \]
+    Restando:
+    \begin{align*}
+        P(\tilde{X}_n = j) - P(Y_n = j)
+        &= P(\tilde{X}_n = j,\; T > n) - P(Y_n = j,\; T > n).
+    \end{align*}
+    Tomando valor absoluto y usando que ambos sumandos son no negativos y están acotados por $P(T > n)$:
+    \[
+        \bigl|P(\tilde{X}_n = j) - P(Y_n = j)\bigr| \le P(T > n).
+    \]
+    Como $\tilde{X}_n$ tiene la misma distribución que $X_n$ (por la validez del pegado) y $P(Y_n = j) = \pi_j$ para todo $n$:
+    \[
+        \bigl|p_{ij}^{(n)} - \pi_j\bigr| = \bigl|P(X_n = j) - P(Y_n = j)\bigr| = \bigl|P(\tilde{X}_n = j) - P(Y_n = j)\bigr| \le P(T > n).
+    \]
+    Finalmente, como $T < \infty$ c.s., se tiene $P(T > n) \xrightarrow{n\to\infty} 0$, y por tanto $p_{ij}^{(n)} \to \pi_j$.
+
+    \medskip
+    \textbf{Caso periódico.}
+    Con período $d$, los estados se particionan en $d$ clases cíclicas $C_0, C_1, \dots, C_{d-1}$, donde desde cualquier estado de $C_s$ la cadena pasa en un paso a un estado de $C_{s+1\bmod d}$. Para $i\in C_s$ y $j\in C_r$, la única posibilidad de tener $p_{ij}^{(n)}>0$ es $n \equiv r-s \pmod{d}$; escribiendo $r := (r-s)\bmod d$ queda $p_{ij}^{(n)}=0$ salvo cuando $n=md+r$ para algún $m\in\mathbb{N}$.
+
+    La cadena observada únicamente en los tiempos $0, d, 2d, \dots$ —es decir, con matriz $P^d$ restringida a una clase $C_r$— es irreducible y aperiódica. El tiempo medio de recurrencia de $j$ para esta cadena auxiliar es $\mu_{jj}/d$: como $j$ está en $C_r$ y los únicos retornos posibles son en múltiplos de $d$, en cada ciclo completo de longitud $\mu_{jj}$ hay exactamente uno de estos retornos. Aplicando el caso aperiódico a la cadena auxiliar:
+    \[
+        \lim_{m\to\infty} p_{ij}^{(md+r)} = \frac{1}{\mu_{jj}/d} = \frac{d}{\mu_{jj}} = d\,\pi_j. \qedhere
+    \]
+\end{proof}
+
+\begin{remark}
+    El teorema anterior completa el cuadro iniciado por la proposición: bajo irreducibilidad, recurrencia positiva y aperiodicidad, los límites $p_{ij}^{(n)}$ sí existen, son independientes de $i$ y suman 1, satisfaciendo así las condiciones de igualdad de la proposición y confirmando que $\pi$ es la única distribución estacionaria. En el caso periódico las distribuciones $\pi^{(n)}$ oscilan entre $d$ fases sin converger, aunque sus promedios de Cesàro siempre convergen a $\pi$.
+\end{remark}
+
 
 \end{document}
