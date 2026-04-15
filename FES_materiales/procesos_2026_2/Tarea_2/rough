@@ -1,10 +1,77 @@
-- numero promedio de volados hasta obtener SS y SAA
-- prop 1.12
-- tiempo que tarda en salir de un loop de anuncios de un tipo
-- prop 1.8 con formalidad y PFM
--formula general para el problema del mono
+- usar analisis del primera paso para obtener el numero promedio de volados necesarios hasta obtener SS y SAA (S=Sol, A=Águila)
+- prop 1.12. Usar el primer inciso de lo siguiente para demostrar el resto
+
+\begin{proposition}
+Para cualesquiera estados $i, j \in S$. La variable $N_{ij}$ con soporte en $\{0, 1, 2, \dots\} \cup \{\infty\}$ satisface las siguientes propiedades:
+\begin{enumerate}
+    \item \textbf{La cola de la distribución de $N_{ij}$:} 
+    \[  \mathbb{P}(N_{ij} \ge k):=\mathbb{P}(N_{i} \ge k \mid X_0 = i) = f_{ij} f_{jj}^{k-1}, \quad \text{para } k \ge 1. \]
+    
+    \item \textbf{La función de masa de $N_{ij}$:}
+    \[
+    \mathbb{P}(N_{ij}=k):=\mathbb{P}(N_{j} = k \mid X_0 = i) =
+    \begin{cases}
+    1 - f_{ij} & \text{si } k=0 \\
+    f_{ij} (1-f_{jj}) f_{jj}^{k-1} & \text{si } k \ge 1
+    \end{cases}
+    \]
+    
+    \item \textbf{La esperanza:}
+    \[
+    \mathbb{E}[N_{ij}]:=\mathbb{E}[N_{j} \mid X_0 = i] = \frac{f_{ij}}{1 - f_{jj}}.
+    \]
+    (Interpretamos $1/0$ como $\infty$ si $f_{jj}=1$).
+    
+    \item \textbf{Probabilidad de infinitas visitas:}
+    \begin{itemize}
+        \item Si $j$ es transitorio ($f_{jj} < 1$): $\mathbb{P}(N_{ij} = \infty) = 0$.
+        \item Si $j$ es recurrente ($f_{jj} = 1$): $\mathbb{P}(N_{ij} = \infty) = f_{ij}$.
+    \end{itemize}
+    
+    \item \textbf{Probabilidad de finitas visitas:}
+    \begin{itemize}
+        \item Si $j$ es transitorio: $\mathbb{P}(N_{ij} < \infty) = 1$.
+        \item Si $j$ es recurrente: $\mathbb{P}(N_{ij} < \infty) = 1 - f_{ij}$ (es la probabilidad de nunca visitarlo).
+    \end{itemize}
+\end{enumerate}
+\end{proposition}
+
+- Crear una cadena cuyos estados son un género de anuncios que te aparecen en una red social, usar análisis del primer paso para calcular el tiempo promedio en  que tarda en salir de un loop de anuncios de un tipo
+
+
+
+- prop 1.8 con formalidad y PFM. Usar la propiedad fuerte de markov para justificar formalmente el texto en esta demostración
+Fijemos un estado $i \in S$ y supongamos que la cadena inicia en $X_0 = i$. Definamos la variable aleatoria $N_i$ como el número total de visitas al estado $i$ \emph{después} del instante inicial:
+\[
+N_i = \sum_{n=1}^{\infty} \mathbf{1}_{\{X_n = i\}}.
+\]
+Por definición, la probabilidad de regresar al menos una vez al estado $i$ en un tiempo finito es $f_{ii}$. Si el proceso regresa, por la propiedad fuerte de Markov evaluada en ese primer instante de retorno, la cadena se reinicia. Por ende, la probabilidad de realizar al menos $k$ retornos, dado que ya presenciamos $k-1$ retornos, sigue siendo $f_{ii}$. Utilizando este argumento de manera inductiva, la suma de los primeros retornos nos da que la probabilidad de que haya al menos $k$ visitas es:
+\[
+\mathbb{P}(N_i \geq k \mid X_0 = i) = f_{ii}^k, \quad k \geq 1.
+\]
+Si reescribimos esto en su forma puntual, $\mathbb{P}(N_i = k \mid X_0 = i) = \mathbb{P}(N_i \geq k) - \mathbb{P}(N_i \geq k+1) = f_{ii}^k (1 - f_{ii})$. Es decir, vemos fácilmente que \textbf{la variable aleatoria $N_i$ tiene una distribución geométrica} sobre el conjunto $\{0, 1, 2, \dots\}$ con parámetro de ''éxito'' $1 - f_{ii}$.
+
+Procedamos a calcular $\mathbb{E}[N_i \mid X_0 = i]$ de dos maneras distintas. Usando la definición por variables indicadoras, la linealidad de la esperanza y el teorema de convergencia monótona nos otorgan:
+\[
+\mathbb{E}[N_i \mid X_0 = i] = \mathbb{E}\left[ \sum_{n=1}^{\infty} \mathbf{1}_{\{X_n = i\}} \;\middle|\; X_0 = i \right] = \sum_{n=1}^{\infty} \mathbb{P}(X_n = i \mid X_0 = i) = \sum_{n=1}^{\infty} p_{ii}^{(n)}.
+\]
+Alternativamente, como $N_i$ es una variable aleatoria no negativa, su esperanza puede obtenerse sumando las probabilidades de sus colas:
+\[
+\mathbb{E}[N_i \mid X_0 = i] = \sum_{k=1}^{\infty} \mathbb{P}(N_i \geq k \mid X_0 = i) = \sum_{k=1}^{\infty} f_{ii}^k.
+\]
+
+
+
+- formula general para el problema del mono. (guiar al estudiante hasta llegar a la solución) Para la cadena de rachas calcular usando análisis del primer paso el tiempo promedio que toma llegar a una racha de tamaño x.  
+
+
 - demostración de que en la caminata aleatoria los estados son recurrentes cuando p=1/2 y transitorios cuando p\neq 1/2
--demostracion de que un estado recurrente pertenece a una clase cerrada
-- Cesaro con la serie shifteada 1
-- Distribucion estacionaria de la urna de ehrenfest
-- regular+doblemente estocástica = uniforme
+
+- demostracion de que un estado recurrente pertenece a una clase cerrada
+
+- Cesaro con la serie shifteada 1. Demostrar que si una sucesion converge en el sentido de cesaro, entonces si en el promedio en lugar de promediar a_m promediamos a_{m+1} la convergencia se conserva
+
+- Distribucion estacionaria de la urna de ehrenfest (guiar al estudiante)
+
+
+- cadena regular+doblemente estocástica implica que la distribucion uniforme es invariante

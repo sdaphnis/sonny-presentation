@@ -1,0 +1,324 @@
+\documentclass[12pt]{article}
+\usepackage{inputenc}
+\usepackage[spanish]{babel}
+\decimalpoint
+\usepackage{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{hyperref}
+
+\geometry{margin=1in}
+
+\newtheorem{problem}{Problema}
+
+\title{Procesos Estocásticos I \\ Tarea 2}
+\author{Semestre 2026-2}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+% ---------------------------------------------------------------
+\begin{problem}
+\textbf{Análisis del primer paso: secuencias de volados.}
+
+Se lanza una moneda justa repetidamente. Sea $T_{SS}$ (resp.\ $T_{SAA}$) el número de lanzamientos hasta obtener la secuencia Sol-Sol (resp.\ Sol-Águila-Águila) por primera vez.
+
+\begin{enumerate}
+    \item[(a)] Para $T_{SS}$, modela el problema como una cadena de Markov con espacio de estados $S = \{\emptyset, \texttt{S}, \texttt{SS}\}$, donde cada estado indica la racha de sufijo relevante. Escribe la matriz de transición.
+
+    \item[(b)] Usa análisis del primer paso para calcular $\mathbb{E}[T_{SS}]$.
+
+    \item[(c)] Repite (a)--(b) para $T_{SAA}$. ¿Cuál de los dos tiempos esperados es mayor? Argumenta intuitivamente la diferencia.
+\end{enumerate}
+\end{problem}
+
+% ---------------------------------------------------------------
+\begin{problem}
+\textbf{La propiedad fuerte de Markov y la distribución de $N_i$.}
+
+Sea $\{X_n\}$ una cadena de Markov, $i \in S$, y define $N_i = \sum_{n=1}^{\infty} \mathbf{1}_{\{X_n = i\}}$.
+
+\begin{enumerate}
+    \item[(a)] Sea $T_i = \inf\{n \ge 1 : X_n = i\}$. Enuncia la Propiedad Fuerte de Markov aplicada a $T_i$ y justifica que $T_i$ es un tiempo de paro.
+
+    \item[(b)] Usa la PFM para demostrar que $\mathbb{P}(N_i \ge k \mid X_0 = i) = f_{ii}^k$ para todo $k \ge 1$.
+
+    \item[(c)] Concluye que $N_i \mid \{X_0 = i\}$ tiene distribución geométrica en $\{0, 1, 2, \ldots\}$ con parámetro $1 - f_{ii}$.
+
+    \item[(d)] Calcula $\mathbb{E}[N_i \mid X_0 = i]$ de dos maneras: mediante la fórmula de la cola $\mathbb{E}[N_i] = \sum_{k \ge 1} \mathbb{P}(N_i \ge k)$, y mediante la representación $N_i = \sum_{n \ge 1} \mathbf{1}_{\{X_n=i\}}$ con el Teorema de Convergencia Monótona. Verifica que ambos cálculos coinciden.
+\end{enumerate}
+\end{problem}
+
+% ---------------------------------------------------------------
+\begin{problem}
+\textbf{La variable $N_{ij}$: distribución, esperanza y visitas infinitas.}
+
+Sea $\{X_n\}$ una cadena de Markov, $i, j \in S$. Define $N_{ij}$ como el número de visitas al estado $j$ a partir de $n = 1$, dado $X_0 = i$.
+
+\begin{enumerate}
+    \item[(a)] Demuestra que $\mathbb{P}(N_{ij} \ge k) = f_{ij} f_{jj}^{k-1}$ para $k \ge 1$.
+
+    \item[(b)] Deduce la función de masa de $N_{ij}$ y su esperanza:
+    \[
+        \mathbb{E}[N_{ij}] = \frac{f_{ij}}{1 - f_{jj}}.
+    \]
+
+    \item[(c)] Demuestra que $\mathbb{P}(N_{ij} = \infty) = 0$ si $j$ es transitorio, y $\mathbb{P}(N_{ij} = \infty) = f_{ij}$ si $j$ es recurrente. ¿Qué ocurre cuando $i = j$ y $j$ es recurrente?
+\end{enumerate}
+\end{problem}
+
+% ---------------------------------------------------------------
+\begin{problem}
+\textbf{Cadena de anuncios en redes sociales.}
+
+Los anuncios de una red social se modelan con una cadena de Markov con estados \textbf{1} = Moda, \textbf{2} = Comida, \textbf{3} = Deportes y matriz de transición
+\[
+    P = \begin{pmatrix}
+        \tfrac{1}{2} & \tfrac{1}{3} & \tfrac{1}{6} \\[4pt]
+        \tfrac{1}{3} & \tfrac{1}{2} & \tfrac{1}{6} \\[4pt]
+        \tfrac{1}{4} & \tfrac{1}{4} & \tfrac{1}{2}
+    \end{pmatrix}.
+\]
+
+\begin{enumerate}
+    \item[(a)] Verifica que la cadena es irreducible y determina la clase de recurrencia de sus estados.
+
+    \item[(b)] El usuario acaba de ver un anuncio de Moda. ¿Cuántos anuncios espera ver en promedio hasta que aparezca el primer anuncio de Deportes? Define $h_i = \mathbb{E}[T_3 \mid X_0 = i]$ para $i = 1, 2$ (con $h_3 = 0$) y resuelve el sistema.
+
+    \item[(c)] Calcula la distribución estacionaria $\pi$ e interpreta $\mu_{33} = 1/\pi_3$.
+\end{enumerate}
+\end{problem}
+
+% ---------------------------------------------------------------
+\begin{problem}
+\textbf{El problema del mono y la cadena de rachas.}
+
+Un mono mecanografía letras al azar, eligiendo en cada paso de manera uniforme e independiente entre las $K$ letras de un alfabeto dado.
+
+\begin{enumerate}
+    \item[(a)] Sea $W = \ell_1\ell_2$ una palabra de longitud 2, con $\ell_1 \ne \ell_2$. Modela el tiempo de espera $T_W$ como una cadena de Markov con estados $\{\emptyset,\, \ell_1,\, W\}$, escribe la matriz de transición y calcula $\mathbb{E}[T_W]$.
+
+    \item[(b)] Sea $W = \ell_1\ell_2\ell_3$ de longitud 3, con las letras distintas entre sí. El espacio de estados es $\{\emptyset, \ell_1, \ell_1\ell_2, W\}$. Plantea el sistema del primer paso y resuélvelo. ¿Cómo cambia el resultado si $\ell_1 = \ell_3$ (solapamiento)?
+
+    \item[(c)] \textbf{(Cadena de rachas.)} Se lanza una moneda con $\mathbb{P}(\text{Sol}) = p$. Sea $T_x$ el primer instante en que se obtienen $x$ Soles consecutivos. Modela el problema con la cadena de rachas con estados $\{0, 1, \ldots, x\}$, donde el estado $k$ indica la longitud de la racha actual de Soles. Define $h_k = \mathbb{E}[T_x \mid X_0 = k]$, plantea el sistema recursivo, encuentra la fórmula para $h_0$ y verifica con $x = 1, 2$ y $p = 1/2$.
+\end{enumerate}
+\end{problem}
+
+% ---------------------------------------------------------------
+\begin{problem}
+\textbf{Recurrencia y transitoriedad de la caminata aleatoria simple.}
+
+Sea $\{X_n\}$ la caminata aleatoria simple en $\mathbb{Z}$: $X_0 = 0$, $X_{n+1} = X_n + \xi_{n+1}$, con $\xi_i$ i.i.d., $\mathbb{P}(\xi = 1) = p$ y $\mathbb{P}(\xi = -1) = q = 1-p$.
+
+\begin{enumerate}
+    \item[(a)] Escribe una fórmula combinatoria para $p_{00}^{(2n)}$.
+
+    \item[(b)] \textbf{Caso $p = 1/2$.} Usa la aproximación de Stirling $n! \approx \sqrt{2\pi n}\,(n/e)^n$ para mostrar que $p_{00}^{(2n)} \sim 1/\sqrt{\pi n}$ y concluye que el estado 0 es recurrente.
+
+    \item[(c)] \textbf{Caso $p \ne 1/2$.} Muestra que $p_{00}^{(2n)} \sim C\,(4pq)^n$ con $4pq < 1$ y concluye que el estado 0 es transitorio. Determina la constante $C$ en términos de $p$ y $q$.
+
+    \item[(d)] ¿Qué implican los incisos anteriores sobre \emph{todos} los estados de la cadena?
+\end{enumerate}
+\end{problem}
+
+% ---------------------------------------------------------------
+\begin{problem}
+\textbf{Los estados recurrentes forman clases cerradas.}
+
+Sea $\{X_n\}$ una cadena de Markov con espacio de estados $S$.
+
+\begin{enumerate}
+    \item[(a)] Sea $i$ recurrente y $j \in S$ con $i \to j$. Demuestra que necesariamente $j \to i$.
+
+    \item[(b)] Concluye que la recurrencia es una propiedad de clase: si $i \leftrightarrow j$ e $i$ es recurrente, entonces $j$ también lo es.
+
+    \item[(c)] Demuestra que toda clase de comunicación formada enteramente por estados recurrentes es una clase cerrada.
+
+    \item[(d)] Construye una cadena con $|S| = 4$ que tenga exactamente una clase cerrada (recurrente) y una clase abierta (transitoria). Escribe su matriz de transición.
+\end{enumerate}
+\end{problem}
+
+% ---------------------------------------------------------------
+\begin{problem}
+\textbf{Promedios de Cesàro y la sucesión desplazada.}
+
+Decimos que una sucesión $\{a_n\}_{n \ge 1}$ \emph{converge en el sentido de Cesàro} a $L$ si
+\[
+    \frac{1}{N} \sum_{n=1}^{N} a_n \;\longrightarrow\; L \quad \text{cuando } N \to \infty.
+\]
+
+\begin{enumerate}
+    \item[(a)] Demuestra que si $a_n \to L$ ordinariamente, entonces $a_n \to L$ en el sentido de Cesàro.
+
+    \item[(b)] Da un ejemplo de sucesión que converja en Cesàro pero no ordinariamente.
+
+    \item[(c)] Supón que $\{a_n\}$ es acotada y converge en Cesàro a $L$. Demuestra que la sucesión desplazada $\{a_{n+1}\}_{n \ge 1}$ también converge en Cesàro a $L$.
+
+    \item[(d)] Generaliza el resultado de (c) para $\{a_{n+k}\}$ con $k \ge 1$ arbitrario.
+\end{enumerate}
+\end{problem}
+
+% ---------------------------------------------------------------
+\begin{problem}
+\textbf{Distribución estacionaria de la urna de Ehrenfest.}
+
+El modelo de la urna de Ehrenfest describe la difusión de $N$ moléculas entre dos compartimentos $A$ y $B$: en cada instante se elige una molécula al azar y se pasa al otro compartimento. El estado es $X_n =$ número de moléculas en $A$, con $S = \{0, 1, \ldots, N\}$.
+
+\begin{enumerate}
+    \item[(a)] Escribe las probabilidades de transición $p_{k,k+1}$ y $p_{k,k-1}$, y dibuja el diagrama de transiciones para $N = 4$.
+
+    \item[(b)] Verifica que la distribución $\pi_k = \binom{N}{k}(1/2)^N$ satisface las ecuaciones de balance detallado
+    \[
+        \pi_k\, p_{k,k+1} = \pi_{k+1}\, p_{k+1,k},
+    \]
+    y concluye que es una distribución estacionaria.
+
+    \item[(c)] Argumenta que la distribución estacionaria es única.
+
+    \item[(d)] ¿La cadena es aperiódica? ¿Qué implica esto sobre la convergencia de $p_{ij}^{(n)}$ cuando $n \to \infty$?
+\end{enumerate}
+\end{problem}
+
+% ---------------------------------------------------------------
+\begin{problem}
+\textbf{Cadena irreducible, finita y aperiódica con matriz doblemente estocástica.}
+
+Una matriz de transición $P$ es \emph{doblemente estocástica} si además de que cada fila suma 1, cada columna también suma 1:
+\[
+    \sum_{i \in S} p_{ij} = 1 \quad \text{para todo } j \in S.
+\]
+
+\begin{enumerate}
+    \item[(a)] Sea $|S| = m$ y $P$ doblemente estocástica. Demuestra que la distribución uniforme $\pi_j = 1/m$ es estacionaria.
+
+    \item[(b)] Si la cadena es además irreducible, finita y aperiódica, ¿puede existir otra distribución estacionaria distinta de la uniforme? Justifica.
+
+    \item[(c)] Da un ejemplo con $|S| = 3$ de matriz doblemente estocástica, irreducible y aperiódica. Verifica explícitamente las condiciones.
+
+    \item[(d)] Da un ejemplo con $|S| = 3$ de matriz doblemente estocástica pero \emph{no} irreducible. ¿La distribución estacionaria es única en este caso?
+\end{enumerate}
+\end{problem}
+
+\end{document}
+
+\begin{enumerate}
+    \item[(a)] \textbf{Warm-up.} Sea $W = AB$ una palabra de longitud 2, donde $A, B$ son letras distintas fijas. Define una cadena de Markov con tres estados: $\emptyset$ (ningún prefijo de $W$ observado), $A$ (el último carácter fue $A$) y $AB$ (encontrado). Escribe la matriz de transición y usa análisis del primer paso para calcular $\mathbb{E}[T_{AB}]$.
+
+    \item[(b)] \textbf{Longitud 3.} Considera ahora $W = ABC$ con $A, B, C$ letras donde $A \ne B$ y $B \ne C$. El espacio de estados tiene cuatro elementos: $\emptyset$, $A$, $AB$, $ABC$. Escribe el sistema de ecuaciones del primer paso y resuélvelo. ¿Cómo depende el resultado del posible \emph{solapamiento} entre el sufijo de $W$ y su prefijo?
+
+    \item[(c)] \textbf{Cadena de rachas.} Lanzamos una moneda con probabilidad $p$ de Sol y $q = 1-p$ de Águila. Sea $T_x$ el primer instante en que se obtienen $x$ Soles consecutivos. Modela el problema con la cadena de rachas $\{X_n\}$, donde $X_n \in \{0, 1, 2, \ldots, x\}$ indica la longitud de la racha actual de Soles. Usando análisis del primer paso, define $h_k = \mathbb{E}[T_x \mid X_0 = k]$ y encuentra el sistema de ecuaciones que satisfacen. Resuélvelo para obtener $\mathbb{E}[T_x] = h_0$.
+
+    \item[(d)] Verifica tu fórmula para $x=1$ y $x=2$ con $p=1/2$.
+\end{enumerate}
+\end{problem}
+
+% ---------------------------------------------------------------
+\begin{problem}
+\textbf{Recurrencia y transitoriedad en la caminata aleatoria simple.}
+
+Sea $\{X_n\}$ la caminata aleatoria simple en $\mathbb{Z}$: $X_0 = 0$ y $X_{n+1} = X_n + \xi_{n+1}$, donde $\{\xi_n\}$ son i.i.d. con $\mathbb{P}(\xi_1 = 1) = p$ y $\mathbb{P}(\xi_1 = -1) = q = 1-p$.
+
+\begin{enumerate}
+    \item[(a)] Escribe una expresión para $p_{00}^{(2n)}$ (probabilidad de regresar al origen en $2n$ pasos). \emph{Sugerencia: en $2n$ pasos se necesitan exactamente $n$ pasos a la derecha y $n$ a la izquierda.}
+
+    \item[(b)] \textbf{Caso $p = 1/2$.} Usa la aproximación de Stirling $n! \approx \sqrt{2\pi n}\,(n/e)^n$ para mostrar que $p_{00}^{(2n)} \sim \frac{1}{\sqrt{\pi n}}$ cuando $n \to \infty$. Concluye que $\sum_{n=0}^{\infty} p_{00}^{(n)} = \infty$ y que el estado 0 es recurrente.
+
+    \item[(c)] \textbf{Caso $p \ne 1/2$.} Muestra que $p_{00}^{(2n)} \sim C \cdot r^n$ con $r = 4pq < 1$, de donde $\sum_{n=0}^{\infty} p_{00}^{(n)} < \infty$ y el estado 0 es transitorio. Determina la constante $C$ en términos de $p$ y $q$.
+
+    \item[(d)] Como la cadena es irreducible, ¿qué puedes concluir sobre la recurrencia o transitoriedad de \emph{todos} los estados de la caminata aleatoria en cada caso?
+\end{enumerate}
+\end{problem}
+
+% ---------------------------------------------------------------
+\begin{problem}
+\textbf{Los estados recurrentes forman clases cerradas.}
+
+Sea $\{X_n\}$ una cadena de Markov con espacio de estados $S$. Recuerda que un estado $i$ es recurrente si $f_{ii} = 1$, y que una clase de comunicación $C \subseteq S$ es \emph{cerrada} si $p_{ij} = 0$ para todo $i \in C$ y $j \notin C$.
+
+\begin{enumerate}
+    \item[(a)] Sea $i$ un estado recurrente y $j$ un estado tal que $i \to j$ (es decir, $f_{ij} > 0$). Demuestra que necesariamente $j \to i$. \emph{Sugerencia: supón por contradicción que $j \not\to i$ y considera las visitas a $i$ a partir de la primera llegada a $j$.}
+
+    \item[(b)] Concluye de (a) que si $i$ es recurrente e $i \leftrightarrow j$, entonces $j$ también es recurrente. En otras palabras, la recurrencia es una propiedad de la clase de comunicación.
+
+    \item[(c)] Sea $C$ una clase de comunicación compuesta enteramente de estados recurrentes. Demuestra que $C$ es cerrada. \emph{Sugerencia: usa el contrapositivo: si existiera $j \notin C$ con $p_{ij} > 0$ para algún $i \in C$, ¿qué implicaría eso para la recurrencia de $i$?}
+
+    \item[(d)] Da un ejemplo de una cadena con dos clases: una cerrada y recurrente, y otra abierta y transitoria. Escribe su matriz de transición y verifica las propiedades.
+\end{enumerate}
+\end{problem}
+
+% ---------------------------------------------------------------
+\begin{problem}
+\textbf{Promedios de Cesàro y la serie desplazada.}
+
+Sea $\{a_n\}_{n \ge 0}$ una sucesión de números reales. Recuerda que $\{a_n\}$ converge en el sentido de Cesàro a $L$ si
+\[
+    \frac{1}{N} \sum_{n=0}^{N-1} a_n \;\longrightarrow\; L \quad \text{cuando } N \to \infty.
+\]
+
+\begin{enumerate}
+    \item[(a)] Demuestra que si $a_n \to L$ (convergencia ordinaria), entonces $\{a_n\}$ converge en el sentido de Cesàro a $L$. (Es decir, la convergencia ordinaria implica la convergencia de Cesàro.)
+
+    \item[(b)] Da un ejemplo de una sucesión que converja en el sentido de Cesàro pero que no converja ordinariamente.
+
+    \item[(c)] \textbf{Desplazamiento de la serie.} Supón que $\{a_n\}$ converge en el sentido de Cesàro a $L$. Demuestra que la sucesión desplazada $\{a_{n+1}\}_{n \ge 0}$ también converge en el sentido de Cesàro a $L$. Es decir:
+    \[
+        \frac{1}{N}\sum_{n=0}^{N-1} a_n \to L \implies \frac{1}{N}\sum_{n=0}^{N-1} a_{n+1} \to L.
+    \]
+    \emph{Sugerencia: escribe $\sum_{n=0}^{N-1} a_{n+1} = \sum_{n=1}^{N} a_n$ y compáralo con $\sum_{n=0}^{N-1} a_n$.}
+
+    \item[(d)] Generaliza: si $\{a_n\}$ converge en Cesàro a $L$, ¿converge también $\{a_{n+k}\}$ en Cesàro a $L$ para cualquier $k \ge 1$? Demuéstralo o da un contraejemplo.
+\end{enumerate}
+\end{problem}
+
+% ---------------------------------------------------------------
+\begin{problem}
+\textbf{Distribución estacionaria de la urna de Ehrenfest.}
+
+El modelo de la urna de Ehrenfest describe la difusión de $N$ moléculas entre dos recipientes $A$ y $B$. En cada instante se elige una molécula al azar (entre las $N$) y se mueve al otro recipiente. El estado de la cadena es $X_n = $ número de moléculas en $A$, con $S = \{0, 1, \ldots, N\}$.
+
+\begin{enumerate}
+    \item[(a)] Determina las probabilidades de transición $p_{k,k+1}$ y $p_{k,k-1}$ para $k \in \{0, 1, \ldots, N\}$, con la convención de que $p_{0,-1} = p_{N,N+1} = 0$. Dibuja el diagrama de transiciones para $N = 4$.
+
+    \item[(b)] Escribe el sistema de ecuaciones $\pi P = \pi$ explícitamente para los estados $k = 1, 2, \ldots, N-1$. Verifica que las ecuaciones de balance detallado
+    \[
+        \pi_k \, p_{k,k+1} = \pi_{k+1} \, p_{k+1,k}
+    \]
+    se satisfacen con $\pi_k = \binom{N}{k} \left(\tfrac{1}{2}\right)^N$.
+
+    \item[(c)] Demuestra que la distribución binomial $\pi_k = \binom{N}{k} (1/2)^N$ normaliza a 1 y es invariante para la cadena. ¿Esta cadena admite una única distribución estacionaria? Justifica.
+
+    \item[(d)] ¿La cadena es aperiódica? \emph{Sugerencia: observa cuándo es posible que $X_n = X_{n+1}$.} ¿Qué implica esto sobre la convergencia de $p_{ij}^{(n)}$ cuando $n \to \infty$?
+\end{enumerate}
+\end{problem}
+
+% ---------------------------------------------------------------
+\begin{problem}
+\textbf{Cadena regular, matriz doblemente estocástica y distribución uniforme.}
+
+Una matriz de transición $P = (p_{ij})$ se llama \emph{doblemente estocástica} si, además de que cada fila suma 1 (condición estándar), también cada columna suma 1:
+\[
+    \sum_{i \in S} p_{ij} = 1 \quad \text{para todo } j \in S.
+\]
+Se dice que la cadena es \emph{regular} si existe $n_0 \ge 1$ tal que $p_{ij}^{(n_0)} > 0$ para todos $i, j \in S$ (equivalentemente, es irreducible y aperiódica con espacio de estados finito).
+
+\begin{enumerate}
+    \item[(a)] Demuestra que si $P$ es doblemente estocástica y $|S| = m$, entonces la distribución uniforme $\pi_j = 1/m$ para todo $j$ es una distribución estacionaria. \emph{Sugerencia: calcula directamente $(\pi P)_j = \sum_i \pi_i p_{ij}$.}
+
+    \item[(b)] Si además la cadena es regular (irreducible y aperiódica), ¿puede haber otra distribución estacionaria distinta de la uniforme? Justifica usando el teorema de existencia y unicidad de la distribución estacionaria.
+
+    \item[(c)] Da un ejemplo de una cadena con $|S| = 3$ cuya matriz de transición sea doblemente estocástica y regular. Verifica explícitamente las condiciones.
+
+    \item[(d)] Da un ejemplo de una cadena con $|S| = 3$ cuya matriz sea doblemente estocástica pero \emph{no} regular. ¿Cuál es la distribución estacionaria en este caso? ¿Es única?
+
+    \item[(e)] \textbf{(Aplicación.)} El algoritmo de Metropolis-Hastings en una cadena finita con distribución objetivo uniforme se construye precisamente para que $P$ sea doblemente estocástica. Explica con tus propias palabras por qué la condición de balance detallado $\pi_i p_{ij} = \pi_j p_{ji}$ implica que $P$ es doblemente estocástica cuando $\pi$ es uniforme.
+\end{enumerate}
+\end{problem}
+
+\end{document}
+
+
+
+
