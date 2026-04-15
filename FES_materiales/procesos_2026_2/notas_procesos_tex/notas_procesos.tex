@@ -2557,5 +2557,100 @@ La proposición anterior caracteriza toda posible distribución límite, pero no
     El teorema anterior completa el cuadro iniciado por la proposición: bajo irreducibilidad, recurrencia positiva y aperiodicidad, los límites $p_{ij}^{(n)}$ sí existen, son independientes de $i$ y suman 1, satisfaciendo así las condiciones de igualdad de la proposición y confirmando que $\pi$ es la única distribución estacionaria. En el caso periódico las distribuciones $\pi^{(n)}$ oscilan entre $d$ fases sin converger, aunque sus promedios de Cesàro siempre convergen a $\pi$.
 \end{remark}
 
+\begin{example}[Convergencia en el caso aperiódico]
+    Considera la cadena con $S = \{1, 2, 3\}$ y matriz de transición
+    \[
+        P = \begin{pmatrix}
+            \tfrac{1}{2} & \tfrac{1}{4} & \tfrac{1}{4} \\[4pt]
+            \tfrac{1}{3} & \tfrac{1}{3} & \tfrac{1}{3} \\[4pt]
+            \tfrac{1}{4} & \tfrac{1}{2} & \tfrac{1}{4}
+        \end{pmatrix}.
+    \]
+    La cadena es irreducible (todos los entries son positivos, por lo que cualquier estado alcanza cualquier otro en un paso) y aperiódica (por ejemplo, $p_{11}^{(1)} = 1/2 > 0$, lo que implica que el período de $1$ es 1). Por la proposición de existencia y unicidad existe una única distribución estacionaria; resolviendo $\pi P = \pi$ con $\pi_1 + \pi_2 + \pi_3 = 1$ se obtiene:
+    \[
+        \pi_1 = \frac{4}{13}, \qquad \pi_2 = \frac{5}{13}, \qquad \pi_3 = \frac{4}{13}.
+    \]
+    Por el teorema de convergencia al equilibrio (caso aperiódico), sin importar el estado inicial $i$:
+    \[
+        \lim_{n\to\infty} p_{ij}^{(n)} = \pi_j \qquad \text{para } j = 1, 2, 3.
+    \]
+    Es decir, la matriz $P^n$ converge a la matriz cuyas tres filas son idénticas e iguales a $\pi$:
+    \[
+        \lim_{n\to\infty} P^n =
+        \begin{pmatrix}
+            \tfrac{4}{13} & \tfrac{5}{13} & \tfrac{4}{13} \\[4pt]
+            \tfrac{4}{13} & \tfrac{5}{13} & \tfrac{4}{13} \\[4pt]
+            \tfrac{4}{13} & \tfrac{5}{13} & \tfrac{4}{13}
+        \end{pmatrix}.
+    \]
+    En particular, cualquier distribución inicial $\pi^{(0)}$ satisface $\pi^{(0)} P^n \to \pi$ cuando $n \to \infty$.
+\end{example}
+
+\begin{example}[Clases cíclicas con más de un estado]
+    Considera la cadena con $S = \{1, 2, 3, 4\}$ y matriz de transición
+    \[
+        P = \begin{pmatrix}
+            0 & 1   & 0   & 0   \\
+            0 & 0   & p   & 1-p \\
+            1 & 0   & 0   & 0   \\
+            1 & 0   & 0   & 0
+        \end{pmatrix},
+    \]
+    con $p \in (0,1)$. Las transiciones son: el estado $1$ pasa a $2$ con certeza; el estado $2$ pasa a $3$ con probabilidad $p$ y a $4$ con probabilidad $1-p$; los estados $3$ y $4$ pasan a $1$ con certeza. La cadena es irreducible y cada trayectoria recorre exactamente $3$ pasos por ciclo: $1\to 2\to\{3\text{ ó }4\}\to 1\to\cdots$, de modo que el período es $d=3$.
+
+    \smallskip
+    \textbf{Clases cíclicas.} Las cláses cíclicas están dadas por
+    \[
+        C_0 = \{1\}, \qquad C_1 = \{2\}, \qquad C_2 = \{3, 4\}.
+    \]
+    Los estados $3$ y $4$ pertenecen a la misma clase cíclica porque ambos se alimentan únicamente desde $C_1$ y ambos envían únicamente hacia $C_0$.
+
+    \smallskip
+    \textbf{Distribución estacionaria.} De $\pi P = \pi$ se obtiene:
+    \[
+        \pi_1 = \pi_3 + \pi_4, \qquad \pi_2 = \pi_1, \qquad
+        \pi_3 = p\,\pi_2, \qquad \pi_4 = (1-p)\,\pi_2.
+    \]
+    Sustituyendo lo anterior en la condición de normalización $\pi_1+\pi_2+\pi_3+\pi_4 = \pi_1(1+1+p+1-p) = 3\pi_1 = 1$ da
+    \[
+        \pi_1 = \tfrac{1}{3}, \quad \pi_2 = \tfrac{1}{3}, \quad
+        \pi_3 = \tfrac{p}{3}, \quad \pi_4 = \tfrac{1-p}{3}.
+    \]
+    Nótese que $\pi_3 + \pi_4 = 1/3 = \pi_1$, lo que refleja que la clase $C_2$ en conjunto tiene el mismo peso que $C_0$ o $C_1$.
+
+    \smallskip
+    \textbf{Potencias de $P$.} Un cálculo directo da:
+    \[
+        P^2 = \begin{pmatrix}
+            0 & 0 & p   & 1-p \\
+            1 & 0 & 0   & 0   \\
+            0 & 1 & 0   & 0   \\
+            0 & 1 & 0   & 0
+        \end{pmatrix}, \qquad
+        P^3 = \begin{pmatrix}
+            1 & 0 & 0   & 0   \\
+            0 & 1 & 0   & 0   \\
+            0 & 0 & p   & 1-p \\
+            0 & 0 & p   & 1-p
+        \end{pmatrix}.
+    \]
+    Observamos que $P^3 \neq I$ (a diferencia del caso completamente determinista): las filas 3 y 4 de $P^3$ coinciden y son $(0,0,p,1-p)$, porque desde $C_2$ el sistema no regresa al mismo estado con certeza, sino que vuelve a repartirse entre $3$ y $4$.  Sin embargo, $P^4 = P^3\cdot P = P$, y por tanto para $m \geq 1$:
+    \[
+        P^{3m} = P^3, \qquad P^{3m+1} = P, \qquad P^{3m+2} = P^2.
+    \]
+    Las potencias no convergen a una única matriz, pero \emph{sí} convergen a lo largo de cada subsucesión $n = 3m + r$.
+
+    \smallskip
+    \textbf{Verificación del teorema.} Para $i = 1 \in C_0$ y $j = 1 \in C_0$ el desplazamiento correcto es $r = 0$:
+    \[
+        p_{11}^{(3m)} = (P^3)_{11} = 1 \;\longrightarrow\; 1 = 3\cdot\tfrac{1}{3} = d\,\pi_1. \;\checkmark
+    \]
+    Para $i=1 \in C_0$ y $j = 3 \in C_2$ el desplazamiento correcto es $r = 2$:
+    \[
+        p_{13}^{(3m+2)} = (P^2)_{13} = p \;\longrightarrow\; p = 3\cdot\tfrac{p}{3} = d\,\pi_3. \;\checkmark
+    \]
+    Análogamente, $p_{14}^{(3m+2)} = 1-p \to d\,\pi_4$. En general, para $i \in C_s$ y $j \in C_t$ el límite es cero salvo cuando $n \equiv t-s \pmod{3}$, en cuyo caso $p_{ij}^{(3m+(t-s))} \to d\,\pi_j$.
+\end{example}
+
 
 \end{document}
