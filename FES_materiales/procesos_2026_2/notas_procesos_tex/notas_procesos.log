@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.3.8)  14 APR 2026 18:40
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.3.8)  20 APR 2026 15:44
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -689,9 +689,21 @@ LaTeX Info: Redefining \. on input line 2638.
 LaTeX Info: Redefining \% on input line 2638.
 [60]
 
-LaTeX Info: Redefining \. on input line 2656.
-LaTeX Info: Redefining \% on input line 2656.
-[61] (./notas_procesos.aux
+LaTeX Info: Redefining \. on input line 2678.
+LaTeX Info: Redefining \% on input line 2678.
+[61]
+
+LaTeX Info: Redefining \. on input line 2723.
+LaTeX Info: Redefining \% on input line 2723.
+[62]
+
+LaTeX Info: Redefining \. on input line 2763.
+LaTeX Info: Redefining \% on input line 2763.
+[63]
+
+LaTeX Info: Redefining \. on input line 2782.
+LaTeX Info: Redefining \% on input line 2782.
+[64] (./notas_procesos.aux
 LaTeX Info: Redefining \. on input line 11.
 LaTeX Info: Redefining \% on input line 11.
 )
@@ -700,21 +712,21 @@ LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
 Package rerunfilecheck Info: File `notas_procesos.out' has not changed.
-(rerunfilecheck)             Checksum: 3D6199AEBAAD13369F11332625A077A2;4547.
+(rerunfilecheck)             Checksum: 035C1DE4ED78281ACD94FD682FD39840;5899.
  ) 
 Here is how much of TeX's memory you used:
- 12530 strings out of 473190
- 194003 string characters out of 5715801
- 620136 words of memory out of 5000000
- 35390 multiletter control sequences out of 15000+600000
+ 12551 strings out of 473190
+ 194326 string characters out of 5715801
+ 619144 words of memory out of 5000000
+ 35397 multiletter control sequences out of 15000+600000
  573443 words of font info for 90 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  75i,14n,82p,1591b,763s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbxti10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsl12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmti8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb>
-Output written on notas_procesos.pdf (61 pages, 476376 bytes).
+Output written on notas_procesos.pdf (64 pages, 488526 bytes).
 PDF statistics:
- 695 PDF objects out of 1000 (max. 8388607)
- 578 compressed objects within 6 object streams
- 234 named destinations out of 1000 (max. 500000)
- 153 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 742 PDF objects out of 1000 (max. 8388607)
+ 621 compressed objects within 7 object streams
+ 248 named destinations out of 1000 (max. 500000)
+ 193 words of extra memory for PDF output out of 10000 (max. 10000000)
 

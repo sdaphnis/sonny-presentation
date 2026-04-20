@@ -2652,5 +2652,131 @@ La proposición anterior caracteriza toda posible distribución límite, pero no
     Análogamente, $p_{14}^{(3m+2)} = 1-p \to d\,\pi_4$. En general, para $i \in C_s$ y $j \in C_t$ el límite es cero salvo cuando $n \equiv t-s \pmod{3}$, en cuyo caso $p_{ij}^{(3m+(t-s))} \to d\,\pi_j$.
 \end{example}
 
+% ==============================================================
+\section{Cadenas de Markov no irreducibles}
+\begin{center}
+    
+\color{blue} -------CONTENIDO NO EXAMINABLE------- \color{black}
+
+\end{center}
+% ==============================================================
+
+Hasta ahora hemos trabajado principalmente bajo el supuesto de irreducibilidad, que garantiza la existencia y unicidad de la distribución estacionaria, así como la convergencia de las distribuciones marginales $\mu P^n$. En esta sección examinamos qué ocurre cuando ese supuesto falla: la cadena puede tener varias clases de comunicación, algunas cerradas y otras no, y el comportamiento a largo plazo depende del estado inicial. Restringiremos los siguientes resultados al caso de cadenas finitas.
+
+% --------------------------------------------------------------
+\subsection{Descomposición del espacio de estados}
+% --------------------------------------------------------------
+
+Sea $(X_n)_{n\geq 0}$ una cadena de Markov con espacio de estados finito $S$ y matriz de transición $P$. Recuérdese la clasificación de los estados: un estado $i\in S$ es \emph{recurrente} si $f_{ii}=1$ y \emph{transitorio} si $f_{ii}<1$. Las clases de comunicación compuestas enteramente de estados recurrentes son automáticamente \emph{cerradas} (es decir, no hay salida de ellas), mientras que las clases transitorias no lo son.
+
+\begin{proposition}[Descomposición canónica]
+    Todo espacio de estados finito $S$ admite una partición
+    \[
+        S \;=\; T \;\cup\; C_1 \;\cup\; C_2 \;\cup\; \cdots \;\cup\; C_k,
+    \]
+    donde $T$ es el conjunto (posiblemente vacío) de todos los estados transitorios y $C_1, \dots, C_k$ son las clases de comunicación cerradas e irreducibles. Cada $C_i$ es positivamente recurrente.
+\end{proposition}
+
+\begin{proof}
+    La existencia de al menos una clase cerrada ya fue probada: en un espacio finito, cualquier estado desde el que no se puede salir forma o pertenece a una clase cerrada. La afirmación de que cada $C_i$ es positivamente recurrente sigue del teorema de existencia de la distribución estacionaria aplicado a la restricción de $P$ a $C_i$.
+\end{proof}
+
+Un hecho fundamental, cuya demostración se basa en la recurrencia de los estados de cada $C_i$, es el siguiente.
+
+\begin{proposition}[Absorción con probabilidad 1]
+    Si la cadena parte de cualquier $x \in S$, entonces con probabilidad $1$ eventualmente entra a alguna clase cerrada $C_i$ y permanece en ella para todo tiempo futuro.
+\end{proposition}
+
+En consecuencia, el comportamiento transitorio de la cadena —las visitas a estados en $T$— ocurre en un horizonte casi seguramente finito, y toda la acción asintótica tiene lugar dentro de las clases cerradas.
+
+% --------------------------------------------------------------
+\subsection{Forma canónica de la matriz de transición}
+% --------------------------------------------------------------
+
+Reordenando los estados de manera que los transientes aparezcan primero y luego las clases cerradas $C_1, \dots, C_k$ en ese orden, la matriz de transición toma la forma en bloques
+\[
+P \;=\;
+\begin{pmatrix}
+Q & R_1 & R_2 & \cdots & R_k \\
+0 & P_1 & 0   & \cdots & 0   \\
+0 & 0   & P_2 & \cdots & 0   \\
+\vdots & & & \ddots & \vdots \\
+0 & 0 & 0 & \cdots & P_k
+\end{pmatrix},
+\]
+donde:
+\begin{itemize}
+    \item $Q$ es la submatriz de transiciones entre estados de $T$ (submatriz de índices $T \times T$). Se puede mostrar que $Q^n \to 0$ entrada a entrada, lo que refleja que los estados transitorios son visitados un número finito de veces.
+    \item $R_i$ describe las transiciones de $T$ hacia la clase $C_i$.
+    \item $P_i$ es la submatriz de transiciones interna a $C_i$, que es ella misma una cadena de Markov irreducible sobre $C_i$.
+\end{itemize}
+
+\begin{remark}
+    La condición $Q^n \to 0$ puede verificarse directamente: el radio espectral de $Q$ es estrictamente menor que $1$ porque todos los estados de $T$ son transitorios y la cadena los abandona en tiempo finito.
+\end{remark}
+
+% --------------------------------------------------------------
+\subsection{Distribuciones estacionarias}
+% --------------------------------------------------------------
+
+Para cada clase cerrada $C_i$, la restricción $P_i$ es irreducible sobre un espacio finito, por lo que existe una única distribución estacionaria $\pi^{(i)}$ soportada en $C_i$. Estas distribuciones pueden extenderse a todo $S$ poniendo $\pi^{(i)}_x = 0$ para $x \notin C_i$.
+
+\begin{theorem}[Distribuciones estacionarias en el caso no irreducible]
+    Las distribuciones estacionarias de $P$ son exactamente las combinaciones convexas
+    \[
+        \pi \;=\; \sum_{i=1}^k \alpha_i\,\pi^{(i)},
+        \qquad \alpha_i \geq 0,\quad \sum_{i=1}^k \alpha_i = 1.
+    \]
+    En particular, $P$ tiene distribución estacionaria única si y solo si $k=1$, es decir, si existe exactamente una clase cerrada.
+\end{theorem}
+
+\begin{proof}
+    \textit{Toda combinación convexa es estacionaria.} Basta verificar que $\pi P = \pi$. Como $\pi^{(i)} P = \pi^{(i)}$ para cada $i$ (por invarianza) y la igualdad $\pi P = \pi$ es lineal en $\pi$, cualquier combinación convexa también la satisface.
+
+    \smallskip
+    \textit{Toda distribución estacionaria es combinación convexa.} Sea $\mu$ una distribución estacionaria. Entonces $\mu = \mu P^n$ para todo $n$. Como $Q^n \to 0$, la masa de $\mu$ sobre $T$ se transfiere progresivamente a las clases cerradas: en el límite $n\to\infty$, $\mu P^n$ concentra toda su masa en $\bigcup_i C_i$. Desglosando esta masa por clase, se obtienen coeficientes $\alpha_i := \sum_{x \in C_i} \mu_x \geq 0$ con $\sum_i \alpha_i = 1$. La unicidad de $\pi^{(i)}$ dentro de $C_i$ fuerza entonces $\mu|_{C_i} = \alpha_i \pi^{(i)}$, de donde $\mu = \sum_i \alpha_i \pi^{(i)}$.
+\end{proof}
+
+% --------------------------------------------------------------
+\subsection{Comportamiento límite}
+% --------------------------------------------------------------
+
+En contraste con el caso irreducible y aperiódico, no existe en general una distribución límite única independiente del estado inicial. El límite depende de en qué clase cerrada termine absorbida la cadena, lo cual es aleatorio.
+
+\begin{theorem}[Convergencia en el caso no irreducible]
+    Sea $(X_n)$ una cadena de Markov con espacio finito $S = T \cup C_1 \cup \cdots \cup C_k$, y asúmase que cada $P_i$ es aperiódica (el caso periódico admite una extensión análoga). Para cualquier estado inicial $x \in S$,
+    \[
+        \lim_{n\to\infty} P_x(X_n = j)
+        \;=\;
+        \sum_{i=1}^k \mathbb{P}_x\!\bigl(X \text{ es absorbida en } C_i\bigr)\,\pi^{(i)}_j, \qquad j \in S,
+    \]
+    donde $\mathbb{P}_x(X \text{ es absorbida en } C_i)$ es la probabilidad de que la trayectoria (partiendo de $x$) termine entrando en $C_i$.
+\end{theorem}
+
+\begin{proof}
+    Sean $h_i(x) := \mathbb{P}_x(X \text{ es absorbida en } C_i)$ las probabilidades de absorción (que calcularemos en la siguiente subsección). Condicionando sobre la clase en que se absorbe la cadena y usando la convergencia garantizada por el teorema límite en cada $C_i$:
+    \begin{align*}
+        P_x(X_n = j)
+        &= \sum_{i=1}^k P_x(X_n = j,\; X \text{ absorbida en } C_i) + P_x(X_n = j,\; X_n \in T).
+    \end{align*}
+    El último sumando tiende a $0$ porque $Q^n \to 0$. Para el primer sumando, dado que la absorción ocurre en tiempo casi seguramente finito $\tau$, para $n$ grande $X_n$ está ya dentro de $C_i$; aplicando la convergencia de $P_i^{n-\tau}(\cdot, j) \to \pi^{(i)}_j$ (que sostiene uniformemente una vez pasado un transitorio), se obtiene el resultado.
+\end{proof}
+
+\begin{remark}
+    El teorema dice que la distribución $P_x(X_n \in \cdot)$ converge a la mezcla $\sum_i h_i(x)\,\pi^{(i)}$. Cuando $x$ ya está en alguna clase $C_l$ se tiene $h_l(x)=1$ y $h_i(x)=0$ para $i\ne l$, y recuperamos la convergencia clásica hacia $\pi^{(l)}$.
+\end{remark}
+
+\vspace{20pt}
+\hrule
+\vspace{10pt}
+{
+\color{blue}
+\noindent\textbf{--- Termina material del segundo parcial ---}
+}
+
+\vspace{10pt}
+\hrule
+\vspace{20pt}
+
 
 \end{document}

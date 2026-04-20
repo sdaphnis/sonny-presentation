@@ -18,3 +18,8 @@
 \contentsline {section}{\numberline {1.14}Evolución de la distribución de $X_n$}{47}{section.1.14}%
 \contentsline {subsection}{\numberline {1.14.1}Soporte de la distribución estacionaria}{50}{subsection.1.14.1}%
 \contentsline {section}{\numberline {1.15}Distribuciones límite}{55}{section.1.15}%
+\contentsline {section}{\numberline {1.16}Cadenas de Markov no irreducibles}{61}{section.1.16}%
+\contentsline {subsection}{\numberline {1.16.1}Descomposición del espacio de estados}{61}{subsection.1.16.1}%
+\contentsline {subsection}{\numberline {1.16.2}Forma canónica de la matriz de transición}{62}{subsection.1.16.2}%
+\contentsline {subsection}{\numberline {1.16.3}Distribuciones estacionarias}{63}{subsection.1.16.3}%
+\contentsline {subsection}{\numberline {1.16.4}Comportamiento límite}{63}{subsection.1.16.4}%
