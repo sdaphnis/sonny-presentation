@@ -2778,5 +2778,489 @@ En contraste con el caso irreducible y aperiódico, no existe en general una dis
 \hrule
 \vspace{20pt}
 
+% For future courses: here goes the ddetailed balance condition and reversibility, which are not examinable in 2026.
+
+% ==============================================================
+\chapter{Martingalas en tiempo discreto}
+% ==============================================================
+
+El término \emph{martingala} en probabilidad moderna designa una clase de procesos estocásticos que satisfacen, en esencia, la identidad
+\[
+    \mathbb{E}[X_{n+1} \mid X_0=x_0, X_1=x_1, \ldots, X_n=x_n] = x_n.
+\]
+
+Este tipo de modelo representa la evolución del capital de un jugador que realiza una sucesión de \emph{apuestas justas}: en esperanza, el capital ni crece ni decrece. Una de las motivaciones originales para estudiar estas estructuras fue precisamente demostrar que no existen estrategias ventajosas en tal juego — es decir, que ningún método de apuesta predecible puede convertir un juego justo en uno favorable.
+
+El concepto fue incorporado a la teoría de la probabilidad por Paul Lévy, y su desarrollo sistemático fue llevado a cabo en gran medida por Joseph Doob (E.U.A., 1910--2004), quien estableció los teoremas fundamentales de convergencia y muestreo que conforman el núcleo del capítulo. Los siguientes resultados se restringen al caso discreto, aunque existen análogos en tiempo continuo.
+\medskip
+
+Para fijar ideas antes de pasar a las definiciones formales, examinemos dos ejemplos motivadores.
+
+\begin{example}[Precio justo en una rifa]
+Considérese una rifa organizada por una iglesia en la que se venden $100$ boletos para ganar una cafetera con valor de \$6000. Solo uno de los boletos resulta ganador, y todos los boletos tienen la misma probabilidad de ganar.
+
+Sea $X$ la ganancia asociada a la compra de un boleto. Entonces
+\[
+X =
+\begin{cases}
+6000, & \text{con probabilidad } \frac{1}{100},\\
+0, & \text{con probabilidad } \frac{99}{100}.
+\end{cases}
+\]
+
+El valor esperado de la ganancia es
+\[
+\mathbb{E}[X] = \frac{1}{100}\cdot 6000 + \frac{99}{100}\cdot 0 = 60.
+\]
+
+Por lo tanto, el \emph{precio justo} de cada boleto es \$60. En efecto, si el precio del boleto es \$60, entonces la ganancia esperada neta del comprador es cero, lo cual caracteriza un juego justo.
+\end{example}
+
+\begin{example}[Caminata aleatoria como juego justo]
+    Un jugador lanza repetidamente una moneda simétrica. Define su capital inicial como $X_0 = 0$ y, en cada ronda $n \ge 1$, gana o pierde una unidad:
+    \[
+        X_n = X_{n-1} + \xi_n,
+    \]
+    donde $\xi_1, \xi_2, \ldots$ son independientes e idénticamente distribuidas con $\mathbb{P}(\xi_k = +1) = \mathbb{P}(\xi_k = -1) = \tfrac{1}{2}$.
+
+    ¿Es este un juego justo? Conocida la historia completa $X_0, X_1, \ldots, X_n$, el capital esperado en la siguiente ronda es:
+    \[
+        \mathbb{E}[X_{n+1} \mid X_0, \ldots, X_n]
+        = X_n + \mathbb{E}[\xi_{n+1}]
+        = X_n + 0 = X_n.
+    \]
+    Sí: la esperanza del capital de mañana, dado todo lo observado hasta hoy, coincide exactamente con el capital de hoy. No hay tendencia ni al alza ni a la baja.
+\end{example}
+
+% ==============================================================
+\section{Filtraciones y procesos adaptados}
+% ==============================================================
+
+\subsection*{Recordatorio: esperanza condicional}
+
+Antes de formalizar las definiciones, conviene recordar brevemente qué significa condicionar, pues la definición de martingala descansa completamente en esa idea.
+
+\textbf{Condicionar en un evento.} La noción más elemental: dado un evento $B$ con $\mathbb{P}(B) > 0$, la esperanza condicional de $X$ dado $B$ es simplemente el promedio de $X$ restringido al escenario en que $B$ ocurrió:
+\[
+    \mathbb{E}[X \mid B] = \frac{\mathbb{E}[X\,\mathbf{1}_B]}{\mathbb{P}(B)}.
+\]
+Si lanzamos un dado y $B = \{\text{resultado par}\}$, entonces $\mathbb{E}[\text{resultado} \mid B] = (2+4+6)/3 = 4$.
+
+\textbf{Condicionar en una variable aleatoria.} Cuando $Y$ es discreta, $\mathbb{E}[X \mid Y]$ es la función que a cada posible valor $y$ de $Y$ le asigna $\mathbb{E}[X \mid Y = y]$. El resultado ya no es un número: es una variable aleatoria que depende de $Y$. Intuitivamente, representa ``el mejor pronóstico de $X$ una vez que se conoce $Y$''.
+
+\textbf{Condicionar en una $\sigma$-álgebra.} Este es el paso que necesitamos para las martingalas. Una $\sigma$-álgebra $\mathcal{G}$ codifica un conjunto de información: saber cuáles eventos de $\mathcal{G}$ ocurrieron equivale a conocer cierta parte del experimento. La esperanza condicional $\mathbb{E}[X \mid \mathcal{G}]$ es entonces la variable aleatoria que responde a la pregunta ``¿cuánto espero que valga $X$, dado todo lo que me dice $\mathcal{G}$?''.
+
+En el contexto de procesos estocásticos, tomar $\mathcal{G} = \sigma(X_0, X_1, \ldots, X_n)$ es lo mismo que condicionar en los primeros $n+1$ valores observados, y $\mathbb{E}[X_{n+1} \mid \mathcal{G}]$ responde a: ``dado el historial hasta el tiempo $n$, ¿qué espero en el paso siguiente?''. El resultado es una variable aleatoria que depende de $X_0, \ldots, X_n$ pero no de $X_{n+1}$ — exactamente lo que necesitamos para que la condición de martingala tenga sentido.
+
+\textbf{Propiedades clave:}
+\begin{itemize}
+    \item \textbf{Torre (forma general):} si $\mathcal{G} \subseteq \mathcal{H}$ son dos $\sigma$-álgebras, entonces
+    \[
+        \mathbb{E}\bigl[\mathbb{E}[X \mid \mathcal{H}] \mid \mathcal{G}\bigr] = \mathbb{E}[X \mid \mathcal{G}].
+    \]
+    Intuitivamente: si primero proceso la información de $\mathcal{H}$ y luego la reduzco a la de $\mathcal{G}$, el resultado es el mismo que haber procesado $\mathcal{G}$ directamente. Como caso especial, tomando $\mathcal{G} = \mathcal{G}_0 = \{\emptyset, \Omega\}$ se recupera $\mathbb{E}[\mathbb{E}[X \mid \mathcal{H}]] = \mathbb{E}[X]$.
+    \item \textbf{Lo conocido sale:} si $Z$ ya está determinado por $\mathcal{G}$, entonces $\mathbb{E}[ZX \mid \mathcal{G}] = Z\,\mathbb{E}[X \mid \mathcal{G}]$.
+    \item \textbf{Independencia:} si $X$ no depende de $\mathcal{G}$, entonces $\mathbb{E}[X \mid \mathcal{G}] = \mathbb{E}[X]$.
+    \item \textbf{$\sigma$-álgebra trivial:} si $\mathcal{G}_0 = \{\emptyset, \Omega\}$, entonces $\mathbb{E}[X \mid \mathcal{G}_0] = \mathbb{E}[X]$. Es un caso especial de la propiedad anterior: toda variable aleatoria es independiente de $\mathcal{G}_0$.
+\end{itemize}
+
+\begin{example}[Tres volados: medibilidad y propiedad torre]
+    Lanzamos tres monedas simétricas e independientes. El espacio muestral es
+    \[
+        \Omega = \{SSS,\; SSA,\; SAS,\; SAA,\; ASS,\; ASA,\; AAS,\; AAA\},
+    \]
+    cada resultado con probabilidad $1/8$. Definimos $\xi_k = +1$ si el $k$-ésimo volado es sol y $\xi_k = -1$ si es águila, y la suma parcial $S_k = \xi_1 + \cdots + \xi_k$.
+
+    \medskip
+    Consideremos la $\sigma$-álgebra generada por el primer volado:
+    \begin{align*}
+        \mathcal{G} = \sigma(\xi_1) = \bigl\{\;&\emptyset,\;\Omega, \\
+        &\{SSS, SSA, SAS, SAA\},\quad (\xi_1 = +1, \text{ primer volado sol})\\
+        &\{ASS, ASA, AAS, AAA\}\;\bigr\}.\quad (\xi_1 = -1, \text{ primer volado águila})
+    \end{align*}
+    Esta $\mathcal{G}$ tiene exactamente cuatro elementos: no es la trivial $\{\emptyset,\Omega\}$ ni la potencia de $\Omega$ (que tendría $2^8 = 256$ subconjuntos). Solo distingue si el primer volado fue sol o águila, ignorando completamente $\xi_2$ y $\xi_3$.
+
+    \medskip
+    \textbf{Propiedad: lo conocido sale.} Calculemos $\mathbb{E}[\xi_1 \cdot \xi_2 \mid \mathcal{G}]$. Como $\xi_1$ es $\mathcal{G}$-medible (su valor queda determinado por $\mathcal{G}$), puede salir de la esperanza condicional:
+    \[
+        \mathbb{E}[\xi_1 \cdot \xi_2 \mid \mathcal{G}] = \xi_1 \cdot \mathbb{E}[\xi_2 \mid \mathcal{G}].
+    \]
+    Como $\xi_2$ es independiente de $\mathcal{G}$, se tiene $\mathbb{E}[\xi_2 \mid \mathcal{G}] = \mathbb{E}[\xi_2] = 0$, y por tanto
+    \[
+        \mathbb{E}[\xi_1 \cdot \xi_2 \mid \mathcal{G}] = \xi_1 \cdot 0 = 0.
+    \]
+    Verificación directa: dado $\xi_1 = +1$ (resultados $SSS, SSA, SAS, SAA$), el promedio de $\xi_1\xi_2$ es $\frac{1+1-1-1}{4} = 0$; igualmente dado $\xi_1=-1$. \checkmark
+
+    \medskip
+    \textbf{Propiedad torre.} Sea ahora $\mathcal{H} = \sigma(\xi_1, \xi_2)$, que representa la información de los dos primeros volados. Claramente $\mathcal{G} \subseteq \mathcal{H} \subsetneq \mathcal{F}$.
+
+    Primero calculamos $\mathbb{E}[S_3 \mid \mathcal{H}]$: dado $(\xi_1, \xi_2)$, solo $\xi_3$ es aleatorio e independiente de $\mathcal{H}$, así que
+    \[
+        \mathbb{E}[S_3 \mid \mathcal{H}] = \xi_1 + \xi_2 + \mathbb{E}[\xi_3] = \xi_1 + \xi_2 = S_2.
+    \]
+    Ahora aplicamos la propiedad torre $\mathcal{G} \subseteq \mathcal{H}$:
+    \[
+        \mathbb{E}\bigl[\,\underbrace{\mathbb{E}[S_3 \mid \mathcal{H}]}_{=\,S_2} \;\Big|\; \mathcal{G}\bigr]
+        \;=\; \mathbb{E}[S_3 \mid \mathcal{G}].
+    \]
+    Lado izquierdo: $\mathbb{E}[S_2 \mid \mathcal{G}] = \mathbb{E}[\xi_1 + \xi_2 \mid \mathcal{G}] = \xi_1 + \mathbb{E}[\xi_2] = \xi_1$.
+
+    Lado derecho: $\mathbb{E}[S_3 \mid \mathcal{G}] = \xi_1 + \mathbb{E}[\xi_2] + \mathbb{E}[\xi_3] = \xi_1$.
+
+    Ambos lados dan $\xi_1 = S_1$. \checkmark \ La torre colapsa la información de $\mathcal{H}$ a la de $\mathcal{G}$: ``si al final de cuentas solo vas a recordar el primer volado, da igual si primero procesaste el segundo''.
+\end{example}
+
+\begin{definition}[Filtración]
+    Una \textbf{filtración} en un espacio de probabilidad $(\Omega, \mathcal{F}, \mathbb{P})$ es una familia creciente de $\sigma$-álgebras $\{\mathcal{F}_n\}_{n \ge 0}$ tal que
+    \[
+        \mathcal{F}_0 \subseteq \mathcal{F}_1 \subseteq \mathcal{F}_2 \subseteq \cdots \subseteq \mathcal{F}.
+    \]
+    Intuitivamente, $\mathcal{F}_n$ representa \emph{la información disponible hasta el tiempo $n$}: mientras más avanza el tiempo, más se sabe.
+\end{definition}
+
+\begin{definition}[Proceso adaptado]
+    Un proceso estocástico $\{X_n\}_{n \ge 0}$ es \textbf{adaptado} a la filtración $\{\mathcal{F}_n\}$ si $X_n$ es $\mathcal{F}_n$-medible para cada $n$, es decir, si el valor de $X_n$ queda determinado por la información disponible hasta el tiempo $n$.
+\end{definition}
+
+La filtración más natural asociada a un proceso $\{X_n\}$ es la \textbf{filtración natural}, definida como
+\[
+    \mathcal{F}_n = \sigma(X_0, X_1, \ldots, X_n),
+\]
+la $\sigma$-álgebra generada por las primeras $n+1$ variables del proceso. Cualquier proceso es adaptado a su propia filtración natural.
+
+En la práctica, cuando trabajemos con un proceso $\{X_n\}$ sin especificar otra $\sigma$-álgebra, siempre utilizaremos su filtración natural. Condicionar en $\mathcal{F}_n$ es entonces equivalente a condicionar en $(X_0, X_1, \ldots, X_n)$.
+
+Nótese la conexión con la adaptabilidad: como $X_n$ es $\mathcal{F}_n$-medible (ya es ``conocido'' dado $\mathcal{F}_n$), la propiedad ``lo conocido sale'' implica que en los cálculos $X_n$ puede factorizarse fuera de la esperanza condicional. Esto justifica pasos como $\mathbb{E}[S_n + \xi_{n+1} \mid \mathcal{F}_n] = S_n + \mathbb{E}[\xi_{n+1}]$, donde $S_n$ sale por ser $\mathcal{F}_n$-medible y $\xi_{n+1}$ se reduce a su esperanza ordinaria por ser independiente de $\mathcal{F}_n$.
+
+% ==============================================================
+\section{Martingalas, submartingalas y supermartingalas}
+% ==============================================================
+
+\begin{definition}[Martingala]
+    Sea $\{X_n\}_{n \ge 0}$ un proceso estocástico adaptado a una filtración $\{\mathcal{F}_n\}$, con $\mathbb{E}[|X_n|] < \infty$ para todo $n$. Se dice que $\{X_n\}$ es:
+    \begin{itemize}
+        \item una \textbf{martingala} si $\mathbb{E}[X_{n+1} \mid \mathcal{F}_n] = X_n$ para todo $n \ge 0$,
+        \item una \textbf{submartingala} si $\mathbb{E}[X_{n+1} \mid \mathcal{F}_n] \ge X_n$ para todo $n \ge 0$,
+        \item una \textbf{supermartingala} si $\mathbb{E}[X_{n+1} \mid \mathcal{F}_n] \le X_n$ para todo $n \ge 0$.
+    \end{itemize}
+\end{definition}
+
+\begin{remark}
+    La condición $\mathbb{E}[X_{n+1} \mid \mathcal{F}_n] = X_n$ puede leerse como: ``conocida toda la historia hasta $n$, el mejor pronóstico de $X_{n+1}$ es el valor actual $X_n$''. Una martingala modela, por tanto, un \emph{juego justo}. Una submartingala modela un proceso que en promedio crece (juego favorable), y una supermartingala uno que en promedio decrece (juego desfavorable).
+
+    La terminología puede resultar contraintuitiva: \emph{super} no significa ``mejor'', sino que \emph{el proceso domina su propia esperanza condicional futura}. Un casino es una supermartingala para el jugador (tiende a disminuir).
+\end{remark}
+
+Una consecuencia del uso de la propiedad torre e inducción matemática es que cualquier martingala satisface
+\[
+    \mathbb{E}[X_n \mid \mathcal{F}_m] = X_m \qquad \text{para todo } n \ge m \ge 0.
+\]
+
+En particular, tomando $m = 0$
+\[
+    \mathbb{E}[X_n] = \mathbb{E}[X_0] \qquad \text{para todo } n \ge 0.
+\]
+La esperanza de una martingala es constante en el tiempo.
+
+% ==============================================================
+\section{Ejemplos fundamentales}
+% ==============================================================
+
+\begin{example}[La caminata aleatoria simple]
+    Sean $\xi_1, \xi_2, \ldots$ variables i.i.d. con $\mathbb{P}(\xi_k = +1) = \mathbb{P}(\xi_k = -1) = 1/2$. Define $S_0 = 0$ y $S_n = \xi_1 + \cdots + \xi_n$. Entonces $\{S_n\}$ es una martingala respecto a su filtración natural.
+
+    \smallskip
+    \textit{Verificación.} Como $\xi_{n+1}$ es independiente de $\mathcal{F}_n = \sigma(S_0, \ldots, S_n)$:
+    \[
+        \mathbb{E}[S_{n+1} \mid \mathcal{F}_n] = \mathbb{E}[S_n + \xi_{n+1} \mid \mathcal{F}_n]
+        = S_n + \mathbb{E}[\xi_{n+1}] = S_n + 0 = S_n. \qquad\checkmark
+    \]
+\end{example}
+
+\begin{example}[$S_n^2 - n$ es martingala]
+    Con la misma caminata aleatoria $S_n$, definamos $M_n = S_n^2 - n$.
+
+    \smallskip
+    \textit{Verificación.}
+    \begin{align*}
+        \mathbb{E}[M_{n+1} \mid \mathcal{F}_n]
+        &= \mathbb{E}[S_{n+1}^2 - (n+1) \mid \mathcal{F}_n] \\
+        &= \mathbb{E}[(S_n + \xi_{n+1})^2 \mid \mathcal{F}_n] - (n+1) \\
+        &= S_n^2 + 2S_n\underbrace{\mathbb{E}[\xi_{n+1}]}_{=0} + \underbrace{\mathbb{E}[\xi_{n+1}^2]}_{=1} - (n+1) \\[4pt]
+        &= S_n^2 + 1 - n - 1 = S_n^2 - n = M_n. \qquad\checkmark
+    \end{align*}
+    Este proceso aparecerá más adelante cuando calculemos tiempos de salida usando el teorema de paro opcional.
+\end{example}
+
+\begin{example}[El mártingale betting — la estrategia del doblaje]
+\label{ej:doblaje}
+    La estrategia más famosa de los casinos consiste en apostar siempre a ``cara'' en un volado justo, y \emph{doblar la apuesta} tras cada pérdida: si se pierde en las rondas $1, \ldots, k-1$ y se gana en la ronda $k$, la ganancia neta es $+1$ peso (se recuperan todas las pérdidas y se obtiene una mínima ganancia). 
+
+    
+Se considera una moneda justa. Un jugador apuesta siempre a “águila” siguiendo la estrategia de duplicar la apuesta después de cada pérdida, comenzando con 1 unidad. El jugador se detiene en cuanto gana o después de 5 volados.
+
+Las posibles trayectorias son:
+
+\medskip
+
+\noindent
+\textbf{1. Gana en el primer volado (A):}
+\[
+\text{Apuesta: } 1, \quad \text{ganancia neta: } +1.
+\]
+
+\noindent
+\textbf{2. Pierde y luego gana (S, A):}
+\[
+\text{Apuestas: } 1,\, 2, \quad \text{ganancia neta: } -1 + 2 = +1.
+\]
+
+\noindent
+\textbf{3. Pierde dos veces y luego gana (S, S, A):}
+\[
+\text{Apuestas: } 1,\, 2,\, 4, \quad \text{ganancia neta: } -1 -2 + 4 = +1.
+\]
+
+\noindent
+\textbf{4. Pierde tres veces y luego gana (S, S, S, A):}
+\[
+\text{Apuestas: } 1,\, 2,\, 4,\, 8, \quad \text{ganancia neta: } -1 -2 -4 + 8 = +1.
+\]
+
+\noindent
+\textbf{5. Pierde cuatro veces y luego gana (S, S, S, S, A):}
+\[
+\text{Apuestas: } 1,\, 2,\, 4,\, 8,\, 16, \quad \text{ganancia neta: } -1 -2 -4 -8 + 16 = +1.
+\]
+
+\noindent
+\textbf{6. Pierde los cinco volados (S, S, S, S, S):}
+\[
+\text{Apuestas: } 1,\, 2,\, 4,\, 8,\, 16, \quad \text{ganancia neta: } -1 -2 -4 -8 -16 = -31.
+\]
+
+\medskip
+
+Obsérvese que en todos los casos en que aparece al menos una “águila”, la ganancia neta es $+1$. Sin embargo, si ocurren cinco pérdidas consecutivas, la pérdida acumulada es $31$.
+
+\medskip
+
+Además, como las probabilidades son
+\[
+\mathbb{P}(\text{ganar en algún momento}) = \frac{31}{32}, \quad
+\mathbb{P}(\text{perder todo}) = \frac{1}{32},
+\]
+el valor esperado de la ganancia es
+\[
+\mathbb{E}[X] = \frac{31}{32}(1) + \frac{1}{32}(-31) = 0,
+\]
+lo cual confirma que el juego sigue siendo justo.
+
+
+    \smallskip
+    ¿Puede alguien ``ganarle'' al juego con esta estrategia? El proceso $\{X_n\}$ del capital sigue siendo una martingala (pues es un proceso de apuestas predecible sobre un juego justo), así que $\mathbb{E}[X_n] = X_0$ para todo $n$. La trampa está en que la apuesta crece exponencialmente: tras $k$ pérdidas consecutivas se necesita apostar $2^k$ pesos. En la práctica, cualquier jugador con capital finito quiebra antes de que la estrategia funcione. Volveremos a este ejemplo con más precisión al estudiar el teorema de paro opcional.
+\end{example}
+
+\begin{example}[Proceso de apuestas]
+    Supongamos que en cada ronda $k$ el jugador decide apostar una cantidad $a_k$, donde $a_k$ puede depender del historial hasta el tiempo $k-1$ pero \emph{no} del resultado $\xi_k$ (estrategia \emph{predecible}). El capital al tiempo $n$ es
+    \[
+        X_n = X_0 + \sum_{k=1}^n a_k \xi_k.
+    \]
+    Si el juego base $S_n = \sum \xi_k$ es una martingala y la estrategia $\{a_k\}$ es predecible (i.e., $a_k$ es $\mathcal{F}_{k-1}$-medible), entonces $\{X_n\}$ también es martingala.
+
+    \smallskip
+    \textit{Verificación.} $\mathbb{E}[X_{n+1} \mid \mathcal{F}_n] = X_n + a_{n+1}\mathbb{E}[\xi_{n+1} \mid \mathcal{F}_n] = X_n + a_{n+1} \cdot 0 = X_n.$
+
+    \smallskip
+    Este resultado tiene una consecuencia filosófica importante: \emph{no existe ninguna estrategia de apuestas predecible que convierta un juego justo en un juego favorable}. Multiplicar la apuesta, cambiar de patrón, o ``esperar el momento correcto'' no altera la esperanza.
+\end{example}
+
+
+% ==============================================================
+\section{Aplicaciones de las martingalas}
+% ==============================================================
+
+El siguiente resultado ilustra cómo una martingala bien elegida resuelve en pocas líneas un problema que por otros métodos requiere resolver un sistema de ecuaciones.
+
+\begin{example}[Ruina del jugador]
+\label{ej:ruina}
+    Un jugador comienza con $x$ pesos y juega en cada ronda un volado \emph{simétrico} (gana o pierde 1 peso con probabilidad $1/2$). El juego termina cuando el jugador llega a tener $0$ pesos (ruina) o alcanza la meta de $N$ pesos. Sea
+    \[
+        T = \min\{n \ge 0 : S_n = 0 \text{ o } S_n = N\}
+    \]
+    el tiempo de paro (que es finito con probabilidad 1). Queremos calcular la probabilidad de ruina $r(x) = \mathbb{P}(S_T = 0 \mid S_0 = x)$.
+
+    \smallskip
+    Como $\{S_n\}$ es martingala y (anticipando el Teorema de Paro Opcional del capítulo siguiente) $\mathbb{E}[S_T] = \mathbb{E}[S_0] = x$, tenemos
+    \[
+        x = \mathbb{E}[S_T] = 0 \cdot r(x) + N \cdot (1 - r(x)),
+    \]
+    de donde
+    \[
+        \boxed{r(x) = 1 - \frac{x}{N} = \frac{N-x}{N}}.
+    \]
+    La probabilidad de ruina es exactamente la fracción del recorrido que falta para llegar a la meta.
+\end{example}
+
+\begin{remark}
+    La elegancia de este cálculo radica en la elección de la martingala correcta. En el capítulo siguiente veremos que la hipótesis que usamos — $\mathbb{E}[S_T] = S_0$ — requiere justificación mediante el Teorema de Paro Opcional, y no siempre se cumple. Para este ejemplo sí se justifica porque $T$ es acotado en probabilidad y el proceso es acotado entre $0$ y $N$.
+\end{remark}
+
+\begin{example}[Duración esperada del juego de ruina]
+\label{ej:duracion_ruina}
+    Con el mismo modelo del ejemplo anterior (caminata simétrica entre $0$ y $N$, partiendo de $x$), calculemos $\mathbb{E}[T]$, la duración esperada del juego.
+
+    \smallskip
+    La clave es usar la \emph{segunda} martingala asociada a la caminata: el proceso $M_n = S_n^2 - n$ (verificado en los Ejemplos fundamentales). Como $M_n$ es martingala y $T$ es un tiempo de paro acotado, el \textbf{Teorema de Paro Opcional (versión acotada)} garantiza
+    \[
+        \mathbb{E}[M_T] = \mathbb{E}[M_0] = x^2,
+    \]
+    es decir, $\mathbb{E}[S_T^2] - \mathbb{E}[T] = x^2$. Despejando:
+    \[
+        \mathbb{E}[T] = \mathbb{E}[S_T^2] - x^2.
+    \]
+    Al tiempo $T$ el proceso está en $0$ o en $N$, con probabilidades $r(x) = (N-x)/N$ y $1-r(x) = x/N$ respectivamente, luego
+    \[
+        \mathbb{E}[S_T^2] = 0^2 \cdot \frac{N-x}{N} + N^2 \cdot \frac{x}{N} = Nx.
+    \]
+    Por tanto
+    \[
+        \boxed{\mathbb{E}[T] = Nx - x^2 = x(N - x)}.
+    \]
+    La duración esperada es máxima cuando $x = N/2$ (el jugador empieza exactamente a la mitad), y se anula en los extremos $x = 0$ y $x = N$ (ya terminó). Nótese que para obtener este resultado necesitamos \emph{dos} martingalas distintas derivadas de la misma caminata: $S_n$ para la probabilidad de ruina y $S_n^2 - n$ para la duración esperada.
+\end{example}
+
+\begin{example}[Valuación de derivados financieros]
+\label{ej:finanzas}
+    Una de las aplicaciones más influyentes de las martingalas fuera de los juegos de azar es la \emph{valuación de derivados}, es decir, la determinación del precio justo de contratos financieros como opciones de compra (\emph{call options}).
+
+    \medskip
+    \textbf{El modelo.} Considera el precio de una acción que en cada periodo puede subir un factor $u > 1$ o bajar un factor $d < 1$ (modelo binomial de Cox--Ross--Rubinstein). Una \emph{opción de compra europea} con precio de ejercicio $K$ y vencimiento $T$ otorga al poseedor el derecho de comprar la acción en $T$ al precio $K$; si en ese momento el precio de mercado $S_T > K$, la opción vale $S_T - K$, y si $S_T \le K$, no vale nada. El pago es entonces $V_T = (S_T - K)^+$.
+
+    \medskip
+    \textbf{La idea martingala.} La observación central de la teoría moderna de precios (Black, Scholes, Merton; Premio Nobel 1997) es la siguiente: en un mercado sin arbitraje, existe una \emph{medida de probabilidad equivalente} $\mathbb{Q}$ --- llamada \textbf{medida neutral al riesgo} --- bajo la cual el precio descontado de cada activo financiero es una \textbf{martingala}. Esta no es la probabilidad real del mercado, sino una medida artificial que ``corrige'' las tendencias del precio para hacerlo justo en el sentido martingala.
+
+    Bajo $\mathbb{Q}$, la condición de martingala da directamente el precio justo del derivado:
+    \[
+        V_0 = \mathbb{E}^{\mathbb{Q}}\!\left[\frac{V_T}{(1+r)^T}\right],
+    \]
+    donde $r$ es la tasa libre de riesgo. Es decir: el precio hoy es la esperanza del pago futuro descontado, calculada bajo $\mathbb{Q}$.
+
+    \medskip
+    \textbf{¿Por qué funciona?} La propiedad de martingala bajo $\mathbb{Q}$ garantiza que no existe ninguna estrategia de cobertura (\emph{hedging}) que genere ganancias sin riesgo. Si el precio del derivado difiriera de $V_0$, un agente racional podría construir una cartera que arbitrara esa diferencia --- lo cual es imposible en un mercado eficiente.
+
+    \medskip
+    \textbf{Conexión con este capítulo.} La fórmula anterior es estructuralmente idéntica a lo que usamos en los ejemplos de ruina: aplicar la condición de martingala en un tiempo de paro (aquí, el vencimiento $T$) para igualar el valor presente con la esperanza del valor futuro. La diferencia está en que en finanzas hay que construir primero la medida $\mathbb{Q}$ correcta --- ese es el trabajo técnico que aquí se omite, pero que descansa enteramente en el Teorema de Representación de Martingalas de Doob.
+\end{example}
+
+% ==============================================================
+\section{Convergencia de martingalas}
+% ==============================================================
+
+Una de las preguntas más naturales sobre un proceso estocástico es si converge conforme $n \to \infty$. Para una martingala, la respuesta depende de si el proceso está ``controlado'' en algún sentido.
+
+\subsection{¿Por qué no toda martingala converge?}
+
+La caminata aleatoria simple $S_n$ es el contraejemplo canónico: es martingala, pero oscila entre $-\infty$ y $+\infty$ casi seguramente (por el comportamiento recurrente en dimensión 1). La razón es que $\mathbb{E}[S_n^2] = n \to \infty$: el proceso ``gana energía'' con el tiempo.
+
+La intuición correcta es: \emph{una martingala puede converger sólo si no tiene excursiones de amplitud arbitrariamente grande con frecuencia ilimitada}. Cuantificar esto lleva al siguiente resultado central.
+
+\subsection{Desigualdad maximal de Doob}
+
+Antes del teorema de convergencia, enunciamos una desigualdad que controla el supremo de una martingala.
+
+\begin{theorem}[Desigualdad maximal de Doob, versión $L^2$]
+    Sea $\{M_n\}_{n=0}^N$ una martingala con $M_n \in L^2$ para todo $n$. Entonces
+    \[
+        \mathbb{E}\!\left[\max_{0 \le k \le N} M_k^2\right] \le 4\,\mathbb{E}[M_N^2].
+    \]
+\end{theorem}
+
+
+\subsection{Teorema de convergencia de Doob}
+
+\begin{theorem}[Convergencia de martingalas]
+\label{thm:convergencia_martingala}
+    Sea $\{X_n\}_{n \ge 0}$ una martingala (o submartingala) no negativa, o más generalmente una martingala acotada en $L^1$, es decir, $\sup_n \mathbb{E}[|X_n|] < \infty$. Entonces existe una variable aleatoria $X_\infty$ con $\mathbb{E}[|X_\infty|] < \infty$ tal que
+    \[
+        X_n \;\xrightarrow{\;\text{c.s.}\;}\; X_\infty \qquad \text{cuando } n \to \infty.
+    \]
+\end{theorem}
+
+\begin{remark}
+    Es crucial entender que convergencia c.s. \emph{no} implica convergencia en $L^1$ en general. La condición adicional que asegura $\mathbb{E}[X_n] \to \mathbb{E}[X_\infty]$ (convergencia en $L^1$, también llamada \emph{convergencia uniforme}) es la \textbf{uniforme integrabilidad} de la familia $\{X_n\}$.
+\end{remark}
+
+\subsection{Ejemplos de convergencia y divergencia}
+
+\begin{example}[Urna de Pólya]
+\label{ej:polya}
+    Una urna contiene inicialmente $r$ bolas rojas y $b$ bolas azules. En cada paso se extrae una bola al azar, se observa su color y se devuelve junto con una bola adicional del mismo color. Sea $X_n$ la \emph{proporción} de bolas rojas tras $n$ extracciones.
+
+    \smallskip
+    Afirmamos que $\{X_n\}$ es martingala. En efecto, si tras $n$ pasos hay $R_n$ bolas rojas de un total de $r+b+n$, entonces $X_n = R_n/(r+b+n)$. Al siguiente paso:
+    \[
+        \mathbb{E}[X_{n+1} \mid \mathcal{F}_n]
+        = \frac{R_n}{r+b+n}\cdot\frac{R_n+1}{r+b+n+1} + \frac{b+n-R_n+r}{r+b+n}\cdot\frac{R_n}{r+b+n+1} \cdot\frac{r+b+n}{r+b+n+1}.
+    \]
+    Un cálculo directo muestra que esto simplifica a $X_n$.
+
+    \smallskip
+    Como $0 \le X_n \le 1$, la martingala está acotada en $L^1$ (de hecho en $L^\infty$), y por el Teorema~\ref{thm:convergencia_martingala} converge casi seguramente a una variable aleatoria $X_\infty \in [0,1]$. Se puede demostrar que $X_\infty \sim \mathrm{Beta}(r, b)$, lo que significa que la urna, a largo plazo, ``recuerda'' su estado inicial de una forma específica.
+\end{example}
+
+\begin{example}[Martingala que no converge en $L^1$]
+\label{ej:no_conv_L1}
+    Sea $T$ una variable aleatoria geométrica con $\mathbb{P}(T = k) = (1/2)^k$ para $k \ge 1$. Define $M_0 = 1$ y
+    \[
+        M_n =
+        \begin{cases}
+            2^n & \text{si } T > n, \\
+            0   & \text{si } T \le n.
+        \end{cases}
+    \]
+    Se verifica que $\{M_n\}$ es una martingala: $\mathbb{E}[M_n] = 2^n \mathbb{P}(T > n) = 2^n (1/2)^n = 1$ para todo $n$. Sin embargo, $M_n \to 0$ casi seguramente (pues $\mathbb{P}(T > n) \to 0$), mientras que $\mathbb{E}[M_\infty] = 0 \ne 1 = \mathbb{E}[M_0]$. En particular, no hay convergencia en $L^1$ y la familia $\{M_n\}$ \emph{no} es uniformemente integrable.
+
+    \smallskip
+    Este ejemplo muestra que la convergencia casi segura del Teorema~\ref{thm:convergencia_martingala} no garantiza por sí sola la preservación de la esperanza.
+\end{example}
+
+\subsection{Teorema de paro opcional}
+
+El teorema de paro opcional (también llamado \emph{teorema de muestreo de Doob}) da condiciones bajo las cuales la ``esperanza de una martingala evaluada en un tiempo de paro'' coincide con la ``esperanza inicial''.
+
+\begin{theorem}[Paro opcional — versión acotada]
+\label{thm:paro_opcional_acotado}
+    Sea $\{X_n\}$ una martingala y $\tau$ un tiempo de paro \textbf{acotado}, es decir, existe $N < \infty$ tal que $\tau \le N$ casi seguramente. Entonces
+    \[
+        \mathbb{E}[X_\tau] = \mathbb{E}[X_0].
+    \]
+    Más generalmente, para cualquier tiempo de paro $\sigma \le \tau \le N$:
+    \[
+        \mathbb{E}[X_\tau \mid \mathcal{F}_\sigma] = X_\sigma.
+    \]
+\end{theorem}
+
+\begin{example}[Ruina del jugador — caso asimétrico]
+\label{ej:ruina_asimetrico}
+    Consideremos ahora el juego con $\mathbb{P}(\xi_k = +1) = p \ne 1/2$ y $\mathbb{P}(\xi_k = -1) = q = 1-p$. El proceso $\{S_n\}$ ya no es martingala. Sin embargo, la \textbf{martingala exponencial}
+    \[
+        M_n = \left(\frac{q}{p}\right)^{S_n}
+    \]
+    sí lo es (se verifica como en el Ejemplo de la martingala exponencial). Aplicando el teorema de paro opcional al tiempo de ruina $T$ (finito c.s. y con $M_{n \wedge T}$ acotada entre $(q/p)^0 = 1$ y $(q/p)^N$):
+    \[
+        \mathbb{E}[M_T] = M_0 = \left(\frac{q}{p}\right)^x.
+    \]
+    Como $M_T = (q/p)^0 = 1$ si $S_T = 0$ (ruina) y $M_T = (q/p)^N$ si $S_T = N$ (éxito):
+    \[
+        r(x) \cdot 1 + (1 - r(x)) \cdot \left(\frac{q}{p}\right)^N = \left(\frac{q}{p}\right)^x,
+    \]
+    de donde
+    \[
+        \boxed{r(x) = \frac{(q/p)^x - (q/p)^N}{1 - (q/p)^N}}.
+    \]
+    Cuando $p < 1/2$ (juego desfavorable) y $N \to \infty$, $(q/p)^N \to \infty$ y se obtiene $r(x) \to 1$: con capital infinito en el otro lado, la ruina es casi segura.
+\end{example}
+
 
 \end{document}
