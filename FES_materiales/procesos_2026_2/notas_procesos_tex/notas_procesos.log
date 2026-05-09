@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.3.8)  27 APR 2026 17:50
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.3.8)  7 MAY 2026 14:01
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -414,13 +414,13 @@ File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 LaTeX Font Info:    Trying to load font information for U+msb on input line 3.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-))
+)
+
+[3])
 \tf@toc=\write4
 \openout4 = `notas_procesos.toc'.
 
 
-
-[3]
 
 LaTeX Info: Redefining \. on input line 76.
 LaTeX Info: Redefining \% on input line 76.
@@ -743,9 +743,43 @@ LaTeX Info: Redefining \. on input line 3221.
 LaTeX Info: Redefining \% on input line 3221.
 [73]
 
-LaTeX Info: Redefining \. on input line 3266.
-LaTeX Info: Redefining \% on input line 3266.
-[74] (./notas_procesos.aux
+LaTeX Info: Redefining \. on input line 3272.
+LaTeX Info: Redefining \% on input line 3272.
+[74]
+Cap\'{\i }tulo 3.
+
+
+[75
+
+]
+
+LaTeX Info: Redefining \. on input line 3351.
+LaTeX Info: Redefining \% on input line 3351.
+[76]
+
+LaTeX Info: Redefining \. on input line 3400.
+LaTeX Info: Redefining \% on input line 3400.
+[77]
+
+LaTeX Info: Redefining \. on input line 3437.
+LaTeX Info: Redefining \% on input line 3437.
+[78]
+
+LaTeX Info: Redefining \. on input line 3479.
+LaTeX Info: Redefining \% on input line 3479.
+[79]
+
+LaTeX Info: Redefining \. on input line 3518.
+LaTeX Info: Redefining \% on input line 3518.
+[80]
+
+LaTeX Info: Redefining \. on input line 3560.
+LaTeX Info: Redefining \% on input line 3560.
+[81]
+
+LaTeX Info: Redefining \. on input line 3582.
+LaTeX Info: Redefining \% on input line 3582.
+[82] (./notas_procesos.aux
 LaTeX Info: Redefining \. on input line 11.
 LaTeX Info: Redefining \% on input line 11.
 )
@@ -754,21 +788,21 @@ LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
 Package rerunfilecheck Info: File `notas_procesos.out' has not changed.
-(rerunfilecheck)             Checksum: 518AFEC0B91A03EB5190B2451C34BBFF;8659.
+(rerunfilecheck)             Checksum: 062EB89372685EE857B0144414C0A773;10438.
  ) 
 Here is how much of TeX's memory you used:
- 12620 strings out of 473190
- 195201 string characters out of 5715801
- 619698 words of memory out of 5000000
- 35421 multiletter control sequences out of 15000+600000
+ 12664 strings out of 473190
+ 195723 string characters out of 5715801
+ 620697 words of memory out of 5000000
+ 35435 multiletter control sequences out of 15000+600000
  573820 words of font info for 91 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,15n,82p,1591b,763s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,15n,82p,1591b,768s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbxti10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsl12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmti8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfti1200.pfb>
-Output written on notas_procesos.pdf (74 pages, 547762 bytes).
+Output written on notas_procesos.pdf (82 pages, 578311 bytes).
 PDF statistics:
- 880 PDF objects out of 1000 (max. 8388607)
- 746 compressed objects within 8 object streams
- 292 named destinations out of 1000 (max. 500000)
- 281 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 965 PDF objects out of 1000 (max. 8388607)
+ 822 compressed objects within 9 object streams
+ 322 named destinations out of 1000 (max. 500000)
+ 329 words of extra memory for PDF output out of 10000 (max. 10000000)
 
