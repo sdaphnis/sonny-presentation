@@ -3274,10 +3274,6 @@ El teorema de paro opcional (también llamado \emph{teorema de muestreo de Doob}
 
 En el presente y en el siguiente capítulo estudiaremos el modelo de cadena de Markov a tiempo continuo. Como introducción a la teoría general que se expondrá más adelante, en este capítulo estudiaremos uno de los ejemplos más importantes de este tipo de modelos: el \textbf{proceso de Poisson}. Una característica distintiva de este capítulo es que presentaremos \emph{diferentes definiciones equivalentes} del proceso, cada una iluminando aspectos distintos de su estructura. Estudiaremos sus propiedades fundamentales, entre ellas la distribución de sus valores en un tiempo fijo, la propiedad de pérdida de memoria y la independencia de sus incrementos. El proceso de Poisson es un modelo relevante tanto en las aplicaciones —modelación de llegadas de clientes, fallas de sistemas, emisiones radioactivas— como en la teoría general de los procesos estocásticos.
 
-% ==============================================================
-\section{Primera definición y propiedades básicas}
-% ==============================================================
-
 \begin{definition}
 Sea $T_1, T_2, \ldots$ una sucesión de variables aleatorias independientes, cada una con distribución $\mathrm{Exp}(\lambda)$. El \textbf{proceso de Poisson} de parámetro $\lambda > 0$ es el proceso a tiempo continuo $\{X_t : t \ge 0\}$ definido por:
 \[
@@ -3387,9 +3383,6 @@ En una central de despacho, las llamadas ingresan a una tasa de $\lambda = 2$ ll
 Hay aproximadamente un $27.1\%$ de probabilidad de que lleguen exactamente 2 llamadas en ese intervalo de 10 minutos.
 \end{example}
 
-% ==============================================================
-\section{Propiedades estructurales del proceso de Poisson}
-% ==============================================================
 
 \begin{proposition}
 El proceso de Poisson $\{X_t : t \ge 0\}$ de parámetro $\lambda > 0$ satisface las siguientes propiedades.
@@ -3446,9 +3439,6 @@ donde en el segundo paso se usó la independencia de $X_t - X_s$ respecto del pa
 La propiedad de Markov que acabamos de demostrar es análoga a la que conocemos para cadenas de Markov, pero exige más cuidado en tiempo continuo. En una cadena de Markov en tiempo discreto, el pasado del proceso queda completamente resumido en la historia finita $(X_0, X_1, \ldots, X_n)$: pedir que el futuro sea independiente del pasado dado el presente significa condicionar en una cantidad finita de variables. En tiempo continuo, en cambio, el pasado del proceso es la trayectoria completa $\{X_u : 0 \le u \le s\}$, que contiene información en \emph{todos} los instantes de tiempo —una cantidad no numerable de variables—. La condición de Markov entonces requiere que el futuro sea independiente de esa trayectoria continua entera, no solo de unos pocos instantes seleccionados. La demostración anterior muestra que, para el proceso de Poisson, este requerimiento más fuerte se satisface precisamente gracias a la propiedad de incrementos independientes.
 \end{remark}
 
-% ==============================================================
-\section{Superposición de procesos de Poisson}
-% ==============================================================
 
 Una propiedad notablemente útil del proceso de Poisson es que la fusión de dos flujos independientes de eventos vuelve a ser un proceso de Poisson.
 
@@ -3506,9 +3496,6 @@ con parámetro $\lambda = \lambda_1 + \lambda_2 = 4$ visitantes por hora. Por ej
 \]
 \end{example}
 
-% ==============================================================
-\section{Distribución condicional de los conteos y los tiempos de arribo}
-% ==============================================================
 
 \begin{proposition}
 Sean $0 < s < t$ y $0 \le k \le n$ enteros. Entonces
@@ -3551,9 +3538,6 @@ La densidad conjunta de $(W_1, \ldots, W_n, W_{n+1})$ puede calcularse directame
 Esta proposición tiene una interpretación elegante: si sabemos que ocurrieron exactamente $n$ eventos en $[0,t]$, los instantes precisos en que ocurrieron son tan ``desinformados'' como sea posible: se distribuyen como $n$ puntos tirados al azar de forma uniforme en $[0,t]$, sin ningún sesgo hacia alguna parte del intervalo.
 \end{remark}
 
-% ==============================================================
-\section{Segunda definición del proceso de Poisson}
-% ==============================================================
 
 \begin{definition}[Segunda definición]
 Un \textbf{proceso de Poisson} de parámetro $\lambda > 0$ es un proceso a tiempo continuo $\{X_t : t \ge 0\}$ con espacio de estados $\{0, 1, 2, \ldots\}$ que satisface las siguientes condiciones:
@@ -3576,7 +3560,122 @@ Las condiciones (c-i) y (c-ii) tienen una lectura muy directa: en un intervalo d
 
 Esta perspectiva es especialmente útil en la práctica para \textbf{modeladores y científicos aplicados}: en lugar de preguntarse si los tiempos de espera son realmente exponenciales (lo cual puede ser difícil de verificar directamente), basta comprobar que el proceso empieza en cero, que los conteos en distintos intervalos son independientes, que la intensidad es constante en el tiempo, y que no hay llegadas simultáneas. Estas condiciones son mucho más fáciles de contrastar con datos observados y de justificar a partir de argumentos físicos o de modelado.
 
-Se puede demostrar que ambas definiciones son equivalentes: todo proceso que satisface la segunda definición puede construirse como en la primera, y viceversa.
 \end{remark}
+
+
+\begin{definition}[Tercera definición]
+Un \textbf{proceso de Poisson} de parámetro $\lambda > 0$ es un proceso a tiempo continuo $\{X_t : t \ge 0\}$ con espacio de estados $\{0, 1, 2, \ldots\}$, con trayectorias no decrecientes, y que satisface las siguientes condiciones:
+\begin{enumerate}
+    \item[\normalfont(a)] $X_0 = 0$.
+    \item[\normalfont(b)] Tiene incrementos independientes.
+    \item[\normalfont(c)] Para cualesquiera $s \ge 0$ y $t > 0$, el incremento $X_{t+s} - X_s \sim \mathrm{Poisson}(\lambda t)$.
+\end{enumerate}
+\end{definition}
+
+\begin{remark}
+Esta tercera definición es la más directa en cuanto a la distribución del proceso: exige explícitamente que cada incremento sea Poisson con parámetro proporcional a la longitud del intervalo. Obsérvese que la condición (c) implica ya la estacionariedad de los incrementos (la distribución de $X_{t+s}-X_s$ depende solo de $t$, no de $s$), por lo que en esta definición los incrementos independientes y estacionarios quedan separados en los incisos (b) y (c). Su utilidad radica en que es la más fácil de verificar en la práctica cuando se dispone de datos de conteo: basta ajustar una distribución Poisson a los conteos observados en intervalos de igual longitud y comprobar la independencia entre intervalos disjuntos.
+\end{remark}
+
+%
+\begin{proposition}[Equivalencia de definiciones]
+\label{prop:equivalencia_PP}
+Las tres definiciones del proceso de Poisson son equivalentes: todo proceso que satisface cualquiera de ellas satisface también las otras dos.
+\end{proposition}
+
+\begin{proof}
+Organizamos la demostración en tres implicaciones circulares: Definición~1 $\Rightarrow$ Definición~3, Definición~3 $\Rightarrow$ Definición~2, y Definición~2 $\Rightarrow$ Definición~1.
+
+\medskip
+\textbf{Definición 1 $\Rightarrow$ Definición 3.}
+
+Sea $\{X_t\}$ un proceso de Poisson construido a partir de tiempos de interarribo i.i.d.\ $T_i \sim \mathrm{Exp}(\lambda)$. Las trayectorias son no decrecientes por construcción (el conteo nunca disminuye) y $X_0 = 0$. La independencia de los incrementos se demostró en la Proposición 3.1(b). Para el inciso (c), dados $s \ge 0$ y $t > 0$, el incremento $X_{t+s} - X_s$ cuenta el número de variables $T_i$ que caen en el intervalo $(s, t+s]$; por la pérdida de memoria y la independencia de los $T_i$, este conteo tiene la misma distribución que $X_t$, a saber $\mathrm{Poisson}(\lambda t)$ según la Proposición 3.1.
+
+\medskip
+\textbf{Definición 3 $\Rightarrow$ Definición 2.}
+
+Supongamos que $\{X_t\}$ satisface la Definición~3. Las condiciones (a) y (b) de la Definición~2 coinciden con las de la Definición~3. Queda verificar las condiciones locales (c-i) y (c-ii). Como $X_{t+h} - X_t \sim \mathrm{Poisson}(\lambda h)$, calculamos directamente:
+\begin{align*}
+    \mathbb{P}(X_{t+h} - X_t = 1) &= e^{-\lambda h}\,\lambda h = \lambda h\,e^{-\lambda h} = \lambda h\,(1 - \lambda h + O(h^2)) = \lambda h + o(h),\\[4pt]
+    \mathbb{P}(X_{t+h} - X_t \ge 2) &= 1 - e^{-\lambda h} - \lambda h\,e^{-\lambda h}\\
+    &= 1 - e^{-\lambda h}(1 + \lambda h).
+\end{align*}
+Expandiendo la exponencial, $e^{-\lambda h}(1+\lambda h) = (1 - \lambda h + \tfrac{(\lambda h)^2}{2} - \cdots)(1+\lambda h) = 1 - \tfrac{(\lambda h)^2}{2} + O(h^3)$, de modo que
+\[
+    \mathbb{P}(X_{t+h} - X_t \ge 2) = \frac{(\lambda h)^2}{2} + O(h^3) = o(h).
+\]
+Luego $\{X_t\}$ satisface la Definición~2.
+
+\medskip
+\textbf{Definición 2 $\Rightarrow$ Definición 1.}
+
+Sea $\{X_t\}$ un proceso que satisface la Definición~2. Demostraremos que sus tiempos de interarribo son i.i.d.\ $\mathrm{Exp}(\lambda)$.
+
+\textit{Distribución del primer tiempo de interarribo.} Sea $T_1 = \inf\{t > 0 : X_t = 1\}$. Para $t > 0$:
+\[
+    \mathbb{P}(T_1 > t) = \mathbb{P}(X_t = 0).
+\]
+Sea $p_0(t) = \mathbb{P}(X_t = 0)$. Usando los incrementos independientes y estacionarios, para $h > 0$ pequeño:
+\[
+    p_0(t+h) = \mathbb{P}(X_{t+h} = 0) = \mathbb{P}(X_t = 0)\,\mathbb{P}(X_{t+h} - X_t = 0).
+\]
+La condición (c-i) y (c-ii) de la Definición~2 implican $\mathbb{P}(X_{t+h} - X_t = 0) = 1 - \lambda h + o(h)$, de modo que
+\[
+    p_0(t+h) = p_0(t)\,(1 - \lambda h + o(h)).
+\]
+Reordenando y tomando el límite $h \to 0$:
+\[
+    \frac{p_0(t+h) - p_0(t)}{h} \to -\lambda\, p_0(t),
+\]
+es decir, $p_0'(t) = -\lambda\, p_0(t)$. Con la condición inicial $p_0(0) = \mathbb{P}(X_0 = 0) = 1$, la solución única es $p_0(t) = e^{-\lambda t}$. Por lo tanto $T_1 \sim \mathrm{Exp}(\lambda)$.
+
+\textit{Independencia y distribución de los tiempos sucesivos.} Dado que el primer evento ocurre en $T_1$, por la propiedad de incrementos independientes el proceso $\{X_{T_1 + t} - X_{T_1} : t \ge 0\}$ es, nuevamente, un proceso que satisface las condiciones de la Definición~2 (con los mismos parámetros) e independiente del pasado. En particular, el tiempo hasta el siguiente evento $T_2$ tiene también distribución $\mathrm{Exp}(\lambda)$ e independiente de $T_1$. El argumento se repite inductivamente para todos los $T_k$.
+
+Por lo tanto los tiempos de interarribo son i.i.d.\ $\mathrm{Exp}(\lambda)$, y $\{X_t\}$ satisface la Definición~1.
+\end{proof}
+
+% ==============================================================
+\section{El proceso de Poisson no homogéneo}
+% ==============================================================
+
+La hipótesis de que la tasa de llegada $\lambda$ sea constante en el tiempo es conveniente matemáticamente, pero resulta restrictiva en muchas aplicaciones reales. Por ejemplo, el número de llamadas a un centro de emergencias no llega al mismo ritmo a las 3 de la mañana que a las 6 de la tarde; el tráfico en una autopista varía a lo largo del día; la tasa de ocurrencia de sismos puede cambiar después de un gran evento. Para capturar este tipo de fenómenos se introduce la siguiente generalización.
+
+\begin{definition}[Proceso de Poisson no homogéneo]
+Sea $\lambda : [0, \infty) \to (0, \infty)$ una función de tasa (o \textbf{función de intensidad}) localmente integrable. Un \textbf{proceso de Poisson no homogéneo} con función de intensidad $\lambda(t)$ es un proceso a tiempo continuo $\{X_t : t \ge 0\}$ con espacio de estados $\{0,1,2,\ldots\}$, trayectorias no decrecientes, y que satisface:
+\begin{enumerate}
+    \item[\normalfont(a)] $X_0 = 0$.
+    \item[\normalfont(b)] Tiene incrementos independientes.
+    \item[\normalfont(c)] Para cualesquiera $0 \le s < t$, el incremento $X_t - X_s$ tiene distribución $\mathrm{Poisson}(\Lambda(s,t))$, donde
+    \[
+        \Lambda(s,t) = \int_s^t \lambda(u)\, du
+    \]
+    es la \textbf{medida de intensidad acumulada} en el intervalo $(s, t]$.
+\end{enumerate}
+\end{definition}
+
+\begin{remark}
+El proceso de Poisson homogéneo de parámetro $\lambda$ es el caso particular en que $\lambda(t) = \lambda$ es constante, pues entonces $\Lambda(s,t) = \lambda(t-s)$. En el caso no homogéneo los incrementos ya \textit{no} son estacionarios: la distribución de $X_t - X_s$ depende de los valores específicos de $s$ y $t$, no solo de la diferencia $t - s$.
+
+La función $\Lambda(0,t) = \int_0^t \lambda(u)\,du$ se denomina \textbf{función de intensidad acumulada} o \textbf{valor esperado acumulado} del proceso, ya que $\mathbb{E}[X_t] = \Lambda(0,t)$. La interpretación es directa: $\lambda(t)\,dt$ representa la probabilidad de que ocurra un evento en el intervalo infinitesimal $[t, t+dt)$.
+\end{remark}
+
+\begin{example}[Tráfico vehicular con variación diaria]
+Supongamos que el número de automóviles que pasan por una caseta de cobro sigue un proceso de Poisson no homogéneo con función de intensidad (en vehículos por hora)
+\[
+    \lambda(t) = 100 + 80\sin^2\!\left(\frac{\pi t}{12}\right), \qquad t \ge 0,
+\]
+donde $t$ se mide en horas desde la medianoche. Esta función refleja una tasa mínima de 100 veh/h durante la madrugada ($t=0$) y una tasa máxima de 180 veh/h al mediodía ($t=6$).
+
+La intensidad acumulada en la mañana, de 6 a 9 horas ($s=6$, $t=9$), es:
+\[
+    \Lambda(6,9) = \int_6^9 \left(100 + 80\sin^2\!\left(\frac{\pi u}{12}\right)\right) du.
+\]
+Usando que $\sin^2(\pi u/12) = \tfrac{1}{2}(1 - \cos(\pi u/6))$:
+\[
+    \Lambda(6,9) = \int_6^9 \left(140 - 40\cos\!\left(\frac{\pi u}{6}\right)\right)du
+    = \left[140u - \frac{240}{\pi}\sin\!\left(\frac{\pi u}{6}\right)\right]_6^9
+    = 420 + \frac{240}{\pi} \approx 496.4.
+\]
+Por lo tanto, el número de vehículos entre las 6 y las 9 de la mañana tiene distribución $\mathrm{Poisson}(496.4)$, con media y varianza aproximadamente iguales a $496.4$.
+\end{example}
 
 \end{document}
