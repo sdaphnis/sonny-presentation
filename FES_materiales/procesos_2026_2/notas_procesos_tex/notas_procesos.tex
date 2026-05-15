@@ -9,6 +9,8 @@
 \usepackage{amssymb} % Para el uso de \mathbb
 \usepackage{amsthm} % Para entornos como definition, proposition, example, remark
 \usepackage{hyperref} % Para hipervínculos interactivos en el PDF
+\usepackage{tikz}
+\usetikzlibrary{decorations.pathreplacing, arrows.meta, babel}
 
 \geometry{margin=1in}
 \pagestyle{fancy}
@@ -3677,5 +3679,503 @@ Usando que $\sin^2(\pi u/12) = \tfrac{1}{2}(1 - \cos(\pi u/6))$:
 \]
 Por lo tanto, el número de vehículos entre las 6 y las 9 de la mañana tiene distribución $\mathrm{Poisson}(496.4)$, con media y varianza aproximadamente iguales a $496.4$.
 \end{example}
+
+% ==============================================================
+\chapter{Movimiento Browniano}
+% ==============================================================
+
+\section{Introducción}
+El Movimiento Browniano, también conocido como el \textit{Proceso de Wiener}, representa la piedra angular de los procesos estocásticos en tiempo continuo. Su importancia en la ciencia actuarial y las finanzas cuantitativas radica en que constituye el bloque de construcción fundamental para la modelación de fenómenos con incertidumbre acumulada, tales como la evolución de precios de activos o la reserva de siniestralidad.
+
+En este capítulo, estableceremos al Movimiento Browniano como el límite de una caminata aleatoria (Principio de Invarianza de Donsker) y caracterizaremos sus propiedades fundamentales de trayectoria y dependencia.
+
+% ==============================================================
+\section{Construcción como límite discreto}
+% ==============================================================
+
+Sea $\{X_i\}_{i \in \mathbb{N}}$ una sucesión de variables aleatorias independientes e idénticamente distribuidas (i.i.d.) definidas en un espacio de probabilidad $(\Omega, \mathcal{F}, \mathbb{P})$, tales que $\mathbb{E}[X_i] = 0$ y $\mathrm{Var}(X_i) = 1$. Definimos la caminata aleatoria simple como $S_n = \sum_{i=1}^n X_i$.
+
+Para transitar al continuo, realizamos un reescalamiento de tiempo y espacio. Consideramos un intervalo $[0,T]$ y lo particionamos en $n$ subintervalos. Definimos el proceso escalado $W_n(t)$ como:
+\[
+    W_n(t) = \frac{1}{\sqrt{n}} S_{\lfloor nt \rfloor} = \frac{1}{\sqrt{n}} \sum_{i=1}^{\lfloor nt \rfloor} X_i.
+\]
+
+\begin{theorem}[Principio de Invarianza de Donsker]
+Cuando $n \to \infty$, el proceso $W_n(t)$ converge débilmente en el espacio de funciones continuas $C[0,T]$ a un proceso estocástico $B = \{B_t : t \ge 0\}$ cuyas trayectorias son casi seguramente continuas.
+\end{theorem}
+
+\begin{remark}
+El factor $1/\sqrt{n}$ es crucial. Si dividimos el tiempo por $n$, la varianza de la suma de pasos escala linealmente con $n$; por tanto, debemos normalizar el espacio por la desviación estándar ($\sqrt{n}$) para obtener un límite no degenerado con varianza finita.
+\end{remark}
+
+% ==============================================================
+\section{Definición axiomática}
+% ==============================================================
+
+Formalmente, caracterizamos al objeto límite del teorema anterior mediante la siguiente definición.
+
+\begin{definition}[Movimiento Browniano estándar]
+Un proceso estocástico real $B = \{B_t\}_{t \ge 0}$ es un \textbf{Movimiento Browniano estándar} si satisface:
+\begin{enumerate}
+    \item[\normalfont(a)] $B_0 = 0$ casi seguramente.
+    \item[\normalfont(b)] \textbf{Incrementos independientes:} para cualesquiera tiempos $0 \le t_0 < t_1 < \cdots < t_k$, las variables aleatorias $B_{t_1}-B_{t_0},\, B_{t_2}-B_{t_1},\, \ldots,\, B_{t_k}-B_{t_{k-1}}$ son independientes.
+    \item[\normalfont(c)] \textbf{Incrementos estacionarios y normales:} para $0 \le s < t$, se tiene $(B_t - B_s) \sim \mathcal{N}(0,\, t-s)$.
+    \item[\normalfont(d)] \textbf{Continuidad de trayectorias:} la función $t \mapsto B_t(\omega)$ es continua para casi todo $\omega \in \Omega$.
+\end{enumerate}
+\end{definition}
+
+\begin{example}[Cálculo de probabilidades conjuntas]
+Calcular la probabilidad de que el proceso sea positivo en $t=1$ y menor a $1$ en $t=2$, es decir, $\mathbb{P}(B_1 > 0,\, B_2 < 1)$.
+
+\textbf{Solución.} Para resolver esto, debemos transformar las variables correlacionadas $B_1$ y $B_2$ en incrementos independientes. Notemos que $B_2 = B_1 + (B_2 - B_1)$:
+\[
+    \mathbb{P}(B_1 > 0,\, B_2 < 1) = \mathbb{P}\bigl(B_1 > 0,\, B_1 + (B_2 - B_1) < 1\bigr).
+\]
+Sea $X = B_1 \sim \mathcal{N}(0,1)$ y $Y = B_2 - B_1 \sim \mathcal{N}(0,1)$. Por definición de movimiento browniano, $X$ e $Y$ son independientes. La probabilidad se calcula como la integral de la densidad conjunta (producto de densidades):
+\[
+    \int_{0}^{\infty} f_X(x) \left[ \int_{-\infty}^{1-x} f_Y(y)\, dy \right] dx
+    = \int_{0}^{\infty} \frac{1}{\sqrt{2\pi}}\, e^{-x^2/2}\, \Phi(1-x)\, dx,
+\]
+donde $\Phi$ es la función de distribución acumulada de la normal estándar. Este valor suele calcularse mediante métodos numéricos.
+\end{example}
+
+% ==============================================================
+\section{Estructura de covarianza y carácter gaussiano}
+% ==============================================================
+
+Dado que el Movimiento Browniano se define a través de distribuciones normales, es un \textbf{proceso gaussiano}. Su ley está completamente determinada por su función de media y su función de autocovarianza.
+
+\begin{proposition}
+La función de autocovarianza del Movimiento Browniano estándar está dada por
+\[
+    \gamma(s,t) = \mathrm{Cov}(B_s, B_t) = \min(s,t).
+\]
+\end{proposition}
+
+\begin{proof}
+Sin pérdida de generalidad, supongamos $s \le t$. Escribimos $B_t = B_s + (B_t - B_s)$. Entonces:
+\begin{align*}
+    \mathrm{Cov}(B_s, B_t) &= \mathbb{E}[B_s B_t] - \mathbb{E}[B_s]\,\mathbb{E}[B_t] \\
+    &= \mathbb{E}[B_s(B_s + B_t - B_s)] - 0 \\
+    &= \mathbb{E}[B_s^2] + \mathbb{E}[B_s(B_t - B_s)].
+\end{align*}
+Por la independencia de incrementos, $\mathbb{E}[B_s(B_t - B_s)] = \mathbb{E}[B_s]\,\mathbb{E}[B_t - B_s] = 0$. Dado que $B_s \sim \mathcal{N}(0,s)$, tenemos $\mathbb{E}[B_s^2] = s$. Por lo tanto, $\mathrm{Cov}(B_s, B_t) = s = \min(s,t)$.
+\end{proof}
+
+\begin{example}[Varianza de una combinación lineal]
+Calcular $\mathrm{Var}(3B_1 - B_4)$.
+
+\textbf{Solución.} Usamos la propiedad $\mathrm{Cov}(B_s, B_t) = \min(s,t)$:
+\begin{align*}
+    \mathrm{Var}(3B_1 - B_4)
+    &= \mathrm{Var}(3B_1) + \mathrm{Var}(B_4) - 2\,\mathrm{Cov}(3B_1,\, B_4) \\
+    &= 9\,\mathrm{Var}(B_1) + \mathrm{Var}(B_4) - 6\,\mathrm{Cov}(B_1, B_4) \\
+    &= 9(1) + 4 - 6\min(1,4) \\
+    &= 13 - 6 = 7.
+\end{align*}
+\end{example}
+
+% ==============================================================
+\section{Propiedades de regularidad de las trayectorias}
+% ==============================================================
+
+A pesar de la continuidad garantizada por el axioma (d), el Movimiento Browniano exhibe un comportamiento extremadamente irregular desde la perspectiva del cálculo diferencial clásico.
+
+\begin{theorem}
+Con probabilidad 1, las trayectorias del Movimiento Browniano no son diferenciables en ningún punto $t \in [0, \infty)$.
+\end{theorem}
+
+\begin{remark}
+Intentar calcular la derivada implica evaluar $\lim_{h \to 0} \frac{B_{t+h}-B_t}{h}$. Sin embargo, $B_{t+h}-B_t \sim \mathcal{N}(0,h)$, lo que implica que el cociente de diferencias sigue una distribución $\mathcal{N}(0, 1/h)$. Al tender $h \to 0$, la varianza diverge, lo que impide la convergencia del límite.
+\end{remark}
+
+\subsection{Variación cuadrática y variación total}
+
+\textbf{Variación total.} Para una función suficientemente regular $f:[0,t]\to\mathbb{R}$, la variación total se define como
+\[
+    V_1(f, t) = \lim_{\|\Pi\|\to 0} \sum_{i=1}^n |f(t_i) - f(t_{i-1})|.
+\]
+Para las funciones que encontramos en cálculo ordinario (diferenciables, Lipschitz) esta cantidad es finita, y corresponde geométricamente a la longitud de la curva: una función con variación total finita es \textbf{rectificable}, es decir, su gráfica puede aproximarse arbitrariamente bien por segmentos de recta. En cambio, puede demostrarse que con probabilidad 1, las trayectorias del Movimiento Browniano tienen \textbf{variación total infinita}: la trayectoria oscila tan rápido y tan frecuentemente que la longitud acumulada de sus excursiones diverge en cualquier intervalo de tiempo, por pequeño que sea.
+
+\textbf{Variación cuadrática.} Dado que la variación total es infinita, necesitamos una medida alternativa para cuantificar la rugosidad del MB. La idea es penalizar menos los saltos pequeños elevando al cuadrado los incrementos antes de sumarlos. Para una partición $\Pi = \{0 = t_0 < t_1 < \cdots < t_n = t\}$, se define:
+\[
+    [B,B]_t = \lim_{\|\Pi\| \to 0} \sum_{i=1}^n \left(B_{t_i} - B_{t_{i-1}}\right)^2 = t.
+\]
+Para entender por qué el resultado es $t$, nótese que cada término satisface $\mathbb{E}[(B_{t_i}-B_{t_{i-1}})^2] = t_i - t_{i-1}$, de modo que la suma tiene esperanza $\sum(t_i - t_{i-1}) = t$ para cualquier partición. Lo no trivial es que la varianza de esa suma tiende a cero al refinar la partición, lo que garantiza la convergencia. La variación cuadrática captura así la escala a la que el MB acumula incertidumbre: en un intervalo $[0,t]$, la cantidad total de fluctuaciones cuadráticas es exactamente $t$.
+
+\subsection{Comportamiento infinitesimal y la regla de la cadena}
+
+Los resultados anteriores describen al MB como objeto. Sin embargo, en la mayoría de las aplicaciones no nos interesa $B_t$ por sí solo, sino \textbf{funciones del MB}. Si $B_t$ modela el logaritmo del precio de un activo financiero, queremos entender $e^{B_t}$; si modela una posición física, queremos calcular la energía potencial $V(B_t)$. En general, nos preguntamos: ¿cómo se comporta $f(B_t)$ infinitesimalmente?
+
+En el cálculo ordinario, esta pregunta tiene una respuesta inmediata: la regla de la cadena. El objetivo de esta sección es entender por qué dicha regla no puede aplicarse directamente a trayectorias brownianas, y qué papel juega la variación cuadrática en su corrección.
+
+\subsubsection*{La regla de la cadena clásica y su hipótesis oculta}
+
+Consideremos una función suave $g:[0,T]\to\mathbb{R}$ diferenciable, y queramos calcular el cambio en $f(g(t))$ a lo largo del tiempo. La expansión de Taylor da:
+\begin{equation}
+    f(g(t) + \Delta g) - f(g(t)) = f'(g(t))\,\Delta g + \frac{1}{2}f''(g(t))\,(\Delta g)^2 + O((\Delta g)^3).
+    \label{eq:taylor}
+\end{equation}
+Como $g$ es diferenciable, $\Delta g \approx g'(t)\,\Delta t$, y por tanto $(\Delta g)^2 \approx (g'(t))^2\,(\Delta t)^2$. Este término es de orden $(\Delta t)^2$, que es despreciable frente a $\Delta t$ cuando $\Delta t \to 0$. Al acumular sobre una partición y tomar el límite, solo sobrevive el término lineal:
+\[
+    df(g(t)) = f'(g(t))\,g'(t)\,dt.
+\]
+Esta es la regla de la cadena ordinaria. Lo que acabamos de ver es que su validez depende de una hipótesis implícita: que $(\Delta g)^2$ sea despreciable, es decir, que la variación cuadrática de $g$ sea \textbf{cero}. Para cualquier función diferenciable esto se cumple, pero ya sabemos que no es el caso del MB.
+
+\subsubsection*{El mundo rugoso: $f(B_t)$}
+
+Repitamos el mismo argumento con $g = B$. El incremento del MB satisface $\Delta B \sim \mathcal{N}(0,\Delta t)$, de modo que su tamaño típico es de orden $\sqrt{\Delta t}$. Al elevar al cuadrado:
+\[
+    (\Delta B)^2 \;\sim\; \Delta t \qquad (\text{y no } (\Delta t)^2).
+\]
+El término cuadrático en \eqref{eq:taylor} es ahora del \textbf{mismo orden} que el término lineal. Al acumular sobre la partición, este término no desaparece sino que converge a una integral, contribuyendo con un término adicional de orden finito. Ignorarlo introduciría un error sistemático no despreciable.
+
+En otras palabras, la regla de la cadena clásica falla para $f(B_t)$ precisamente porque $[B,B]_t = t \neq 0$. La corrección necesaria es exactamente el término que la variación cuadrática no nula impone, y que en la literatura se conoce como la \textbf{fórmula de It\^{o}}.% ==============================================================
+\section{Propiedades de invarianza}
+% ==============================================================
+
+Una de las características más elegantes del movimiento browniano es que varias transformaciones naturales lo dejan invariante en distribución. Las verificaciones siguen el mismo esquema: comprobar los cuatro axiomas de la definición. Las simetrías fundamentales son las siguientes.
+
+\begin{proposition}[Simetría]
+Si $\{B_t\}$ es un movimiento browniano estándar, entonces $\{-B_t\}$ también lo es.
+\end{proposition}
+
+\begin{proposition}[Autosimilitud]
+Sea $\{B_t\}$ un movimiento browniano estándar y $c > 0$. El proceso $W_t = c^{-1} B_{c^2 t}$ es también un movimiento browniano estándar.
+\end{proposition}
+
+\begin{remark}
+Esta propiedad se conoce como \textbf{autosimilitud de índice $1/2$}: al ampliar la escala temporal por un factor $c^2$ y la espacial por $c$, el proceso luce estadísticamente idéntico. Es la razón por la que el MB aparece en la teoría de fractales.
+\end{remark}
+
+\begin{proposition}[Inversión de tiempo]
+Define $\hat{B}_t = t\, B_{1/t}$ para $t > 0$ y $\hat{B}_0 = 0$. El proceso $\{\hat{B}_t : t \ge 0\}$ es un movimiento browniano estándar.
+\end{proposition}
+
+\begin{proposition}[Traslación]
+Para cualquier $t_0 > 0$ fijo, el proceso $W_t = B_{t_0 + t} - B_{t_0}$, $t \ge 0$, es un movimiento browniano estándar.
+\end{proposition}
+
+\begin{example}[Ilustración de las invarianzas]
+\label{ex:invarianzas}
+Sea $\{B_t\}$ un MB estándar. Las invarianzas tienen interpretaciones concretas:
+
+\begin{enumerate}
+    \item \textit{(Simetría)} La trayectoria reflejada $-B_t$ es indistinguible estadísticamente de $B_t$. En particular $\mathbb{P}(B_t > a) = \mathbb{P}(B_t < -a)$ para todo $a \in \mathbb{R}$, lo que refleja la simetría de la distribución normal.
+
+    \item \textit{(Autosimilitud)} $B_t \overset{d}{=} \sqrt{t}\,B_1 \sim \mathcal{N}(0,t)$. Al ampliar la ventana temporal por un factor $c^2$, las fluctuaciones solo crecen por un factor $c$: el MB ``no explota'' pero tampoco se estabiliza.
+
+    \item \textit{(Inversión temporal)} El comportamiento del MB en tiempos grandes (cómo oscila $B_t$ cuando $t\to\infty$) es estadísticamente equivalente a su comportamiento en tiempos pequeños (cómo oscila cerca del origen). Esto es una simetría entre el ``inicio'' y el ``horizonte lejano''.
+
+    \item \textit{(Traslación)} El MB ``se renueva'' en cualquier instante $t_0$: la evolución futura $B_{t_0+t} - B_{t_0}$ es estadísticamente idéntica a la evolución desde el origen. Esta propiedad es el contenido de la \textbf{propiedad fuerte de Markov}.
+\end{enumerate}
+\end{example}
+
+\subsection{Movimiento browniano geométrico}
+
+A pesar de sus elegantes propiedades, el movimiento browniano estándar no es un modelo adecuado para los precios de activos financieros: sus trayectorias toman valores negativos con probabilidad positiva, y la magnitud de las fluctuaciones no depende del nivel del precio.
+
+Para corregir esto se introduce el \textbf{movimiento browniano geométrico} (MBG):
+
+\begin{definition}[Movimiento browniano geométrico]
+\label{def:mbg}
+Sea $\{B_t\}$ un movimiento browniano estándar. El proceso
+\[
+    S_t = S_0\,\exp\!\left(\left(\mu - \tfrac{1}{2}\sigma^2\right)t + \sigma B_t\right), \quad t \ge 0,
+\]
+donde $S_0 > 0$, $\mu \in \mathbb{R}$ y $\sigma > 0$ son parámetros, se llama \textbf{movimiento browniano geométrico} con parámetros de deriva $\mu$ y volatilidad $\sigma$.
+\end{definition}
+
+\begin{remark}
+El MBG es siempre positivo, lo que lo hace apropiado para modelar precios de activos. Sus rendimientos logarítmicos $\log(S_t/S_0)$ siguen una distribución normal. El parámetro $\sigma$ controla la amplitud de las fluctuaciones y recibe el nombre de \textbf{volatilidad}: a mayor $\sigma$, las trayectorias son más erráticas y el activo exhibe mayor riesgo. El término $-\sigma^2/2$ en el exponente es la corrección de Itô mencionada anteriormente; gracias a él, el precio esperado es $\mathbb{E}[S_t] = S_0 e^{\mu t}$, independientemente de $\sigma$.
+\end{remark}
+
+\begin{example}[Distribución del precio de un activo bajo el MBG]
+Sea $S_0 = 100$, $\mu = 0.08$ y $\sigma = 0.20$ (valores anuales). Al cabo de 1 año:
+\[
+    \log(S_1/100) \sim \mathcal{N}\!\left(\mu - \tfrac{1}{2}\sigma^2,\, \sigma^2\right) = \mathcal{N}(0.06,\, 0.04).
+\]
+La probabilidad de que el precio supere 120 al cabo del año es:
+\[
+    \mathbb{P}(S_1 > 120) = \mathbb{P}\!\left(Z > \frac{\log(120/100) - 0.06}{0.20}\right) \approx \mathbb{P}(Z > 0.712) \approx 0.238.
+\]
+El precio esperado es $\mathbb{E}[S_1] = 100\,e^{0.08} \approx 108.33$, pero la mediana es $100\,e^{0.06} \approx 106.18$: la distribución log-normal es asimétrica hacia la derecha.
+\end{example}
+
+% ==============================================================
+\section{El movimiento browniano como martingala}
+% ==============================================================
+
+El movimiento browniano no es solo un proceso gaussiano con trayectorias continuas; es también un ejemplo paradigmático de martingala, y sus transformaciones dan lugar a tres martingalas clásicas de uso frecuente.
+
+\begin{definition}[Filtración natural]
+Dado el movimiento browniano $\{B_t\}$, su \textbf{filtración natural} es la familia $\mathcal{F}_t = \sigma(B_s : 0 \le s \le t)$, es decir, la información acumulada hasta el instante $t$.
+\end{definition}
+
+\begin{proposition}[Las tres martingalas clásicas del movimiento browniano]
+\label{prop:tres_martingalas}
+Los siguientes procesos son martingalas respecto a $\{\mathcal{F}_t\}$:
+\begin{enumerate}
+    \item[\normalfont(a)] $M_t^{(1)} = B_t$.
+    \item[\normalfont(b)] $M_t^{(2)} = B_t^2 - t$.
+    \item[\normalfont(c)] $M_t^{(3)} = \exp\!\left(\sigma B_t - \tfrac{1}{2}\sigma^2 t\right)$ para cualquier $\sigma \in \mathbb{R}$ (\textbf{martingala exponencial}).
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+\textit{Inciso (a).} $\mathbb{E}[B_t \mid \mathcal{F}_s] = \mathbb{E}[B_s + (B_t - B_s) \mid \mathcal{F}_s] = B_s + \mathbb{E}[B_t - B_s] = B_s$, donde usamos que el incremento $B_t - B_s$ es independiente de $\mathcal{F}_s$ y tiene media cero.
+
+\textit{Inciso (b).} Escribimos $B_t^2 = (B_s + (B_t - B_s))^2 = B_s^2 + 2B_s(B_t - B_s) + (B_t - B_s)^2$. Tomando esperanza condicional:
+\begin{align*}
+    \mathbb{E}[B_t^2 - t \mid \mathcal{F}_s]
+    &= B_s^2 + 2B_s\,\mathbb{E}[B_t - B_s] + \mathbb{E}[(B_t-B_s)^2] - t \\
+    &= B_s^2 + 0 + (t-s) - t = B_s^2 - s.
+\end{align*}
+
+\textit{Inciso (c).} Sea $Z = B_t - B_s \sim \mathcal{N}(0, t-s)$, independiente de $\mathcal{F}_s$. Entonces
+\begin{align*}
+    \mathbb{E}\!\left[e^{\sigma B_t - \frac{1}{2}\sigma^2 t} \mid \mathcal{F}_s\right]
+    &= e^{\sigma B_s - \frac{1}{2}\sigma^2 t}\,\mathbb{E}\!\left[e^{\sigma Z}\right]
+    = e^{\sigma B_s - \frac{1}{2}\sigma^2 t} \cdot e^{\frac{1}{2}\sigma^2(t-s)}
+    = e^{\sigma B_s - \frac{1}{2}\sigma^2 s},
+\end{align*}
+donde usamos que la función generatriz de momentos de $Z \sim \mathcal{N}(0, t-s)$ es $\mathbb{E}[e^{\sigma Z}] = e^{\frac{1}{2}\sigma^2(t-s)}$.
+\end{proof}
+
+\subsection{Aplicación del Teorema del Paro Opcional a tiempos de primer pasaje}
+
+En la práctica, las martingalas del movimiento browniano se utilizan principalmente con tiempos de paro de la forma $\tau_a = \inf\{t \ge 0 : B_t = a\}$ (tiempo de primer pasaje por un nivel $a$) o $\tau_{a,b} = \inf\{t \ge 0 : B_t \notin (-b, a)\}$ (tiempo de salida de un intervalo). Para aplicar el TPO a estos tiempos es necesario verificar sus hipótesis; en la mayoría de los contextos prácticos esto se logra mediante el siguiente argumento estándar.
+
+El TPO en tiempo continuo requiere, en esencia, que la martingala parada $M_{t \wedge \tau}$ sea uniformemente integrable (o, en versiones más básicas, que $\tau$ sea acotado o que el proceso esté acotado entre $0$ y $\tau$). Para los tiempos de primer pasaje esto no puede verificarse directamente sobre la martingala original $\{M_t\}$, ya que $\tau$ no es acotado en general. La estrategia estándar es la siguiente:
+
+\begin{enumerate}
+    \item \textbf{Martingala parada y acotación.} Se trabaja con la \textbf{martingala parada} $M_{t \wedge \tau}$, donde $\tau$ es el tiempo de paro de interés. Esta sigue siendo una martingala (el proceso parado de una martingala es martingala). Si el proceso está \emph{acotado} en $[0,\tau]$ —como ocurre para la salida de un intervalo $(-b,a)$, donde $B_{t\wedge\tau_{a,b}} \in [-b,a]$ siempre— entonces $M_{t \wedge \tau}$ es acotada y el TPO aplica directamente.
+
+    \item \textbf{Tiempos de paro acotados y límite.} Cuando $\tau$ no acota el proceso, se introduce la sucesión $\tau_n = \tau \wedge n$. Para cada $n$, el TPO aplica a $\tau_n$ (tiempo de paro acotado), dando $\mathbb{E}[M_{\tau_n}] = \mathbb{E}[M_0]$. Se toma entonces el límite $n \to \infty$: si $M_{\tau_n} \to M_\tau$ c.s. (lo que ocurre cuando $\tau < \infty$ c.s.) y la familia $\{M_{\tau_n}\}$ es uniformemente integrable, entonces $\mathbb{E}[M_\tau] = \mathbb{E}[M_0]$.
+
+    \item \textbf{¿Cuándo es $\tau < \infty$ c.s.?} Para $\tau_a = \inf\{t: B_t = a\}$ esto es un hecho clásico: el movimiento browniano es recurrente en $\mathbb{R}$, es decir, visita cualquier nivel $a$ en tiempo finito con probabilidad 1. Para la salida de $(-b,a)$, el argumento es análogo.
+\end{enumerate}
+
+En los ejemplos de estas notas siempre se indicará cuál de estas condiciones aplica. Generalmente el argumento de acotación es suficiente para los problemas de primer pasaje por barreras finitas.
+
+\begin{example}[Ruina del jugador en tiempo continuo]
+\label{ex:ruina_continua}
+Sea $\tau_{a,b} = \inf\{t \ge 0 : B_t \notin (-b, a)\}$ el primer tiempo de salida del intervalo $(-b, a)$ con $a, b > 0$. Queremos calcular $\mathbb{P}(B_{\tau_{a,b}} = a)$, la probabilidad de que el proceso salga por la barrera superior.
+
+\textit{Paso 1: Aplicar el TPO a $M_t^{(1)} = B_t$.} Bajo condiciones técnicas estándar (que se verifican porque el tiempo de salida es finito c.s. y el proceso está acotado en $[-b, a]$ hasta $\tau_{a,b}$), el Teorema del Paro Opcional (TPO) garantiza:
+\[
+    \mathbb{E}[B_{\tau_{a,b}}] = \mathbb{E}[B_0] = 0.
+\]
+Como $B_{\tau_{a,b}} \in \{-b, a\}$:
+\[
+    a\,\mathbb{P}(B_{\tau_{a,b}} = a) + (-b)\,\mathbb{P}(B_{\tau_{a,b}} = -b) = 0.
+\]
+Con $\mathbb{P}(B_{\tau_{a,b}} = a) + \mathbb{P}(B_{\tau_{a,b}} = -b) = 1$, se obtiene:
+\[
+    \boxed{\mathbb{P}(B_{\tau_{a,b}} = a) = \frac{b}{a+b}}.
+\]
+
+\textit{Paso 2: Aplicar el TPO a $M_t^{(2)} = B_t^2 - t$.} Por el mismo razonamiento:
+\[
+    \mathbb{E}[B_{\tau_{a,b}}^2 - \tau_{a,b}] = \mathbb{E}[B_0^2 - 0] = 0,
+\]
+de donde $\mathbb{E}[\tau_{a,b}] = \mathbb{E}[B_{\tau_{a,b}}^2]$. Calculando la segunda expresión:
+\[
+    \mathbb{E}[B_{\tau_{a,b}}^2] = a^2 \cdot \frac{b}{a+b} + b^2 \cdot \frac{a}{a+b} = \frac{ab(a+b)}{a+b} = ab.
+\]
+Por lo tanto, $\mathbb{E}[\tau_{a,b}] = ab$.
+
+Interpretación actuarial: si modelamos la reserva de una cartera de seguros como un movimiento browniano que comienza en 0 y la compañía se arruina al llegar a $-b$ (el capital se agota) o distribuye excedentes al llegar a $a$ (la reserva supera el umbral), entonces la probabilidad de distribuir excedentes antes de la ruina es $b/(a+b)$ y el tiempo esperado hasta la decisión es $ab$.
+\end{example}
+
+% ==============================================================
+\section{Máximo del proceso y principio de reflexión}
+% ==============================================================
+
+\begin{definition}[Máximo corrido]
+Para el movimiento browniano estándar $\{B_t\}$ y un horizonte $t \ge 0$, el \textbf{máximo corrido} se define como
+\[
+    M_t = \max_{0 \le s \le t} B_s.
+\]
+\end{definition}
+
+\begin{theorem}[Principio de reflexión]
+\label{thm:reflexion}
+Para $a > 0$ y $t > 0$:
+\[
+    \mathbb{P}(M_t \ge a) = 2\,\mathbb{P}(B_t \ge a) = 2\left(1 - \Phi\!\left(\frac{a}{\sqrt{t}}\right)\right),
+\]
+donde $\Phi$ es la función de distribución acumulada de la normal estándar.
+\end{theorem}
+
+\begin{proof}
+Sea $\tau_a = \inf\{s \ge 0 : B_s = a\}$ el primer tiempo de pasaje por el nivel $a$. El evento $\{M_t \ge a\} = \{\tau_a \le t\}$. Descomponemos:
+\[
+    \mathbb{P}(B_t \ge a) = \mathbb{P}(B_t \ge a,\, \tau_a \le t) + \mathbb{P}(B_t \ge a,\, \tau_a > t).
+\]
+El segundo término es cero (si $B$ no ha alcanzado $a$ en $[0,t]$, no puede estar en $[a,\infty)$ en $t$). Por la simetría del movimiento browniano después de $\tau_a$: dado que $\tau_a \le t$, el proceso $B_t - a$ y $-(B_t - a)$ tienen la misma distribución (el proceso reflejo a partir de $\tau_a$ es también un movimiento browniano). Por lo tanto:
+\[
+    \mathbb{P}(B_t \ge a,\, \tau_a \le t) = \mathbb{P}(B_t \le a,\, \tau_a \le t) = \frac{1}{2}\mathbb{P}(\tau_a \le t),
+\]
+de donde $\mathbb{P}(B_t \ge a) = \frac{1}{2}\mathbb{P}(\tau_a \le t)$, y por tanto:
+\[
+    \mathbb{P}(M_t \ge a) = \mathbb{P}(\tau_a \le t) = 2\,\mathbb{P}(B_t \ge a).
+\]
+\end{proof}
+
+\begin{remark}
+El principio de reflexión tiene la siguiente interpretación: para que $B_t \ge a$ es necesario haber cruzado el nivel $a$ antes de $t$; y cada trayectoria que cruza $a$ y termina abajo de $a$ en el tiempo $t$ tiene, por simetría, una trayectoria ``reflejada'' que termina encima de $a$. Esto produce la relación exacta $\mathbb{P}(M_t \ge a) = 2\mathbb{P}(B_t \ge a)$.
+\end{remark}
+
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}[scale=1.15, >=Stealth]
+    % Ejes
+    \draw[->] (0,0) -- (7.2,0) node[right] {$t$};
+    \draw[->] (0,-0.5) -- (0,3.2) node[above] {$B_t$};
+    % Nivel a
+    \draw[dashed, gray] (0,2) node[left] {$a$} -- (7,2);
+    % Tiempo tau_a
+    \draw[dashed, gray!60] (3.1,0) node[below] {$\tau_a$} -- (3.1,2);
+    % Tiempo t
+    \draw[dashed, gray!60] (6.5,0) node[below] {$t$} -- (6.5,3.0);
+    % --- Trayectoria original (cruza a, termina ENCIMA: evento {B_t >= a}) ---
+    \draw[blue, thick]
+        (0,0) -- (0.5,0.4) -- (1.0,0.9) -- (1.5,0.6) -- (2.0,1.1)
+        -- (2.5,1.6) -- (3.0,1.85) -- (3.1,2.0)
+        -- (3.6,2.5) -- (4.2,2.9) -- (4.8,2.6) -- (5.3,2.2)
+        -- (5.8,2.7) -- (6.2,2.4) -- (6.5,2.8);
+    % Punto final original
+    \filldraw[blue] (6.5,2.8) circle (2pt);
+    \node[blue, right] at (6.5,2.8) {$B_t > a$};
+    % --- Trayectoria reflejada (a partir de tau_a, termina DEBAJO) ---
+    \draw[red, thick, dashed]
+        (3.1,2.0)
+        -- (3.6,1.5) -- (4.2,1.1) -- (4.8,1.4) -- (5.3,1.8)
+        -- (5.8,1.3) -- (6.2,1.6) -- (6.5,1.2);
+    % Punto final reflejado
+    \filldraw[red] (6.5,1.2) circle (2pt);
+    \node[red, right] at (6.5,1.2) {$\widetilde{B}_t < a$ (reflejada)};
+    % Punto de contacto en tau_a
+    \filldraw[black] (3.1,2.0) circle (2pt);
+    % Flecha de correspondencia biyectiva
+    \draw[<->, gray, thick] (6.7,2.8) -- (6.7,1.2)
+        node[midway, right, gray, font=\small] {biyección};
+    % Leyenda
+    \node[blue, font=\small] at (1.8,-0.4)
+        {original: $\tau_a \le t$, $B_t > a$};
+    \node[red, font=\small] at (5.0,-0.4)
+        {reflejada: $\tau_a \le t$, $\widetilde{B}_t < a$};
+\end{tikzpicture}
+\caption{Principio de reflexión. La trayectoria azul toca el nivel $a$ en $\tau_a$ y termina \emph{encima} de $a$ en el tiempo $t$: representa el evento $\{B_t > a\}$. A partir de $\tau_a$, se refleja la trayectoria respecto a la recta $y = a$ (trayectoria roja discontinua), obteniendo una trayectoria que también tocó $a$ pero termina \emph{debajo} de $a$. La correspondencia es biyectiva, por lo que $\mathbb{P}(\tau_a \le t,\, B_t > a) = \mathbb{P}(\tau_a \le t,\, \widetilde{B}_t < a)$; como además $\{B_t > a\} \subset \{\tau_a \le t\}$, se concluye $\mathbb{P}(M_t \ge a) = \mathbb{P}(\tau_a \le t) = 2\,\mathbb{P}(B_t \ge a)$.}
+\label{fig:reflexion}
+\end{figure}
+
+
+\begin{example}[Opción barrera de tipo \textit{knock-out}]
+\label{ex:barrera}
+Una \textbf{opción barrera knock-out} es un contrato financiero que se cancela (``muere'') si el precio del activo subyacente toca o supera una barrera $H$ antes del vencimiento $T$. En el mundo simplificado donde el activo sigue un movimiento browniano (sin deriva), la prima de esta opción involucra calcular la probabilidad de que el proceso no toque la barrera.
+
+Supongamos que la posición relativa del activo respecto a su valor inicial se modela como $B_t$ y la barrera está en $H = 2$ (en unidades de desviación estándar). Para un horizonte $T = 1$ año:
+\begin{align*}
+    \mathbb{P}(\text{opción sobrevive}) &= \mathbb{P}(M_1 < 2) = 1 - \mathbb{P}(M_1 \ge 2) \\
+    &= 1 - 2\,\mathbb{P}(B_1 \ge 2) = 1 - 2(1 - \Phi(2)) \\
+    &\approx 1 - 2(1 - 0.9772) = 1 - 0.0456 \approx 0.9544.
+\end{align*}
+En la práctica, $\Phi(2) \approx 0.9772$, de modo que hay aproximadamente un $4.56\%$ de probabilidad de que la opción sea cancelada antes del vencimiento.
+\end{example}
+
+% ==============================================================
+\section{Movimiento browniano geométrico y el modelo de Black-Scholes}
+% ==============================================================
+
+El movimiento browniano estándar no puede modelar directamente los precios de activos financieros, pues sus trayectorias toman valores negativos. La extensión natural es el \textbf{movimiento browniano geométrico} (GBM, por sus siglas en inglés).
+
+\begin{definition}[Movimiento browniano geométrico]
+\label{def:gbm}
+Sea $\{B_t\}$ un movimiento browniano estándar. El \textbf{movimiento browniano geométrico} con deriva $\mu \in \mathbb{R}$ y volatilidad $\sigma > 0$ se define como
+\[
+    S_t = S_0 \exp\!\left(\left(\mu - \frac{\sigma^2}{2}\right)t + \sigma B_t\right),
+\]
+donde $S_0 > 0$ es el valor inicial.
+\end{definition}
+
+\begin{remark}[¿Por qué el logaritmo?]
+El precio de un activo debe ser positivo y, de forma natural, los rendimientos porcentuales son aditivos en el logaritmo. Si $S_t = e^{X_t}$ con $X_t = \log(S_0) + (\mu - \sigma^2/2)t + \sigma B_t$, entonces:
+\begin{enumerate}
+    \item[\normalfont(a)] $S_t > 0$ para todo $t$, pues la exponencial es siempre positiva.
+    \item[\normalfont(b)] El rendimiento logarítmico $\log(S_t/S_s) = (\mu - \sigma^2/2)(t-s) + \sigma(B_t - B_s)$ es normal con media $(\mu - \sigma^2/2)(t-s)$ y varianza $\sigma^2(t-s)$; en particular, es independiente del pasado.
+\end{enumerate}
+\end{remark}
+
+\begin{remark}[La corrección de Itô: por qué aparece $\mu - \sigma^2/2$]
+Podría parecer más natural escribir $S_t = S_0 e^{\mu t + \sigma B_t}$, pero este proceso tiene $\mathbb{E}[S_t] = S_0 e^{(\mu + \sigma^2/2)t}$, de modo que la tasa de crecimiento esperada de $S_t$ sería $\mu + \sigma^2/2$, no $\mu$. Para que el parámetro $\mu$ sea efectivamente la tasa de rendimiento esperada del activo (es decir, $\mathbb{E}[S_t] = S_0 e^{\mu t}$), se necesita restar $\sigma^2/2$. Este ajuste es consecuencia del \textbf{lema de Itô} y refleja el hecho de que la variación cuadrática no nula del movimiento browniano introduce una corrección adicional que no existe en el cálculo clásico.
+\end{remark}
+
+\begin{proposition}
+Si $S_t$ es el movimiento browniano geométrico de la Definición~\ref{def:gbm}, entonces:
+\[
+    \mathbb{E}[S_t] = S_0 e^{\mu t}, \qquad \mathrm{Var}(S_t) = S_0^2 e^{2\mu t}\left(e^{\sigma^2 t} - 1\right).
+\]
+\end{proposition}
+
+\begin{proof}
+Dado que $\log(S_t/S_0) = (\mu - \sigma^2/2)t + \sigma B_t \sim \mathcal{N}((\mu-\sigma^2/2)t,\, \sigma^2 t)$, y para $Z \sim \mathcal{N}(m, v^2)$ se tiene $\mathbb{E}[e^Z] = e^{m + v^2/2}$:
+\[
+    \mathbb{E}[S_t] = S_0\,\mathbb{E}\!\left[e^{(\mu-\sigma^2/2)t + \sigma B_t}\right] = S_0\,e^{(\mu - \sigma^2/2)t + \sigma^2 t/2} = S_0\,e^{\mu t}.
+\]
+Para la varianza, usamos $\mathbb{E}[S_t^2] = S_0^2\,e^{(2\mu - \sigma^2)t + 2\sigma^2 t} = S_0^2 e^{(2\mu + \sigma^2)t}$, de donde
+\[
+    \mathrm{Var}(S_t) = S_0^2 e^{(2\mu+\sigma^2)t} - S_0^2 e^{2\mu t} = S_0^2 e^{2\mu t}(e^{\sigma^2 t} - 1).
+\]
+\end{proof}
+
+\begin{example}[Precio esperado y cuantiles bajo el GBM]
+Una acción cotiza hoy a $S_0 = 100$ pesos. Se asume un modelo GBM con $\mu = 0.10$ (rendimiento anual) y $\sigma = 0.20$ (volatilidad anual).
+
+\begin{enumerate}
+    \item[\normalfont(a)] \textit{Precio esperado a un año:} $\mathbb{E}[S_1] = 100\,e^{0.10} \approx 110.52$ pesos.
+
+    \item[\normalfont(b)] \textit{Probabilidad de que $S_1 > 120$:}
+    \[
+        \mathbb{P}(S_1 > 120) = \mathbb{P}\!\left(\sigma B_1 > \log(120/100) - \left(\mu - \frac{\sigma^2}{2}\right)\right).
+    \]
+    Con $\mu - \sigma^2/2 = 0.10 - 0.02 = 0.08$ y $\log(1.2) \approx 0.1823$:
+    \[
+        \mathbb{P}(S_1 > 120) = \mathbb{P}\!\left(Z > \frac{0.1823 - 0.08}{0.20}\right) = \mathbb{P}(Z > 0.5115) \approx 1 - \Phi(0.51) \approx 30.5\%.
+    \]
+
+    \item[\normalfont(c)] \textit{Interpretación del parámetro $\sigma$:} Si el analista calibra $\sigma = 1\%$ por día a partir de datos históricos, la volatilidad anualizada es $\sigma_{\text{anual}} = 1\% \times \sqrt{252} \approx 15.87\%$ (regla de la raíz del tiempo, Ejemplo~\ref{ex:raiz_t}).
+\end{enumerate}
+\end{example}
+
+% ==============================================================
+\section{Limitaciones del modelo y extensiones}
+% ==============================================================
+
+El movimiento browniano (y el GBM) son el punto de partida de la teoría financiera moderna, pero presentan limitaciones importantes cuando se confrontan con datos reales de mercado.
+
+\begin{remark}[Colas ligeras frente a \textit{fat tails}]
+Bajo el GBM, los rendimientos logarítmicos son normales: la probabilidad de caídas extremas decrece de forma gaussiana. Sin embargo, los mercados reales exhiben \textbf{colas pesadas} (\textit{fat tails}): eventos de tipo $-10\%$ en un día ocurren con una frecuencia mucho mayor de la que predice una normal. Indicadores de este fenómeno son:
+\begin{enumerate}
+    \item[\normalfont(a)] \textbf{Curtosis excesiva:} la distribución empírica de los rendimientos diarios tiene curtosis $> 3$.
+    \item[\normalfont(b)] \textbf{Agrupamiento de volatilidad} (\textit{volatility clustering}): períodos de alta volatilidad tienden a seguirse, lo cual contradice la hipótesis de incrementos estacionarios e independientes.
+    \item[\normalfont(c)] \textbf{Asimetría:} los rendimientos suelen mostrar sesgo negativo (las caídas son más abruptas que las subidas).
+\end{enumerate}
+\end{remark}
+
+\begin{remark}[Extensiones del modelo]
+Para subsanar estas limitaciones se han desarrollado generalizaciones del movimiento browniano:
+\begin{enumerate}
+    \item[\normalfont(a)] \textbf{Procesos de volatilidad estocástica} (modelos de Heston, SABR): $\sigma$ se modela como un proceso estocástico separado, permitiendo el agrupamiento de volatilidad.
+    \item[\normalfont(b)] \textbf{Procesos de Lévy} (modelo de varianza gamma, proceso de salto de Merton): se añaden saltos al movimiento browniano para generar colas más pesadas.
+    \item[\normalfont(c)] \textbf{Movimiento browniano fraccional}: se reemplaza el movimiento browniano estándar por uno con correlaciones de largo alcance (índice de Hurst $H \ne 1/2$), útil para modelar dependencia temporal.
+\end{enumerate}
+A pesar de sus limitaciones, el movimiento browniano estándar sigue siendo la base de la comprensión teórica y el punto de partida indispensable para todos los modelos más sofisticados.
+\end{remark}
+
+\end{document}
+
+
 
 \end{document}

@@ -1,0 +1,291 @@
+\documentclass[12pt]{article}
+\usepackage{inputenc}
+\usepackage[spanish]{babel}
+\decimalpoint
+\usepackage{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{hyperref}
+
+\geometry{margin=.7in}
+
+\newtheorem{problem}{Problema}
+
+\title{Procesos Estocásticos I \\ Tarea 3}
+\author{Semestre 2026-2}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+% ================================================================
+% PARTE I: MARTINGALAS A TIEMPO DISCRETO
+% ================================================================
+
+\noindent\textbf{\large Parte I: Martingalas a tiempo discreto}
+
+\bigskip
+
+% ---------------------------------------------------------------
+\begin{problem}
+\textbf{La urna de Pólya y el fenómeno de reforzamiento.}
+
+Una urna contiene inicialmente $r \ge 1$ bolas rojas y $b \ge 1$ bolas azules. En cada paso se extrae una bola al azar, se observa su color y se devuelve junto con una nueva bola del mismo color. Sea $R_n$ el número de bolas rojas tras $n$ extracciones y $M_n = R_n / (r + b + n)$ la proporción de bolas rojas.
+
+\begin{enumerate}
+    \item[(a)] Demuestra que $\{M_n\}$ es una martingala respecto a la filtración natural. \textit{Sugerencia:} Calcula $\mathbb{E}[R_{n+1} \mid \mathcal{F}_n]$ condicionando en el color extraído en el paso $n+1$.
+
+    \item[(b)] Como $\{M_n\}$ es una martingala no negativa y acotada, el Teorema de Convergencia garantiza que $M_n \to M_\infty$ c.s. Argumenta que $\mathbb{E}[M_\infty] = r/(r+b)$.
+
+    \item[(c)] Para $r = b = 1$ (urna con 1 roja y 1 azul), calcula la probabilidad de que las primeras 3 extracciones sean todas rojas. Interpreta el resultado en el contexto del \emph{fenómeno de reforzamiento}: ¿qué implica sobre la proporción final $M_\infty$?
+\end{enumerate}
+\end{problem}
+
+% ---------------------------------------------------------------
+\begin{problem}
+\textbf{Precio descontado de un activo y la medida neutral al riesgo.}
+
+En un mercado financiero de tiempo discreto, el precio de una acción evoluciona de la siguiente forma: en cada período, el precio sube un factor $u = 1.1$ con probabilidad $p$ o baja un factor $d = 0.9$ con probabilidad $1-p$. La tasa libre de riesgo es $r_f = 0.02$ por período y el precio inicial es $S_0 = 50$ pesos.
+
+\begin{enumerate}
+    \item[(a)] Define el precio descontado $\tilde{S}_n = S_n / (1 + r_f)^n$. Encuentra el único valor de $p$ (llamado \textbf{probabilidad neutral al riesgo} $q$) tal que $\{\tilde{S}_n\}$ sea una martingala. Verifica que $d < 1 + r_f < u$ (condición de no arbitraje).
+
+    \item[(b)] Bajo la probabilidad $q$ encontrada en (a), calcula el precio justo hoy de un contrato que paga $\max(S_2 - 55, 0)$ al cabo de 2 períodos (opción de compra europea con precio de ejercicio $K = 55$). \textit{Sugerencia:} Por la propiedad de martingala, el precio hoy es $\mathbb{E}^q[\max(S_2 - 55, 0)] / (1+r_f)^2$.
+
+    \item[(c)] Calcula el ``precio esperado'' de la opción descontando bajo la probabilidad real $p = 0.7$, es decir, $\mathbb{E}^p[\max(S_2 - 55, 0)]/(1+r_f)^2$. Verifica que este valor \emph{no} coincide con el precio neutral al riesgo obtenido en (b). El precio correcto de no arbitraje es el obtenido en (b): la razón es que la opción puede replicarse exactamente con una cartera dinámica de la acción y el bono libre de riesgo, y el costo de armar esa cartera depende únicamente de los precios observables $S_0$, $u$, $d$ y $r_f$, no de ninguna creencia subjetiva sobre el futuro. Si alguien cobrara el precio calculado bajo $p = 0.7$, existiría una estrategia de arbitraje —ganancia sin riesgo— que el mercado no permitiría subsistir. Intuitivamente, un \textbf{mercado sin arbitraje} es aquel en el que no existe ninguna estrategia de inversión que, partiendo de capital cero, garantice una ganancia positiva sin ningún riesgo de pérdida: es la formalización matemática de la idea de que ``no hay dinero gratis''.
+\end{enumerate}
+\end{problem}
+
+% ---------------------------------------------------------------
+\begin{problem}
+\textbf{Reserva de siniestralidad y criterio de ruina.}
+
+Una aseguradora inicia el año con una reserva de $k$ millones de pesos. Al final de cada mes recibe primas netas por $c > 0$ millones y paga siniestros cuyo monto es una variable aleatoria $Z_n$ con $\mathbb{E}[Z_n] = c$ (es decir, la prima es actuarialmente justa) y $\mathrm{Var}(Z_n) = \sigma^2$; los $Z_n$ son i.i.d. La reserva evoluciona como $R_n = k + \sum_{i=1}^n (c - Z_i)$. La empresa se declara insolvente si $R_n < 0$ para algún $n$.
+
+\begin{enumerate}
+    \item[(a)] Demuestra que $\{R_n\}$ y $\{R_n^2 - n\sigma^2\}$ son martingalas respecto a la filtración natural.
+
+    \item[(b)] Sea $\tau = \inf\{n : R_n \notin [0, N]\}$ el primer tiempo en que la reserva sale del intervalo $[0, N]$ (ruina o acumulación de capital excesivo). Aplica el Teorema del Paro Opcional a $\{R_n\}$ para calcular la probabilidad de ruina $\mathbb{P}(R_\tau = 0 \mid R_0 = k)$ en función de $k$ y $N$.
+
+    \item[(c)] Para $k = 10$, $N = 30$ y $\sigma^2 = 4$, calcula la probabilidad de ruina y el tiempo esperado hasta la decisión $\mathbb{E}[\tau]$ usando la segunda martingala. Interpreta el resultado: ¿qué implicaciones tiene para la política de reservas de la empresa?
+\end{enumerate}
+\end{problem}
+
+% ---------------------------------------------------------------
+%\begin{problem}
+%\textbf{Desigualdad de Doob y consecuencias.}
+%
+%Sea $\{M_n, \mathcal{F}_n\}_{n=0}^N$ una martingala no negativa.
+%
+%\begin{enumerate}
+%    \item[(a)] Demuestra la \textbf{desigualdad de Doob}: para todo $\lambda > 0$,
+%    \[
+%        \mathbb{P}\!\left(\max_{0 \le k \le N} M_k \ge \lambda\right) \le \frac{\mathbb{E}[M_N]}{\lambda}.
+%    \]
+%    \textit{Sugerencia:} Define el tiempo de paro $\tau = \min\{k : M_k \ge \lambda\} \wedge N$ y aplica el TPO.
+%
+%    \item[(b)] Sea $\{M_n\}$ una martingala (no necesariamente no negativa) con $\mathbb{E}[M_n^2] < \infty$ para todo $n$. Demuestra la \textbf{desigualdad $L^2$ de Doob}:
+%    \[
+%        \mathbb{E}\!\left[\max_{0 \le k \le N} M_k^2\right] \le 4\,\mathbb{E}[M_N^2].
+%    \]
+%    \textit{Sugerencia:} $\{M_n^2\}$ es una submartingala; aplica la desigualdad del inciso (a) a $\{M_n^2\}$ y usa Cauchy-Schwarz para concluir.
+%
+%    \item[(c)] Usa la desigualdad del inciso (a) para acotar la probabilidad de que la reserva del Problema~3 supere $N = 30$ antes del período 100, partiendo de $k = 10$ y con $\sigma^2 = 4$.
+%\end{enumerate}
+%\end{problem}
+
+% ---------------------------------------------------------------
+\begin{problem}
+\textbf{Deriva genética y fijación de alelos (modelo de Wright-Fisher).}
+
+En una población de tamaño fijo $N$, coexisten dos alelos: $A$ y $a$. Sea $X_n$ el número de copias del alelo $A$ en la generación $n$. La dinámica del modelo de Wright-Fisher establece que, dada la generación actual, la siguiente se obtiene muestreando $N$ individuos de forma independiente con probabilidad $X_n/N$ de heredar el alelo $A$:
+\[
+    X_{n+1} \mid X_n \;\sim\; \mathrm{Binomial}\!\left(N,\, \frac{X_n}{N}\right).
+\]
+Sea $M_n = X_n / N$ la \textbf{frecuencia} del alelo $A$ en la generación $n$.
+
+\begin{enumerate}
+    \item[(a)] Demuestra que $\{M_n\}$ es una martingala respecto a la filtración natural $\mathcal{F}_n = \sigma(X_0, \ldots, X_n)$. \textit{Sugerencia:} Calcula $\mathbb{E}[X_{n+1} \mid \mathcal{F}_n]$ usando las propiedades de la distribución binomial.
+
+    \item[(b)] Los estados $X_n = 0$ (el alelo $A$ se perdió) y $X_n = N$ (el alelo $A$ se fijó) son absorbentes. Sea $\tau = \inf\{n : X_n \in \{0, N\}\}$ el tiempo de fijación. Aplica el Teorema del Paro Opcional a $\{M_n\}$ (justificando brevemente que sus condiciones se satisfacen) para demostrar que
+    \[
+        \mathbb{P}(X_\tau = N \mid X_0 = k) = \frac{k}{N}.
+    \]
+    Interpreta este resultado: ¿de qué depende la probabilidad de que el alelo $A$ se fije en la población?
+
+    \item[(c)] Para $N = 100$ y una frecuencia inicial de $X_0 = 30$ copias del alelo $A$, calcula la probabilidad de fijación y de pérdida del alelo $A$. ¿Qué ocurre con la probabilidad de fijación si la frecuencia inicial se duplica a $X_0 = 60$? Reflexiona sobre las implicaciones evolutivas.
+\end{enumerate}
+\end{problem}
+
+\bigskip
+% ================================================================
+% PARTE II: PROCESO DE POISSON
+% ================================================================
+
+\noindent\textbf{\large Parte II: Proceso de Poisson}
+
+\bigskip
+
+% ---------------------------------------------------------------
+\begin{problem}
+\textbf{Modelado de llamadas a un centro de soporte técnico.}
+
+Un centro de soporte técnico recibe llamadas de clientes según un proceso de Poisson con tasa $\lambda = 12$ llamadas por hora. El servicio opera en turnos de 4 horas.
+
+\begin{enumerate}
+    \item[(a)] Al inicio del turno ya han llegado 3 llamadas en los primeros 20 minutos. Calcula la probabilidad de que en la primera hora completa hayan llegado exactamente 10 llamadas en total. 
+
+    \item[(b)] El supervisor monitorea el sistema cada 30 minutos. ¿Cuál es la probabilidad de que en al menos uno de los 8 intervalos de 30 minutos del turno no llegue ninguna llamada?
+
+    \item[(c)] Se sabe que en el turno de 4 horas llegaron exactamente 45 llamadas. ¿Cuántas se esperan haber recibido en las primeras 2.5 horas? Calcula también la probabilidad de que llegaran más de 30 en ese subintervalo. 
+    \item[] 
+\end{enumerate}
+\end{problem}
+
+% ---------------------------------------------------------------
+\begin{problem}
+\textbf{Detección de fallos en una red eléctrica urbana.}
+
+Una red eléctrica urbana registra cortes de suministro según un proceso de Poisson con tasa $\lambda = 0.8$ cortes por día. Los cortes se clasifican de forma independiente: con probabilidad $p = 0.25$ son \emph{cortes mayores} (duración mayor a 2 horas) y con probabilidad $1-p$ son \emph{cortes menores}.
+
+\begin{enumerate}
+    \item[(a)] Sea $N_M(t)$ el número de cortes mayores y $N_m(t)$ el de cortes menores hasta el tiempo $t$ (en días). Demuestra que ambos son procesos de Poisson independientes e identifica sus parámetros. ¿Cuántos cortes mayores se esperan en una semana?
+
+    \item[(b)] La ciudad opera dos zonas con redes independientes, cada una con la tasa descrita. Define el proceso de cortes totales $N(t) = N^{(1)}(t) + N^{(2)}(t)$. Calcula la probabilidad de que en un día ocurran exactamente 3 cortes en total entre ambas zonas, y la probabilidad de que ocurran exactamente 2 en la Zona~1 dado que ocurrieron 3 en total.
+
+    \item[(c)] El equipo de mantenimiento responde solamente a cortes mayores. Sea $W_3$ el tiempo de espera hasta el tercer corte mayor. Calcula $\mathbb{E}[W_3]$ y $\mathbb{P}(W_3 > 10)$ (probabilidad de que el tercer corte mayor tarde más de 10 días).
+\end{enumerate}
+\end{problem}
+
+% ---------------------------------------------------------------
+\begin{problem}
+\textbf{Confiabilidad de un sistema con componentes en paralelo.}
+
+Un sistema industrial tiene dos componentes idénticas que operan en paralelo. Las fallas de cada componente ocurren según procesos de Poisson independientes con tasa $\lambda = 0.5$ fallas por mes. Cuando una componente falla, se repara instantáneamente y vuelve a operar.
+
+\begin{enumerate}
+    \item[(a)] Sea $N(t) = N_1(t) + N_2(t)$ el número total de fallas hasta el tiempo $t$. Demuestra que $\{N(t)\}$ es un proceso de Poisson e identifica su parámetro.
+
+    \item[(b)] Define un \emph{evento crítico} como un mes en que falla al menos una vez cada componente. Calcula la probabilidad de que ocurra exactamente un evento crítico en un período de 6 meses. \textit{Sugerencia:} Usa la distribución de $N_1(1)$ y $N_2(1)$ y la independencia entre componentes.
+
+    \item[(c)] El ingeniero quiere programar una revisión al tiempo $t^*$ tal que la probabilidad de haber tenido más de 8 fallas totales en $[0, t^*]$ sea $0.05$. Plantea la ecuación que determina $t^*$ y resuélvela numéricamente (aproximación en meses).
+\end{enumerate}
+\end{problem}
+
+% ---------------------------------------------------------------
+\begin{problem}
+\textbf{Función generatriz de probabilidad y momentos del proceso de Poisson.}
+
+Sea $\{X_t\}$ un proceso de Poisson de parámetro $\lambda > 0$.
+
+\begin{enumerate}
+    \item[(a)] Demuestra que la función generatriz de probabilidad (FGP) de $X_t$ es
+    \[
+        G(z, t) = \mathbb{E}[z^{X_t}] = e^{\lambda t(z - 1)}, \quad |z| \le 1.
+    \]
+    \textit{Sugerencia:} Usa directamente la distribución $\mathrm{Poisson}(\lambda t)$ y la serie de la exponencial.
+
+    \item[(b)] Usa $G(z,t)$ para calcular $\mathbb{E}[X_t]$, $\mathbb{E}[X_t^2]$ y $\mathrm{Var}(X_t)$ derivando respecto a $z$ y evaluando en $z = 1$.
+
+    \item[(c)] Para dos tiempos $0 < s < t$, calcula $\mathrm{Cov}(X_s, X_t)$ usando que $X_t = X_s + (X_t - X_s)$ con los incrementos independientes. ¿Recuerda este resultado a alguna propiedad del movimiento browniano?
+\end{enumerate}
+\end{problem}
+
+% ---------------------------------------------------------------
+%\begin{problem}
+%\textbf{Distribución condicional conjunta y estadísticos de orden.}
+
+%Sea $\{X_t\}$ un proceso de Poisson de parámetro $\lambda$ y sean $W_1 < W_2 < \cdots$ los tiempos de arribo.
+
+%\begin{enumerate}
+%    \item[(a)] Dado que $X_t = 2$, calcula la densidad conjunta condicional $f_{W_1, W_2 \mid X_t = 2}(w_1, w_2)$. Verifica que corresponde a la densidad de los estadísticos de orden $(U_{(1)}, U_{(2)})$ de una muestra de tamaño 2 de la distribución Uniforme$(0, t)$.
+%
+%    \item[(b)] Generaliza el resultado: dado $X_t = n$, la densidad conjunta condicional de $(W_1, \ldots, W_n)$ es $f(w_1, \ldots, w_n) = n!/t^n$ para $0 < w_1 < \cdots < w_n \le t$. Demuestra este resultado integrando sobre $W_{n+1}$.
+%
+%    \item[(c)] Dado que $X_1 = 3$, calcula la densidad marginal condicional de $W_2$ y su esperanza. Verifica que $\mathbb{E}[W_2 \mid X_1 = 3] = 1/2$.
+%\end{enumerate}
+%\end{problem}
+
+\bigskip
+% ================================================================
+% PARTE III: MOVIMIENTO BROWNIANO
+% ================================================================
+
+\noindent\textbf{\large Parte III: Movimiento Browniano}
+
+\bigskip
+
+% ---------------------------------------------------------------
+\begin{problem}
+\textbf{Distribuciones, esperanzas condicionales y combinaciones lineales.}
+
+Sea $\{B_t\}$ un movimiento browniano estándar. En este problema se practican los cálculos fundamentales con el proceso.
+
+\begin{enumerate}
+    \item[(a)] Encuentra la distribución de $Z = B_2 + B_3 - B_1$. \textit{Sugerencia:} Expresa $Z$ como suma de incrementos independientes.
+
+    \item[(b)] Calcula $\mathbb{E}[B_5 \mid B_2 = 1]$. 
+    
+    \item[(c)] Calcula $\mathrm{Var}(3B_1 - 2B_3 + B_5)$ usando la función de covarianza $\mathrm{Cov}(B_s, B_t) = \min(s,t)$.
+
+    \item[(d)] Para la partición uniforme $t_k = kT/n$ de $[0,T]$, calcula $$\mathbb{E}\!\left[\sum_{k=1}^n (B_{t_k} - B_{t_{k-1}})^2\right] \text{ y } \mathrm{Var}\!\left[\sum_{k=1}^n (B_{t_k} - B_{t_{k-1}})^2\right]$$. Interpreta: ¿qué dice este resultado sobre la acumulación de incertidumbre en un horizonte $T$?
+\end{enumerate}
+\end{problem}
+
+% ---------------------------------------------------------------
+\begin{problem}
+\textbf{Difusión de partículas y tiempos de primer pasaje.}
+
+Una partícula suspendida en agua parte del origen y su posición a tiempo $t$ (en micrómetros) se modela como $X_t = B_t$, donde $\{B_t\}$ es un movimiento browniano estándar con parámetro de difusión unitario.
+
+\begin{enumerate}
+    \item[(a)] Calcula la probabilidad de que la partícula se encuentre a más de 3 micrómetros del origen en $t = 4$ segundos. ¿Y la probabilidad de que haya estado a más de 3 micrómetros en algún momento de $[0, 4]$? \textit{Sugerencia:} Aplica el principio de reflexión.
+
+    \item[(b)] Sea $\tau_a = \inf\{t \ge 0 : B_t = a\}$ el tiempo de primer pasaje por la barrera $a > 0$. Usando las martingalas $\{B_t\}$ y $\{B_t^2 - t\}$, calcula $\mathbb{E}[\tau_a]$. Para $a = 2$ micrómetros, ¿cuántos segundos tarda en promedio la partícula en alcanzar esa distancia?
+
+    \item[(c)] Un recipiente tiene paredes absorbentes en $-b$ y $a$ (con $a, b > 0$). Una partícula parte de $x_0 \in (-b, a)$. Usando la martingala $\{B_t\}$ y el TPO aplicado a $\tau = \inf\{t : B_t \notin (-b, a)\}$, calcula la probabilidad de que la partícula sea absorbida por la pared derecha ($B_\tau = a$). Para $a = b$ (recipiente simétrico), ¿cuál es esa probabilidad si la partícula parte del centro?
+\end{enumerate}
+\end{problem}
+
+
+% ---------------------------------------------------------------
+%\begin{problem}
+%\textbf{Propiedad de Markov y distribución condicional del movimiento browniano.}
+
+%Sea $\{B_t\}$ un movimiento browniano estándar y $0 \le s < t$.
+
+%\begin{enumerate}
+%    \item[(a)] Demuestra que la distribución condicional de $B_t$ dado $\mathcal{F}_s = \sigma(B_u : u \le s)$ es
+%    \[
+%        (B_t \mid \mathcal{F}_s) \;\stackrel{d}{=}\; \mathcal{N}(B_s,\, t - s).|    \]
+%    Es decir, demuestra que para cualquier función medible acotada $f$, $\mathbb{E}[f(B_t) \mid \mathcal{F}_s] = g(B_s)$ con $g(x) = \mathbb{E}[f(x + \sqrt{t-s}\,Z)]$ donde $Z \sim \mathcal{N}(0,1)$.
+%
+%    \item[(b)] Deduce que el movimiento browniano es un proceso de Markov: la distribución futura dado el pasado $\mathcal{F}_s$ depende solo del valor presente $B_s$.
+%
+%    \item[(c)] Calcula $\mathbb{E}[B_3^2\, B_5 \mid \mathcal{F}_2]$ paso a paso: aplica la propiedad de Markov para simplificar la expresión en términos de $B_2$; luego usa las propiedades de los incrementos independientes para obtener el resultado final en función de $B_2$.
+%\end{enumerate}
+%\end{problem}
+
+% ---------------------------------------------------------------
+\begin{problem}
+\textbf{Invarianzas del movimiento browniano.}
+
+Sea $\{B_t\}_{t \ge 0}$ un movimiento browniano estándar. Demuestra que cada uno de los siguientes procesos también es un movimiento browniano estándar, verificando en cada caso los cuatro axiomas: (i) $W_0 = 0$, (ii) incrementos independientes, (iii) $W_t - W_s \sim \mathcal{N}(0, t-s)$ para $0 \le s < t$, y (iv) trayectorias continuas.
+
+\begin{enumerate}
+    \item[(a)] \textbf{(Simetría)} $W_t = -B_t$, $\;t \ge 0$.
+
+    \item[(b)] \textbf{(Autosimilitud)} $W_t = \dfrac{1}{c}\,B_{c^2 t}$, $\;t \ge 0$, donde $c > 0$ es una constante fija.
+
+    \item[(c)] \textbf{(Inversión temporal)} $W_t = t\,B_{1/t}$ para $t > 0$, con $W_0 = 0$. \textit{Sugerencia:} Para los incisos (iii) y (iv), recuerda que $W_t - W_s = t\,B_{1/t} - s\,B_{1/s}$; exprésala como combinación lineal de incrementos brownianos y calcula su varianza. Asuma simplemente que las trayectorias de $B_t$ son continuas en $t = 0$ para concluir la continuidad de $W_t$.
+
+    \item[(d)] \textbf{(Traslación)} $W_t = B_{t_0 + t} - B_{t_0}$, $\;t \ge 0$, donde $t_0 > 0$ es fijo.
+\end{enumerate}
+\end{problem}
+
+% ---------------------------------------------------------------
+
+
+\end{document}
