@@ -1,0 +1,180 @@
+\documentclass[12pt]{article}
+\usepackage{inputenc}
+\usepackage[spanish]{babel}
+\decimalpoint
+\usepackage{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usetikzlibrary{babel}
+\usepackage{titling}
+
+\newgeometry{left=0.6in, right=0.6in, top=0.4in, bottom=0.5in}
+
+\newtheorem{problem}{Problema}
+
+\title{Procesos Estocásticos I $|$ Examen Final 1}
+\author{Semestre 2026-2}
+\date{}
+
+\begin{document}
+
+\maketitle
+\vspace{-0.8cm}
+\scriptsize
+
+\textbf{Instrucciones generales:} Encierre sus respuestas finales en un recuadro. Justifique cada paso de sus cálculos y razonamientos.
+
+\begin{itemize}
+    \item \textbf{Reposición de parcial:} Si el estudiante realiza una reposición de alguno de los parciales, deberá resolver los \textbf{tres ejercicios del módulo correspondiente} a ese parcial.
+    \item \textbf{Examen final:} Si el estudiante presenta examen final, deberá resolver \textbf{4 problemas en total}: al menos uno de cada módulo y un cuarto problema adicional del módulo de su elección.
+\end{itemize}
+
+%\medskip
+%\noindent\rule{\linewidth}{0.4pt}
+
+% =============================================================
+\subsection*{Módulo 1}
+% =============================================================
+
+\begin{problem}
+Considere una cadena de Markov $\{X_n : n \geq 0\}$ con espacio de estados $S = \{1, 2, 3\}$, distribución inicial uniforme $\mathbb{P}(X_0 = i) = \tfrac{1}{3}$ para todo $i \in S$, y matriz de transición dada por:
+\[
+P = \begin{pmatrix}
+1/4 & 1/2 & 1/4 \\[4pt]
+1/3 & 0   & 2/3 \\[4pt]
+1/2 & 1/2 & 0
+\end{pmatrix}.
+\]
+Calcule de forma explícita lo siguiente:
+\begin{enumerate}
+    \item[(a)] La probabilidad de que la cadena se encuentre en el estado 2 en el tiempo $n = 1$.
+    \item[(b)] La probabilidad condicional $\mathbb{P}(X_2 = 3 \mid X_0 = 1)$.
+    \item[(c)] La probabilidad conjunta de la trayectoria particular $\mathbb{P}(X_0 = 1, X_1 = 2, X_2 = 3)$.
+    \item[(d)] El valor esperado $\mathbb{E}(X_1 \mid X_0 = 3)$.
+\end{enumerate}
+\end{problem}
+
+\begin{problem}
+Para cada una de las siguientes matrices de transición, dibuje su diagrama de transición asociado, identifique todas las clases de comunicación y determine el periodo de cada clase.
+
+\noindent\textbf{(a)}
+\[
+P = \begin{pmatrix}
+0   & 1   & 0   & 0   & 0   \\[3pt]
+1/2 & 0   & 1/2 & 0   & 0   \\[3pt]
+0   & 1   & 0   & 0   & 0   \\[3pt]
+0   & 0   & 1/3 & 1/3 & 1/3 \\[3pt]
+0   & 0   & 0   & 0   & 1
+\end{pmatrix}.
+\]
+
+\noindent\textbf{(b)}
+\[
+P = \begin{pmatrix}
+0   & 1/2 & 0   & 1/2 \\[3pt]
+0   & 0   & 1   & 0   \\[3pt]
+0   & 0   & 0   & 1   \\[3pt]
+1   & 0   & 0   & 0
+\end{pmatrix}.
+\]
+\end{problem}
+
+\begin{problem}
+Un proceso de ramificación, donde $X_n$ denota el número de individuos en la generación $n$, comienza con un solo individuo ($X_0 = 1$). El número de descendientes $\xi$ de cada individuo sigue una distribución definida por:
+\[
+    \mathbb{P}(\xi = 0) = \tfrac{1}{4}, \quad
+    \mathbb{P}(\xi = 1) = \tfrac{1}{2}, \quad
+    \mathbb{P}(\xi = 2) = \tfrac{1}{4}.
+\]
+\begin{enumerate}
+    \item[(a)] Calcule el número esperado de individuos en la $n$-ésima generación, $\mathbb{E}[X_n]$. \textit{Hint:} $X_{n+1} = \sum_{i=1}^{X_n} \xi_i$.
+    \item[(b)] Determine la probabilidad $\mathbb{P}(X_2 = 2)$.
+    \item[(c)] Calcule la probabilidad de que la población se extinga exactamente en la segunda generación, es decir, $\mathbb{P}(X_2 = 0 \mid X_1 > 0)$.
+\end{enumerate}
+\end{problem}
+
+%\noindent\rule{\linewidth}{0.4pt}
+
+% =============================================================
+\subsection*{Módulo 2}
+% =============================================================
+
+\begin{problem} Considere una cadena de Markov con espacio de estados $S = \{1,2,3,4,5,6\}$ y matriz de transición
+\[
+P = \begin{pmatrix}
+1/2 & 1/2 & 0   & 0   & 0   & 0   \\[3pt]
+1/4 & 3/4 & 0   & 0   & 0   & 0   \\[3pt]
+1/4 & 0   & 1/4 & 1/2 & 0   & 0   \\[3pt]
+0   & 0   & 0   & 0   & 1   & 0   \\[3pt]
+0   & 0   & 0   & 0   & 0   & 1   \\[3pt]
+0   & 0   & 0   & 1   & 0   & 0
+\end{pmatrix}.
+\]
+\begin{enumerate}
+    \item[(a)] Encuentre las clases de comunicación de la cadena y clasifíquelas como recurrentes o transitorias.
+    \item[(b)] Determine el periodo de cada clase de comunicación recurrente.
+    \item[(c)] Sea $h_3$ la probabilidad de que la cadena, iniciando en el estado 3, termine siendo absorbida por la clase a la que pertenece el estado 1. Plantee las ecuaciones correspondientes y calcule $h_3$.
+\end{enumerate}
+\end{problem}
+
+\begin{problem} Sea $\{X_n\}$ una cadena de Markov y suponga que los estados $i, j \in S$ se comunican entre sí (es decir, $i \leftrightarrow j$). 
+\begin{enumerate}
+    \item[(a)] Argumente por qué existen enteros $m \geq 1$ y $r \geq 1$ tales que $p_{ij}^{(m)} > 0$ y $p_{ji}^{(r)} > 0$.
+    \item[(b)] Utilizando la ecuación de Chapman-Kolmogorov, demuestre que para cualquier entero $n \geq 0$, se cumple la desigualdad:
+    \[
+        p_{jj}^{(m+n+r)} \geq p_{ji}^{(r)} p_{ii}^{(n)} p_{ij}^{(m)}.
+    \]
+    \item[(c)] Utilice el criterio de recurrencia $\left(\sum_{n=1}^{\infty} p_{kk}^{(n)} = \infty \right)$ y el resultado del inciso (b) para demostrar rigurosamente que si el estado $i$ es recurrente, entonces el estado $j$ también debe ser recurrente.
+\end{enumerate}
+\end{problem}
+
+\begin{problem} Una empresa de alquiler de maquinaria clasifica sus equipos diariamente en tres estados: \textbf{1} = Disponible, \textbf{2} = Alquilado, \textbf{3} = En mantenimiento. La matriz de transición diaria es:
+\[
+P = \begin{pmatrix}
+3/5 & 2/5 & 0   \\[4pt]
+1/5 & 7/10& 1/10\\[4pt]
+1/2 & 0   & 1/2
+\end{pmatrix}.
+\]
+\begin{enumerate}
+    \item[(a)] Dibuje el diagrama de transición y argumente con precisión enunciando las hipótesis por las cuales esta cadena posee una única distribución estacionaria $\pi$.
+    \item[(b)] Plantee el sistema de ecuaciones $\pi = \pi P$ (junto con su restricción) y encuentre la distribución estacionaria.
+    \item[(c)] Si una máquina se encuentra hoy \textbf{En mantenimiento} (estado 3), defina y resuelva un sistema de ecuaciones de primer paso para calcular el número esperado de días que transcurrirán hasta que la máquina vuelva a ser alquilada (estado 2).
+\end{enumerate}
+\end{problem}
+
+%\noindent\rule{\linewidth}{0.4pt}
+
+% =============================================================
+\subsection*{Módulo 3}
+% =============================================================
+
+\begin{problem} Sea $\{N_t : t \geq 0\}$ un proceso de Poisson con tasa $\lambda > 0$, y sean $W_1, W_2, \ldots$ los tiempos de llegada sucesivos. 
+\begin{enumerate}
+    \item[(a)] Demuestre analíticamente que, dado que ocurrió exactamente un evento en el intervalo $[0, t]$ (es decir, $N_t = 1$), la distribución del tiempo de llegada $W_1$ es uniforme en el intervalo $(0, t)$ y calcule $\mathbb{E}[W_1 \mid N_t = 1]$. Hint: Calcule la probabilidad $\mathbb{P}(W_1 \le t \mid N_t = 1)$.
+    \item[(b)] Generalice: si se sabe que $N_t = 2$, plantee la función de densidad de probabilidad conjunta de $(W_1, W_2)$ condicionada a este evento. 
+\end{enumerate}
+\end{problem}
+
+\begin{problem}
+Sea $\{X_t : t \geq 0\}$ un proceso de Poisson de parámetro $\lambda$. Denote por $W_1 < W_2$ los
+tiempos de la primera y segunda llegada. Demuestre los siguientes resultados de manera sucesiva.
+\begin{enumerate}
+    \item[(a)] $\left\{W_1 > t_1,\, W_2 > t_2\right\} = \left\{X_{t_1} = 0,\; X_{t_2} - X_{t_1} = 0 \text{ ó } 1\right \}$.
+    \item[(b)] $\mathbb{P}(W_1 > t_1,\, W_2 > t_2) = e^{-\lambda t_1}\bigl(1 + \lambda(t_2-t_1)\bigr)e^{-\lambda(t_2-t_1)}$.
+    \item[(c)] $f_{W_1,W_2}(t_1,t_2) = \lambda^2 e^{-\lambda t_2}$, \quad para $0 < t_1 < t_2$.
+\end{enumerate}
+\end{problem}
+
+\begin{problem} Sea $\{B_t\}_{t \geq 0}$ un movimiento browniano estándar.
+\begin{enumerate}
+    \item[(a)] Sea $c > 0$ una constante. Defina el proceso escalado $X_t = c B_{t/c^2}$ para todo $t \geq 0$. Demuestre paso a paso que $\{X_t\}_{t \geq 0}$ cumple con todas las propiedades para ser considerado también un movimiento browniano estándar.
+    \item[(b)] Para dos instantes de tiempo fijos $0 < s < t$, encuentre la distribución de probabilidad completa de la variable aleatoria $Z = B_t + B_s$, identificando su media y varianza.
+    \item[(c)] Calcule la esperanza condicional $\mathbb{E}[B_t \mid B_s=x]$ y la varianza condicional $\mathrm{Var}(B_t \mid B_s=x)$ para $s < t$.
+\end{enumerate}
+\end{problem}
+
+\end{document}
